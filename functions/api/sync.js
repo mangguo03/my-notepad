@@ -1,59 +1,53 @@
-function getAuth(请求) {
+// 核心鉴权函数
+async function verifyAuth(请求, env) {
     const authHeader = 请求.headers.get('Authorization');
     if (!authHeader || !authHeader.startsWith('Basic ')) return null;
-    try {
-        const decoded = atob(authHeader.split(' ')[1]);
-        const [username, password] = decoded.split(':');
-        return { username, password };
-    } catch(e) { return null; }
+    
+    const b64 = authHeader.substring(6);
+    const decoded = atob(b64);
+    const [username, password] = decoded.split(':');
+    
+    if (!username || !password) return null;
+    
+    const storedUser = await env.NOTE_KV.get(`user:${username}`, { type: "json" });
+    if (storedUser && storedUser.password === password) {
+        return username;
+    }
+    return null;
 }
 
-export async function onRequestGet(arg1, arg2) {
-    try {
-        const 请求 = arg1.请求 || arg1;
-        const env = arg1.env || arg2;
-
-        if (!env || !env.MY_KV) return new Response(JSON.stringify({error: 'KV未绑定'}), {status: 400});
-
-        const auth = getAuth(请求);
-        if (!auth) return new Response("Unauthorized", {status: 401});
-
-        const userDataStr = await env.MY_KV.get(`user:${auth.username}`);
-        if (!userDataStr) return new Response("Unauthorized", {status: 401});
-        
-        const userData = JSON.parse(userDataStr);
-        if (userData.password !== auth.password) return new Response("Unauthorized", {status: 401});
-
-        return new Response(JSON.stringify(userData.data || {}), {status: 200});
-    } catch (error) {
-        return new Response(JSON.stringify({error: error.message}), {status: 400});
+// 获取云端数据 (拉取)
+export async function onRequestGet(context) {
+    const { 请求, env } = context;
+    const username = await verifyAuth(请求, env);
+    
+    if (!username) {
+        return new Response(JSON.stringify({ message: "未授权" }), { status: 401 });
     }
+
+    let data = await env.NOTE_KV.get(`data:${username}`);
+    if (!data) data = "{}";
+
+    return new Response(data, {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+    });
 }
 
-export async function onRequestPost(arg1, arg2) {
-    try {
-        const 请求 = arg1.请求 || arg1;
-        const env = arg1.env || arg2;
-
-        if (!env || !env.MY_KV) return new Response(JSON.stringify({success: false, message: 'KV未绑定'}), {status: 400});
-
-        const auth = getAuth(请求);
-        if (!auth) return new Response("Unauthorized", {status: 401});
-
-        const userDataStr = await env.MY_KV.get(`user:${auth.username}`);
-        if (!userDataStr) return new Response("Unauthorized", {status: 401});
-        
-        const userData = JSON.parse(userDataStr);
-        if (userData.password !== auth.password) return new Response("Unauthorized", {status: 401});
-
-        const rawText = await 请求.text();
-        const newData = JSON.parse(rawText);
-        
-        userData.data = newData;
-        await env.MY_KV.put(`user:${auth.username}`, JSON.stringify(userData));
-
-        return new Response(JSON.stringify({success: true}), {status: 200});
-    } catch (error) {
-        return new Response(JSON.stringify({success: false, message: '保存异常: ' + error.message}), {status: 400});
+// 保存数据到云端 (推送)
+export async function onRequestPost(context) {
+    const { 请求, env } = context;
+    const username = await verifyAuth(请求, env);
+    
+    if (!username) {
+        return new Response(JSON.stringify({ message: "未授权" }), { status: 401 });
     }
+
+    const data = await 请求.text();
+    await env.NOTE_KV.put(`data:${username}`, data);
+
+    return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+    });
 }
