@@ -109,8 +109,10 @@
                 <input type="file" id="import-folder-input" webkitdirectory directory multiple class="hidden" onchange="handleFolderImport(event)">
             </div>
             
+            <div id="all-docs-container" class="p-2 border-b border-slate-200 bg-slate-100/40 flex-shrink-0"></div>
+
             <div class="px-3.5 py-2 bg-slate-200/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200">
-                <span class="sync-btn-font text-slate-700">文件夹层</span>
+                <span class="sync-btn-font text-slate-700">文件夹层级</span>
                 <div class="flex items-center gap-0.5 bg-white border border-slate-300 rounded p-0.5 shadow-inner scale-95 origin-right">
                     <button id="view-tree-list" onclick="toggleTreeLayout('list')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100">列表</button>
                     <button id="view-tree-grid" onclick="toggleTreeLayout('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100">图表</button>
@@ -366,31 +368,40 @@
         function toggleTreeLayout(mode) { treeLayoutView = mode; saveCloudData(); refreshAllViews(); }
         function toggleLeftView(mode) { leftLayoutView = mode; saveCloudData(); refreshAllViews(); }
 
-        // 新增辅助函数：递归获取指定分类及其所有子孙分类的 ID 集合
         function getAllCategoryIds(rootId) {
             let ids = [rootId];
             function findChildren(pId) {
                 categories.filter(c => c.parentId === pId).forEach(c => {
                     ids.push(c.id);
-                    findChildren(c.id); // 继续向下挖
+                    findChildren(c.id); 
                 });
             }
             findChildren(rootId);
             return ids;
         }
 
+        // 【修改的核心函数】
         function renderCategoryTree() {
             const container = document.getElementById('category-tree-container'); 
             container.innerHTML = '';
             
+            // 【新增】：获取上方新建的全文档容器，并清空它
+            const allDocsContainer = document.getElementById('all-docs-container');
+            if(allDocsContainer) allDocsContainer.innerHTML = '';
+
             const activeStyle = 'bg-blue-500 text-white border-blue-600 shadow';
             const defaultStyle = 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 shadow-sm';
 
             const allBtn = document.createElement('div');
-            allBtn.className = `px-3 py-1.5 rounded-lg border flex items-center gap-1.5 mb-2 cursor-pointer transition-all text-sm font-black ${currentFilterCategory === '全部' ? activeStyle : defaultStyle}`;
+            // 注意：移除了原有的 mb-2，因为它现在在一个独立的容器里了
+            allBtn.className = `px-3 py-1.5 rounded-lg border flex items-center gap-1.5 cursor-pointer transition-all text-sm font-black ${currentFilterCategory === '全部' ? activeStyle : defaultStyle}`;
             allBtn.innerHTML = `<i class="fa-solid fa-list-check text-[14px]"></i> 全文档目录`;
             allBtn.onclick = () => { currentFilterCategory = "全部"; refreshAllViews(); };
-            container.appendChild(allBtn);
+            
+            // 【修改】：将全文档按钮加入到上方的独立容器
+            if(allDocsContainer) {
+                allDocsContainer.appendChild(allBtn);
+            }
 
             const treeRootWrapper = document.createElement('div');
             treeRootWrapper.className = treeLayoutView === 'grid' ? "grid grid-cols-3 gap-1 w-full" : "space-y-1 w-full";
@@ -489,13 +500,11 @@
                 const box = document.createElement('div');
                 const isSelected = note.id === activeNoteId;
                 
-                // 【核心修复 1】选中状态使用纯正蓝底 active-note-item，未选中状态保留灰色悬停效果，防变灰 CSS 依然有效
                 box.className = `w-full h-16 p-1.5 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? 'bg-blue-500 border-blue-600 text-white shadow active-note-item' : 'bg-white border-slate-200 hover:bg-slate-100 shadow-sm'}`;
                 box.onclick = (e) => { if (!e.target.closest('.del-btn')) openNote(note.id); };
                 
                 const plainText = note.content ? note.content.replace(/<[^>]+>/g, '').substring(0, 15) : '...';
                 
-                // 【核心修复 2】删除按钮图标放大，且任何时候都清晰可见
                 box.innerHTML = `
                     <button class="del-btn opacity-0 group-hover:opacity-100 absolute right-1 top-1 p-0.5 ${isSelected ? 'text-white hover:text-blue-200' : 'text-slate-400 hover:text-red-600'} transition-all z-10" onclick="event.stopPropagation(); deleteNote('${note.id}')"><i class="fa-solid fa-trash-can text-[15px]"></i></button>
                     <div class="w-full overflow-hidden flex flex-col flex-1 pr-2">
