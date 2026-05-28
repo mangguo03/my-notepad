@@ -40,6 +40,6 @@ export async function onRequestPost(arg1, arg2) {
 // 兼容二：原生 Worker 或 _worker.js 模式调用
 export default {
     async fetch(请求, env, ctx) {
-        return await handleRequest(请求, env);
+        return await handleRequest(请求, env); //
     }
 }
