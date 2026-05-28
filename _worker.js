@@ -1,14 +1,14 @@
 export default {
-    async fetch(请求, env, ctx) {
+    async fetch(request, env, ctx) {
         // 开启最强保护网
         try {
-            const url = new 网站(请求.url);
+            const url = new URL(request.url);
             const path = url.pathname;
             const jsonHeaders = { "Content-Type": "application/json" };
 
             // 鉴权辅助函数
             async function verifyAuth() {
-                const authHeader = 请求.headers.get('Authorization');
+                const authHeader = request.headers.get('Authorization');
                 if (!authHeader || !authHeader.startsWith('Basic ')) return null;
                 const base64str = authHeader.substring(6);
                 const decoded = atob(base64str);
@@ -23,11 +23,11 @@ export default {
             // ==========================
             // 1. API: 注册账号
             // ==========================
-            if (path === '/api/register' && 请求.method === 'POST') {
+            if (path === '/api/register' && request.method === 'POST') {
                 if (!env.NOTE_KV) throw new Error("严重错误：后台尚未绑定 NOTE_KV 存储！");
                 
                 // 改用 text() 读取，避免系统内置的 json() 解析引发隐性 Bug
-                const bodyText = await 请求.text();
+                const bodyText = await request.text();
                 const body = JSON.parse(bodyText);
                 const username = body.username;
                 const password = body.password;
@@ -50,9 +50,9 @@ export default {
             // ==========================
             // 2. API: 登入账号
             // ==========================
-            if (path === '/api/login' && 请求.method === 'POST') {
+            if (path === '/api/login' && request.method === 'POST') {
                 if (!env.NOTE_KV) throw new Error("严重错误：后台尚未绑定 NOTE_KV 存储！");
-                const bodyText = await 请求.text();
+                const bodyText = await request.text();
                 const body = JSON.parse(bodyText);
                 
                 const stored = await env.NOTE_KV.get(`user:${body.username}`, { type: "json" });
@@ -70,13 +70,13 @@ export default {
                 const username = await verifyAuth();
                 if (!username) return new Response(JSON.stringify({ message: "未授权" }), { status: 401, headers: jsonHeaders });
 
-                if (请求.method === 'GET') {
+                if (request.method === 'GET') {
                     let data = await env.NOTE_KV.get(`data:${username}`);
                     return new Response(data || "{}", { status: 200, headers: jsonHeaders });
                 }
                 
-                if (请求.method === 'POST') {
-                    const data = await 请求.text();
+                if (request.method === 'POST') {
+                    const data = await request.text();
                     await env.NOTE_KV.put(`data:${username}`, data);
                     return new Response(JSON.stringify({ success: true }), { status: 200, headers: jsonHeaders });
                 }
@@ -90,7 +90,7 @@ export default {
             }
             
             // 这里的 await 非常关键，防止报错穿透导致 1101 Error
-            const assetResponse = await env.ASSETS.fetch(请求);
+            const assetResponse = await env.ASSETS.fetch(request);
             
             // 重点排查：如果 Cloudflare 找不到你的前端文件
             if (assetResponse.status === 404 && path === '/') {
