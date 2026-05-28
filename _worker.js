@@ -1,6 +1,5 @@
 export default {
     async fetch(request, env, ctx) {
-        // 开启最强保护网
         try {
             const url = new URL(request.url);
             const path = url.pathname;
@@ -21,12 +20,11 @@ export default {
             }
 
             // ==========================
-            // 1. API: 注册账号
+            // 1. API: 注册账号 (带数量限制)
             // ==========================
             if (path === '/api/register' && request.method === 'POST') {
                 if (!env.NOTE_KV) throw new Error("严重错误：后台尚未绑定 NOTE_KV 存储！");
                 
-                // 改用 text() 读取，避免系统内置的 json() 解析引发隐性 Bug
                 const bodyText = await request.text();
                 const body = JSON.parse(bodyText);
                 const username = body.username;
@@ -34,6 +32,17 @@ export default {
 
                 if (!username || !password) {
                     return new Response(JSON.stringify({ success: false, message: "账号或密码为空" }), { status: 400, headers: jsonHeaders });
+                }
+
+                // 限制注册人数
+                const maxUsers = env.MAX_USERS ? parseInt(env.MAX_USERS, 10) : 1; 
+                const userList = await env.NOTE_KV.list({ prefix: 'user:' });
+                
+                if (userList.keys.length >= maxUsers) {
+                    return new Response(JSON.stringify({ 
+                        success: false, 
+                        message: `私有云限制：当前系统最多仅允许注册 ${maxUsers} 个账号` 
+                    }), { status: 403, headers: jsonHeaders });
                 }
 
                 const existing = await env.NOTE_KV.get(`user:${username}`);
@@ -83,24 +92,34 @@ export default {
             }
 
             // ==========================
-            // 4. 静态网页托管 (输出 index.html)
+            // 4. API: 账号注销 (彻底清空数据)
+            // ==========================
+            if (path === '/api/delete-account' && request.method === 'POST') {
+                if (!env.NOTE_KV) throw new Error("严重错误：后台尚未绑定 NOTE_KV 存储！");
+                const username = await verifyAuth();
+                if (!username) return new Response(JSON.stringify({ success: false, message: "未授权" }), { status: 401, headers: jsonHeaders });
+
+                // 删除对应账号的所有数据，包括登录凭证和笔记
+                await env.NOTE_KV.delete(`data:${username}`);
+                await env.NOTE_KV.delete(`user:${username}`);
+
+                return new Response(JSON.stringify({ success: true, message: "账号及数据已彻底销毁" }), { status: 200, headers: jsonHeaders });
+            }
+
+            // ==========================
+            // 5. 静态网页托管
             // ==========================
             if (!env.ASSETS) {
                 throw new Error("云端组件丢失：ASSETS 对象不存在，无法渲染 index.html。");
             }
             
-            // 这里的 await 非常关键，防止报错穿透导致 1101 Error
             const assetResponse = await env.ASSETS.fetch(request);
-            
-            // 重点排查：如果 Cloudflare 找不到你的前端文件
             if (assetResponse.status === 404 && path === '/') {
                 throw new Error("404 错误：系统找不到 index.html。请检查 index.html 和 _worker.js 是否都在代码仓库的最外层根目录！");
             }
-            
             return assetResponse;
 
         } catch (err) {
-            // 最强兜底：如果不幸报错，直接在网页上打出纯文本日志，绝不遮掩！
             return new Response(`🚨 网页崩溃日志 🚨\n\n错误信息: ${err.message}\n\n堆栈跟踪:\n${err.stack}`, { 
                 status: 500, 
                 headers: { "Content-Type": "text/plain;charset=UTF-8" } 
