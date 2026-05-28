@@ -1,13 +1,14 @@
 export async function onRequestPost(context) {
     try {
-        const 请求 = context.请求;
+        const req = context.请求;
         const env = context.env;
 
-        if (!env || !env.NOTE_KV) {
-            throw new Error("后端未能读取到 NOTE_KV 存储空间");
-        }
+        if (!req) throw new Error("找不到请求对象(request)");
+        if (!env || !env.NOTE_KV) throw new Error("读取不到 NOTE_KV 空间");
 
-        const body = await 请求.json();
+        let text = await req.text();
+        let body = JSON.parse(text);
+
         const username = body.username;
         const password = body.password;
 
@@ -22,9 +23,6 @@ export async function onRequestPost(context) {
             headers: { "Content-Type": "application/json" } 
         });
     } catch (err) {
-        return new Response(JSON.stringify({ success: false, message: "后端报错: " + err.message }), { 
-            status: 500, 
-            headers: { "Content-Type": "application/json" } 
-        });
+        return new Response(JSON.stringify({ success: false, message: "终极捕获报错: " + err.message }), { status: 500 });
     }
 }
