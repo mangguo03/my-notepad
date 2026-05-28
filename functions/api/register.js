@@ -18,6 +18,6 @@ export async function onRequestPost(context) {
 
         return new Response(JSON.stringify({ success: true, message: "注册成功" }), { status: 200, headers: { "Content-Type": "application/json" } });
     } catch (err) {
-        return new Response(JSON.stringify({ success: false, message: "服务器内部错误" }), { status: 500 });
+        return new Response(JSON.stringify({ success: false, message: "内部错误: " + err.message }), { status: 500 });
     }
 }
