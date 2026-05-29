@@ -455,13 +455,13 @@
                     
                     const folderIconColor = cat.parentId === null ? 'text-amber-500' : 'text-red-500';
                     
-                    let iconHtml = `<i class="fa-solid fa-folder ${folderIconColor} text-[16px] shrink-0"></i>`;
+                    let iconHtml = `<i class="fa-solid fa-folder ${folderIconColor} text-[14px] shrink-0"></i>`;
                     if (hasChildren) {
                         iconHtml = isExpanded 
-                            ? `<i class="fa-solid fa-caret-down ${isSelected ? 'text-blue-100' : 'text-slate-400'} text-[12px] w-3 shrink-0"></i><i class="fa-solid fa-folder-open ${folderIconColor} text-[16px] shrink-0"></i>`
-                            : `<i class="fa-solid fa-caret-right ${isSelected ? 'text-blue-100' : 'text-slate-400'} text-[12px] w-3 shrink-0"></i><i class="fa-solid fa-folder ${folderIconColor} text-[16px] shrink-0"></i>`;
+                            ? `<i class="fa-solid fa-caret-down ${isSelected ? 'text-blue-100' : 'text-slate-400'} text-[12px] w-3 shrink-0"></i><i class="fa-solid fa-folder-open ${folderIconColor} text-[14px] shrink-0"></i>`
+                            : `<i class="fa-solid fa-caret-right ${isSelected ? 'text-blue-100' : 'text-slate-400'} text-[12px] w-3 shrink-0"></i><i class="fa-solid fa-folder ${folderIconColor} text-[14px] shrink-0"></i>`;
                     } else {
-                        iconHtml = `<span class="w-3 inline-block shrink-0"></span><i class="fa-solid fa-folder ${folderIconColor} text-[16px] shrink-0"></i>`;
+                        iconHtml = `<span class="w-3 inline-block shrink-0"></span><i class="fa-solid fa-folder ${folderIconColor} text-[14px] shrink-0"></i>`;
                     }
 
                     if (treeLayoutView === 'grid') {
