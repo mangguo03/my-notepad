@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -62,16 +63,16 @@
         </div>
     </div>
 
-    <header class="bg-slate-800 text-slate-200 py-1.5 px-6 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-700 shadow-md relative">
+    <header class="bg-slate-800 text-slate-200 py-1 px-6 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-700 shadow-md relative">
         <div class="flex items-center gap-3 z-10">
-            <button onclick="toggleLeftPanel()" class="bg-blue-700 hover:bg-blue-800 text-white font-black px-3 py-1.5 rounded-xl text-sm transition-all shadow-md flex items-center gap-2 border border-blue-600 mr-2">
+            <button onclick="toggleLeftPanel()" class="bg-blue-700 hover:bg-blue-800 text-white font-black px-3 py-1 rounded-xl text-sm transition-all shadow-md flex items-center gap-2 border border-blue-600 mr-2">
                 <i id="left-panel-toggle-icon" class="fa-solid fa-folder-tree text-xs"></i> <span id="btn-toggle-left-text">关闭侧栏</span>
             </button>
         </div>
         
         <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none w-max">
-            <i class="fa-solid fa-cubes text-blue-400 text-3xl"></i>
-            <span class="font-black tracking-wider text-xl lg:text-xl bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">
+            <i class="fa-solid fa-note-sticky text-emerald-400 text-2xl"></i>
+            <span class="font-black tracking-wider text-xl lg:text-lg bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">
                 云端记事本
             </span>
         </div>
@@ -92,22 +93,22 @@
 
     <div id="workspace-container" class="flex flex-1 overflow-hidden w-full bg-slate-200">
         <aside id="left-panel" class="bg-slate-50 flex flex-col flex-shrink-0 overflow-hidden border-r border-slate-200 panel-large-text transition-all" style="width: 220px; min-width: 160px; max-width: 480px;">
-            <div class="p-2 border-b border-slate-200 bg-slate-100/80 flex flex-col gap-1.5 flex-shrink-0">
+            <div class="p-1.5 border-b border-slate-200 bg-slate-100/80 flex flex-col gap-1 flex-shrink-0">
                 <div class="flex items-center gap-1.5 px-1">
-                    <button id="btn-new-note" onclick="createNewNote()" class="flex-1 py-2 px-1 flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black transition-all shadow-sm text-xs"><i class="fa-solid fa-file-plus"></i> 新建笔记</button>
-                    <button onclick="createNewCategory()" class="flex-1 py-2 px-1 flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black transition-all shadow-sm text-xs"><i class="fa-solid fa-folder-plus"></i> 新建分类</button>
+                    <button id="btn-new-note" onclick="createNewNote()" class="flex-1 py-1 px-1 flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black transition-all shadow-sm text-xs"><i class="fa-solid fa-file-plus"></i> 新建笔记</button>
+                    <button onclick="createNewCategory()" class="flex-1 py-1 px-1 flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black transition-all shadow-sm text-xs"><i class="fa-solid fa-folder-plus"></i> 新建分类</button>
                 </div>
-                <div class="flex flex-col gap-1 bg-white/70 p-1.5 rounded-lg border border-slate-200/60">
+                <div class="flex flex-col gap-0.5 bg-white/70 p-1 rounded-lg border border-slate-200/60">
                     <div class="flex items-center gap-1.5">
-                        <button onclick="triggerImport('md')" class="flex-1 py-2 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-import mr-0.5"></i>导入 MD</button>
-                        <button onclick="exportFile('md')" class="flex-1 py-2 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-download mr-0.5"></i>导出 MD</button>
+                        <button onclick="triggerImport('md')" class="flex-1 py-1 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-import mr-0.5"></i>导入 MD</button>
+                        <button onclick="exportFile('md')" class="flex-1 py-1 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-download mr-0.5"></i>导出 MD</button>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <button onclick="triggerImport('txt')" class="flex-1 py-2 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-import mr-0.5"></i>导入 TXT</button>
-                        <button onclick="exportFile('txt')" class="flex-1 py-2 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-export mr-0.5"></i>导出 TXT</button>
+                        <button onclick="triggerImport('txt')" class="flex-1 py-1 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-import mr-0.5"></i>导入 TXT</button>
+                        <button onclick="exportFile('txt')" class="flex-1 py-1 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-export mr-0.5"></i>导出 TXT</button>
                     </div>
                 </div>
-                <button onclick="triggerFolderImport()" class="w-full py-2 bg-slate-700 hover:bg-slate-800 text-white rounded-lg font-black transition-all text-xs shadow-sm flex items-center justify-center gap-1"><i class="fa-solid fa-folder-tree text-amber-400"></i> 导入文件夹</button>
+                <button onclick="triggerFolderImport()" class="w-full py-1 bg-slate-700 hover:bg-slate-800 text-white rounded-lg font-black transition-all text-xs shadow-sm flex items-center justify-center gap-1"><i class="fa-solid fa-folder-tree text-amber-400"></i> 导入文件夹</button>
                 <input type="file" id="import-md-input" accept=".md" class="hidden" onchange="handleImportFile(event, 'md')">
                 <input type="file" id="import-txt-input" accept=".txt" class="hidden" onchange="handleImportFile(event, 'txt')">
                 <input type="file" id="import-folder-input" webkitdirectory directory multiple class="hidden" onchange="handleFolderImport(event)">
