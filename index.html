@@ -70,7 +70,7 @@
         </div>
         
         <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none w-max">
-            <i class="fa-solid fa-pen-to-square text-yellow-400 text-2xl"></i>
+            <i class="fa-solid fa-pen-to-square text-yellow-400 text-1xl"></i>
             <span class="font-black tracking-wider text-xl lg:text-lg bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">
                 云端笔记
             </span>
@@ -113,7 +113,7 @@
                 <input type="file" id="import-folder-input" webkitdirectory directory multiple class="hidden" onchange="handleFolderImport(event)">
             </div>
             
-            <div id="all-docs-container" class="p-2 border-b border-slate-200 bg-slate-100/40 flex-shrink-0"></div>
+            <div id="all-docs-container" class="p-1 border-b border-slate-200 bg-slate-100/40 flex-shrink-0"></div>
 
             <div class="px-3.5 py-2 bg-slate-200/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200">
                 <span class="sync-btn-font text-slate-700">文件夹层级</span>
@@ -427,7 +427,7 @@
 
             const allBtn = document.createElement('div');
             // 注意：移除了原有的 mb-2，因为它现在在一个独立的容器里了
-            allBtn.className = `px-3 py-1.5 rounded-lg border flex items-center gap-1.5 cursor-pointer transition-all text-sm font-black ${currentFilterCategory === '全部' ? activeStyle : defaultStyle}`;
+            allBtn.className = `px-3 py-1 rounded-lg border flex items-center gap-1 cursor-pointer transition-all text-xs font-black ${currentFilterCategory === '全部' ? activeStyle : defaultStyle}`;
             allBtn.innerHTML = `<i class="fa-solid fa-list-check text-[12px]"></i> 全文档目录`;
             allBtn.onclick = () => { currentFilterCategory = "全部"; refreshAllViews(); };
             
@@ -458,13 +458,13 @@
                     else if (level === 2) folderIconColor = 'text-emerald-500'; // 3级文件夹：绿色 (Emerald)
                     else if (level >= 3) folderIconColor = 'text-purple-500'; // 4级及以上文件夹：紫色 (Purple)
                     
-                    let iconHtml = `<i class="fa-solid fa-folder ${folderIconColor} text-[13px] shrink-0"></i>`;
+                    let iconHtml = `<i class="fa-solid fa-folder ${folderIconColor} text-[12px] shrink-0"></i>`;
                     if (hasChildren) {
                         iconHtml = isExpanded 
-                            ? `<i class="fa-solid fa-caret-down ${isSelected ? 'text-blue-100' : 'text-slate-400'} text-[12px] w-3 shrink-0"></i><i class="fa-solid fa-folder-open ${folderIconColor} text-[13px] shrink-0"></i>`
-                            : `<i class="fa-solid fa-caret-right ${isSelected ? 'text-blue-100' : 'text-slate-400'} text-[12px] w-3 shrink-0"></i><i class="fa-solid fa-folder ${folderIconColor} text-[13px] shrink-0"></i>`;
+                            ? `<i class="fa-solid fa-caret-down ${isSelected ? 'text-blue-100' : 'text-slate-400'} text-[10px] w-3 shrink-0"></i><i class="fa-solid fa-folder-open ${folderIconColor} text-[12px] shrink-0"></i>`
+                            : `<i class="fa-solid fa-caret-right ${isSelected ? 'text-blue-100' : 'text-slate-400'} text-[10px] w-3 shrink-0"></i><i class="fa-solid fa-folder ${folderIconColor} text-[12px] shrink-0"></i>`;
                     } else {
-                        iconHtml = `<span class="w-3 inline-block shrink-0"></span><i class="fa-solid fa-folder ${folderIconColor} text-[13px] shrink-0"></i>`;
+                        iconHtml = `<span class="w-3 inline-block shrink-0"></span><i class="fa-solid fa-folder ${folderIconColor} text-[12px] shrink-0"></i>`;
                     }
 
                     if (treeLayoutView === 'grid') {
@@ -542,7 +542,7 @@
                 const plainText = note.content ? note.content.replace(/<[^>]+>/g, '').substring(0, 15) : '...';
                 
                 box.innerHTML = `
-                    <button class="del-btn opacity-0 group-hover:opacity-100 absolute right-1 top-1 p-0.5 ${isSelected ? 'text-white hover:text-blue-200' : 'text-slate-400 hover:text-red-600'} transition-all z-10" onclick="event.stopPropagation(); deleteNote('${note.id}')"><i class="fa-solid fa-trash-can text-[15px]"></i></button>
+                    <button class="del-btn opacity-0 group-hover:opacity-100 absolute right-1 top-1 p-0.5 ${isSelected ? 'text-white hover:text-blue-200' : 'text-slate-400 hover:text-red-600'} transition-all z-10" onclick="event.stopPropagation(); deleteNote('${note.id}')"><i class="fa-solid fa-trash-can text-[11px]"></i></button>
                     <div class="w-full overflow-hidden flex flex-col flex-1 pr-2">
                         <div class="font-extrabold text-[12px] ${isSelected ? 'text-white' : 'text-slate-950'} line-clamp-1 leading-tight mb-0.5" title="${note.title || '无标题'}">${note.title || '无标题'}</div>
                         <p class="text-[10px] ${isSelected ? 'text-blue-100' : 'text-slate-400'} line-clamp-2 leading-relaxed mt-0.5">${plainText}</p>
