@@ -180,9 +180,9 @@
                       <button onmousedown="event.preventDefault();" onclick="execCmd('removeFormat')" class="px-2 py-0.5 text-xs font-bold text-slate-600 hover:bg-slate-200 rounded border border-slate-200 bg-slate-50" title="清除格式"><i class="fa-solid fa-eraser"></i></button>
                       <div class="h-4 w-[1px] bg-slate-300 mx-0.5"></div>
     
-                      <button onmousedown="event.preventDefault(); insertHyperlink()" class="px-2 py-0.5 text-xs font-bold text-blue-600 hover:bg-blue-50 rounded border border-blue-200 bg-blue-50/50"><i class="fa-solid fa-link"></i> 链</button>
-                      <button onmousedown="event.preventDefault(); insertImageUrl()" class="px-2 py-0.5 text-xs font-bold text-emerald-600 hover:bg-emerald-50 rounded border border-emerald-200 bg-emerald-50/50"><i class="fa-regular fa-image"></i> 图</button>
+                      <button onmousedown="event.preventDefault(); document.getElementById('local-img-input').click()" class="px-2 py-0.5 text-xs font-bold text-emerald-600 hover:bg-emerald-50 rounded border border-emerald-200 bg-emerald-50/50"><i class="fa-regular fa-image"></i> 图</button>
                 </div>
+                      <input type="file" id="local-img-input" accept="image/*" class="hidden" onchange="handleLocalImageUpload(event)">
             </div>
             
             <div class="flex-1 flex flex-col p-5 overflow-y-auto w-full bg-white relative">
@@ -858,6 +858,36 @@
             a.download = `${title}.${formatType}`; a.href = url; a.click(); 
             window.URL.revokeObjectURL(url);
         }
+         
+        // 处理本地图片上传并插入到编辑器
+        function handleLocalImageUpload(event) {
+               const file = event.target.files[0];
+               if (!file) return;
+
+               // 限制只能选择图片
+               if (!file.type.startsWith('image/')) {
+                   alert('请选择图片类型的文件！');
+                   return;
+               }
+
+               const reader = new FileReader();
+               reader.onload = function(e) {
+                      // 读取成功后，获取图片的 Base64 数据
+                      const base64Image = e.target.result;
+        
+                     // 确保编辑器处于焦点状态
+                     document.getElementById('note-editor').focus();
+        
+                     // 执行插入图片命令
+                     document.execCommand('insertImage', false, base64Image);
+               };
+    
+               // 开始把文件读取为 Data URL (Base64)
+               reader.readAsDataURL(file);
+
+               // 清空 input 的值，确保下次选同一张图也能触发 onchange
+               event.target.value = '';
+        }        
     </script>
 </body>
 </html>
