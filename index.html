@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -133,8 +134,8 @@
             <div class="px-3.5 py-2 bg-slate-200/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200">
                 <span class="sync-btn-font text-slate-700">文件夹层级</span>
                 <div class="flex items-center gap-0.5 bg-white border border-slate-300 rounded p-0.5 shadow-inner scale-95 origin-right">
-                    <button id="view-left-list" onclick="toggleLeftView('list')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100 bg-blue-500 text-white" style="background-color: #3b82f6;">列表</button>
-                    <button id="view-left-grid" onclick="toggleLeftView('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100" style="background-color: transparent;">图表</button>
+                    <button id="view-tree-list" onclick="toggleTreeLayout('list')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100">列表</button>
+                    <button id="view-tree-grid" onclick="toggleTreeLayout('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100">图表</button>
                 </div>
             </div>
             <div id="category-tree-container" class="p-2 border-b border-slate-200 bg-slate-100/40 flex-shrink-0 max-h-72 overflow-y-auto space-y-1"></div>
@@ -246,7 +247,7 @@
         let leftPanelClosed = false;
         let rightPanelClosed = true;
         let treeLayoutView = "list"; 
-        let leftLayoutView = "list";
+        let leftLayoutView = "grid";
         let rightClickedCategoryId = null; 
         
         let isLoginMode = true;
