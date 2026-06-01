@@ -128,7 +128,7 @@
                 <input type="file" id="import-folder-input" webkitdirectory directory multiple class="hidden" onchange="handleFolderImport(event)">
             </div>
             
-            <div id="all-docs-container" class="p-1 border-b border-slate-200 bg-slate-100/40 flex-shrink-0"></div>
+            <div id="all-docs-container" class="py-1 px-[7px] border-b border-slate-200 bg-slate-100/40 flex-shrink-0"></div>
 
             <div class="px-3.5 py-2 bg-slate-200/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200">
                 <span class="sync-btn-font text-slate-700">文件夹层级</span>
@@ -453,7 +453,7 @@
             const allBtn = document.createElement('div');
             // 注意：移除了原有的 mb-2，因为它现在在一个独立的容器里了
             allBtn.className = `px-3 py-1 rounded-lg border flex items-center gap-1 cursor-pointer transition-all text-xs font-black ${currentFilterCategory === '全部' ? activeStyle : defaultStyle}`;
-            allBtn.innerHTML = `<i class="fa-solid fa-list-check text-[12px]"></i> 全文档目录`;
+            allBtn.innerHTML = `<i class="fa-solid fa-list-check text-[12px]"></i> 全文档展示`;
             allBtn.onclick = () => { currentFilterCategory = "全部"; refreshAllViews(); };
             
             // 【修改】：将全文档按钮加入到上方的独立容器
