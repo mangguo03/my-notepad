@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>云端记事本</title>
-    <script src="https://cdn.tailwindcss.com"cell.className = `p-1.5 rounded-lg border cursor-pointer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
@@ -120,8 +120,8 @@
                                  <button onclick="triggerFolderImport()" class="w-full py-1 bg-slate-700 hover:bg-slate-800 text-white rounded-lg font-black transition-all text-xs shadow-sm flex items-center justify-center gap-1"><i class="fa-solid fa-folder-tree text-amber-400"></i> 导入文件夹</button>
                            </div>
 
-                     </div>
-               </div>
+                      </div>
+                </div>
 
                 <input type="file" id="import-md-input" accept=".md" class="hidden" onchange="handleImportFile(event, 'md')">
                 <input type="file" id="import-txt-input" accept=".txt" class="hidden" onchange="handleImportFile(event, 'txt')">
@@ -133,8 +133,8 @@
             <div class="px-3.5 py-2 bg-slate-200/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200">
                 <span class="sync-btn-font text-slate-700">文件夹层级</span>
                 <div class="flex items-center gap-0.5 bg-white border border-slate-300 rounded p-0.5 shadow-inner scale-95 origin-right">
-                    <button id="view-left-list" onclick="toggleLeftView('list')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100 bg-blue-500 text-white" style="background-color: #3b82f6;">列表</button>
-                    <button id="view-left-grid" onclick="toggleLeftView('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100" style="background-color: transparent;">图表</button>
+                    <button id="view-tree-list" onclick="toggleTreeLayout('list')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100">列表</button>
+                    <button id="view-tree-grid" onclick="toggleTreeLayout('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100">图表</button>
                 </div>
             </div>
             <div id="category-tree-container" class="p-2 border-b border-slate-200 bg-slate-100/40 flex-shrink-0 max-h-72 overflow-y-auto space-y-1"></div>
@@ -142,8 +142,8 @@
             <div class="px-3.5 py-2 bg-slate-200/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200">
                 <span class="sync-btn-font text-slate-700">内容展示</span>
                 <div class="flex items-center gap-0.5 bg-white border border-slate-300 rounded p-0.5 shadow-inner scale-95 origin-right">
-                    <button id="view-left-list" onclick="toggleLeftView('list')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100">列表</button>
-                    <button id="view-left-grid" onclick="toggleLeftView('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100">图表</button>
+                    <button id="view-left-list" onclick="toggleLeftView('list')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100 text-white" style="background-color: #3b82f6;">列表</button>
+                    <button id="view-left-grid" onclick="toggleLeftView('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100" style="background-color: transparent;">图表</button>
                 </div>
             </div>
             <div id="left-notes-container" class="flex-1 overflow-y-auto p-2 bg-slate-50/50"></div>
@@ -173,7 +173,7 @@
                             <option value="5">特大</option>
                             <option value="6">超大</option>
                             <option value="7">极巨</option>
-                     </select>
+                      </select>
                      <div class="h-4 w-[1px] bg-slate-300 mx-0.5"></div>
 
                      <button onmousedown="event.preventDefault();" onclick="execCmd('formatBlock', 'H1')" class="px-2 py-0.5 text-xs font-black text-slate-700 hover:bg-slate-100 rounded border border-slate-200">H1</button>
@@ -189,13 +189,13 @@
                      <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#22c55e')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #22c55e;" title="绿">绿</button>
                      <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#000000')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #0f172a;" title="黑">黑</button>
 
-                      <div class="h-4 w-[1px] bg-slate-300 mx-0.5"></div>
+                       <div class="h-4 w-[1px] bg-slate-300 mx-0.5"></div>
 
-                      <button onmousedown="event.preventDefault();" onclick="wrapHTML('<code>', '</code>')" class="px-2 py-0.5 text-xs font-mono text-slate-700 hover:bg-slate-100 rounded border border-slate-200"><i class="fa-solid fa-code"></i></button>
-                      <button onmousedown="event.preventDefault();" onclick="execCmd('removeFormat')" class="px-2 py-0.5 text-xs font-bold text-slate-600 hover:bg-slate-200 rounded border border-slate-200 bg-slate-50" title="清除格式"><i class="fa-solid fa-eraser"></i></button>
-                      <div class="h-4 w-[1px] bg-slate-300 mx-0.5"></div>
+                       <button onmousedown="event.preventDefault();" onclick="wrapHTML('<code>', '</code>')" class="px-2 py-0.5 text-xs font-mono text-slate-700 hover:bg-slate-100 rounded border border-slate-200"><i class="fa-solid fa-code"></i></button>
+                       <button onmousedown="event.preventDefault();" onclick="execCmd('removeFormat')" class="px-2 py-0.5 text-xs font-bold text-slate-600 hover:bg-slate-200 rounded border border-slate-200 bg-slate-50" title="清除格式"><i class="fa-solid fa-eraser"></i></button>
+                       <div class="h-4 w-[1px] bg-slate-300 mx-0.5"></div>
     
-                      <button onmousedown="event.preventDefault(); document.getElementById('local-img-input').click()" class="px-2 py-0.5 text-xs font-bold text-emerald-600 hover:bg-emerald-50 rounded border border-emerald-200 bg-emerald-50/50"><i class="fa-regular fa-image"></i> 图</button>
+                       <button onmousedown="event.preventDefault(); document.getElementById('local-img-input').click()" class="px-2 py-0.5 text-xs font-bold text-emerald-600 hover:bg-emerald-50 rounded border border-emerald-200 bg-emerald-50/50"><i class="fa-regular fa-image"></i> 图</button>
                 </div>
                       <input type="file" id="local-img-input" accept="image/*" class="hidden" onchange="handleLocalImageUpload(event)">
             </div>
@@ -246,6 +246,7 @@
         let leftPanelClosed = false;
         let rightPanelClosed = true;
         let treeLayoutView = "list"; 
+        // 🚨【修改点】：内容展示区布局改为默认 list 模式，并把之前不科学的标题字号对调放大，体验拉满
         let leftLayoutView = "list";
         let rightClickedCategoryId = null; 
         
@@ -294,7 +295,6 @@
             document.getElementById('auth-btn').innerText = isLoginMode ? '登入' : '立即注册';
         }
 
-        // 【新增】彻底注销账号功能 (带确定/取消弹窗)
         async function deleteAccount() {
             if(!cfUser) return;
             const isConfirmed = confirm(`🚨 危险操作警告 🚨\n\n此操作将彻底销毁您的账号【${cfUser}】以及云端所有的笔记数据！\n\n点击“确定”立即注销，点击“取消”放弃。`);
@@ -337,14 +337,14 @@
         }
         
         window.addEventListener('DOMContentLoaded', () => {
-            if (window.innerWidth < 768) { toggleLeftPanel(); } // 手机端默认收起侧边栏
+            if (window.innerWidth < 768) { toggleLeftPanel(); }
             initResizers();
             initRichTextInteractiveEvents();
 
             document.getElementById('note-title-input').addEventListener('keydown', function(e) {
                      if (e.key === 'Enter') {
-                         e.preventDefault(); // 阻止默认的回车行为
-                         document.getElementById('note-editor-richtext').focus(); // 让正文编辑器获取光标
+                         e.preventDefault(); 
+                         document.getElementById('note-editor-richtext').focus(); 
                      }
             });  
 
@@ -358,39 +358,34 @@
         });
         
         async function loadCloudData() {
-                if (typeof marked !== 'undefined') marked.use({ breaks: true, gfm: true });
-                try {
-                     const response = await fetch('/api/sync', { headers: getAuthHeaders() });
-                     if (response.status === 401) { logout(); return; }
-                     if (!response.ok) throw new Error('网络响应异常');
-                     const data = await response.json();
-                     if (data.notes) notes = data.notes;
-                     if (data.categories) {
-                          if (data.categories.length > 0 && typeof data.categories[0] === 'string') {
-                               categories = data.categories.map(c => ({ id: c, name: c, parentId: null }));
-                          } else {
-                               categories = data.categories;
-                          }
-                      }
-                      if (data.categoryColors) categoryColors = data.categoryColors;
-                      if (data.trashBin) trashBin = data.trashBin;
-                      if (data.folderTreeRelations) folderTreeRelations = data.folderTreeRelations;
-                      if (data.leftExpandedFolders) leftExpandedFolders = data.leftExpandedFolders;
-                } catch (error) {
-                     console.log("数据拉取失败或首次使用", error);
+            if (typeof marked !== 'undefined') marked.use({ breaks: true, gfm: true });
+            try {
+                const response = await fetch('/api/sync', { headers: getAuthHeaders() });
+                if (response.status === 401) { logout(); return; }
+                if (!response.ok) throw new Error('网络响应异常');
+                const data = await response.json();
+                if (data.notes) notes = data.notes;
+                if (data.categories) {
+                    if (data.categories.length > 0 && typeof data.categories[0] === 'string') {
+                        categories = data.categories.map(c => ({ id: c, name: c, parentId: null }));
+                    } else {
+                        categories = data.categories;
+                    }
                 }
-                refreshAllViews();
-                if (notes.length > 0) {
-                    const sorted = [...notes].sort((a,b) => b.updatedAt - a.updatedAt);
-                    openNote(sorted[0].id);
-               } else {
-                    createNewNote();
-               }
-
-               // 🚨【安全核心】：等上面所有账号验证、数据下载都稳妥完成后，再执行下面两行
-              // 强制转换为列表模式，并自动点亮“列表”按钮的蓝色背景
-              leftLayoutView = 'list';
-              refreshAllViews();
+                if (data.categoryColors) categoryColors = data.categoryColors;
+                if (data.trashBin) trashBin = data.trashBin;
+                if (data.folderTreeRelations) folderTreeRelations = data.folderTreeRelations;
+                if (data.leftExpandedFolders) leftExpandedFolders = data.leftExpandedFolders;
+            } catch (error) {
+                console.log("数据拉取失败或首次使用", error);
+            }
+            refreshAllViews();
+            if (notes.length > 0) {
+                const sorted = [...notes].sort((a,b) => b.updatedAt - a.updatedAt);
+                openNote(sorted[0].id);
+            } else {
+                createNewNote();
+            }
         }
         
         async function saveCloudData() {
@@ -419,6 +414,10 @@
             document.getElementById('view-tree-grid').style.backgroundColor = treeLayoutView === 'grid' ? '#3b82f6' : 'transparent';
             document.getElementById('view-left-list').style.backgroundColor = leftLayoutView === 'list' ? '#3b82f6' : 'transparent';
             document.getElementById('view-left-grid').style.backgroundColor = leftLayoutView === 'grid' ? '#3b82f6' : 'transparent';
+            
+            // 💡 同步处理文字显眼度和按钮高亮文字颜色
+            document.getElementById('view-left-list').style.color = leftLayoutView === 'list' ? '#ffffff' : '#334155';
+            document.getElementById('view-left-grid').style.color = leftLayoutView === 'grid' ? '#ffffff' : '#334155';
 
             renderCategoryTree();
             renderCategorySelectOptions();
@@ -442,12 +441,10 @@
             return ids;
         }
 
-        // 【修改的核心函数】
         function renderCategoryTree() {
             const container = document.getElementById('category-tree-container'); 
             container.innerHTML = '';
             
-            // 【新增】：获取上方新建的全文档容器，并清空它
             const allDocsContainer = document.getElementById('all-docs-container');
             if(allDocsContainer) allDocsContainer.innerHTML = '';
 
@@ -455,12 +452,10 @@
             const defaultStyle = 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 shadow-sm';
 
             const allBtn = document.createElement('div');
-            // 注意：移除了原有的 mb-2，因为它现在在一个独立的容器里了
             allBtn.className = `px-3 py-1 rounded-lg border flex items-center gap-1 cursor-pointer transition-all text-xs font-black ${currentFilterCategory === '全部' ? activeStyle : defaultStyle}`;
             allBtn.innerHTML = `<i class="fa-solid fa-list-check text-[12px]"></i> 全文档展示`;
             allBtn.onclick = () => { currentFilterCategory = "全部"; refreshAllViews(); };
             
-            // 【修改】：将全文档按钮加入到上方的独立容器
             if(allDocsContainer) {
                 allDocsContainer.appendChild(allBtn);
             }
@@ -482,10 +477,10 @@
                     const cell = document.createElement('div');
                     const cellClass = isSelected ? activeStyle : defaultStyle;
                     
-                    let folderIconColor = 'text-amber-500'; // 默认1级主文件夹：黄色 (Amber)
-                    if (level === 1) folderIconColor = 'text-blue-500'; // 2级文件夹：蓝色 (Blue)
-                    else if (level === 2) folderIconColor = 'text-emerald-500'; // 3级文件夹：绿色 (Emerald)
-                    else if (level >= 3) folderIconColor = 'text-purple-500'; // 4级及以上文件夹：紫色 (Purple)
+                    let folderIconColor = 'text-amber-500'; 
+                    if (level === 1) folderIconColor = 'text-blue-500'; 
+                    else if (level === 2) folderIconColor = 'text-emerald-500'; 
+                    else if (level >= 3) folderIconColor = 'text-purple-500'; 
                     
                     let iconHtml = `<i class="fa-solid fa-folder ${folderIconColor} text-[12px] shrink-0"></i>`;
                     if (hasChildren) {
@@ -565,16 +560,17 @@
                 const box = document.createElement('div');
                 const isSelected = note.id === activeNoteId;
                 
-                box.className = `w-full h-14 p-1 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? 'bg-blue-500 border-blue-600 text-white shadow active-note-item' : 'bg-white border-emerald-400 hover:bg-emerald-50 shadow-sm'}`;
+                // 💡 优化点 1：把高度从 h-14 稍微拉高到 h-16，给大字体充裕空间，绝不挡字
+                box.className = `w-full h-16 p-2 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? 'bg-blue-500 border-blue-600 text-white shadow active-note-item' : 'bg-white border-emerald-400 hover:bg-emerald-50 shadow-sm'}`;
                 box.onclick = (e) => { if (!e.target.closest('.del-btn')) openNote(note.id); };
                 
                 const plainText = note.content ? note.content.replace(/<[^>]+>/g, '').substring(0, 15) : '...';
                 
                 box.innerHTML = `
                     <button class="del-btn opacity-0 group-hover:opacity-100 absolute right-1 top-1 p-0.5 ${isSelected ? 'text-white hover:text-blue-200' : 'text-slate-600 hover:text-red-600'} transition-all z-10" onclick="event.stopPropagation(); deleteNote('${note.id}')"><i class="fa-solid fa-trash-can text-[13px]"></i></button>
-                    <div class="w-full overflow-hidden flex flex-col flex-1 pr-2">
-                        <div class="font-extrabold text-[10px] ${isSelected ? 'text-white' : 'text-slate-950'} line-clamp-1 leading-tight mb-0.5" title="${note.title || '无标题'}">${note.title || '无标题'}</div>
-                        <p class="text-[12px] ${isSelected ? 'text-blue-100' : 'text-slate-400'} line-clamp-1 leading-relaxed mt-1">${plainText}</p>
+                    <div class="w-full overflow-hidden flex flex-col flex-1 pr-2 justify-center">
+                        <div class="font-black text-[13.5px] ${isSelected ? 'text-white' : 'text-slate-900'} line-clamp-1 leading-snug mb-0.5" title="${note.title || '无标题'}">${note.title || '无标题'}</div>
+                        <p class="text-[11px] ${isSelected ? 'text-blue-100' : 'text-slate-500'} line-clamp-1 leading-relaxed">${plainText}</p>
                     </div>
                 `;
                 gridWrapper.appendChild(box);
@@ -887,12 +883,10 @@
             window.URL.revokeObjectURL(url);
         }
          
-        // 处理本地图片上传并插入到编辑器
         function handleLocalImageUpload(event) {
                const file = event.target.files[0];
                if (!file) return;
 
-               // 限制只能选择图片
                if (!file.type.startsWith('image/')) {
                    alert('请选择图片类型的文件！');
                    return;
@@ -900,38 +894,31 @@
 
                const reader = new FileReader();
                reader.onload = function(e) {
-                      // 读取成功后，获取图片的 Base64 数据
                       const base64Image = e.target.result;
         
-                    // 🛑 修复点：确保准确获取到你的富文本编辑器并让它聚焦
                     const editor = document.getElementById('note-editor-richtext');
                     if (editor) {
                         editor.focus();
-                        // 执行插入图片命令
                         document.execCommand('insertImage', false, base64Image);
                     } else {
                          console.error("找不到编辑器 ID，请检查 HTML 中的 ID 是否为 note-editor-richtext");
                     }
                };
     
-               // 开始把文件读取为 Data URL (Base64)
                reader.readAsDataURL(file);
-
-              // 清空 input 的值，确保下次选同一张图也能触发
-              event.target.value = '';
+               event.target.value = '';
         }
 
-        // 控制导入导出面板的展开和收起
        function toggleImportExport() {
               const content = document.getElementById('import-export-content');
               const arrow = document.getElementById('import-export-arrow');
     
               if (content.classList.contains('hidden')) {
-                  content.classList.remove('hidden'); // 展开
-                  arrow.classList.add('rotate-180');  // 箭头指向上
+                  content.classList.remove('hidden'); 
+                  arrow.classList.add('rotate-180');  
               } else {
-                   content.classList.add('hidden');    // 收起
-                   arrow.classList.remove('rotate-180'); // 箭头指向下
+                   content.classList.add('hidden');    
+                   arrow.classList.remove('rotate-180'); 
               }
         }
 
