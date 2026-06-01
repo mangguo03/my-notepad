@@ -875,19 +875,23 @@
                       // 读取成功后，获取图片的 Base64 数据
                       const base64Image = e.target.result;
         
-                     // 确保编辑器处于焦点状态
-                     document.getElementById('note-editor').focus();
-        
-                     // 执行插入图片命令
-                     document.execCommand('insertImage', false, base64Image);
+                    // 🛑 修复点：确保准确获取到你的富文本编辑器并让它聚焦
+                    const editor = document.getElementById('note-editor-richtext');
+                    if (editor) {
+                        editor.focus();
+                        // 执行插入图片命令
+                        document.execCommand('insertImage', false, base64Image);
+                    } else {
+                         console.error("找不到编辑器 ID，请检查 HTML 中的 ID 是否为 note-editor-richtext");
+                    }
                };
     
                // 开始把文件读取为 Data URL (Base64)
                reader.readAsDataURL(file);
 
-               // 清空 input 的值，确保下次选同一张图也能触发 onchange
-               event.target.value = '';
-        }        
+              // 清空 input 的值，确保下次选同一张图也能触发
+              event.target.value = '';
+        }
     </script>
 </body>
 </html>
