@@ -99,11 +99,11 @@
                     <button onclick="createNewCategory()" class="flex-1 py-1 px-1 flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black transition-all shadow-sm text-xs"><i class="fa-solid fa-folder-plus"></i> 新建分类</button>
                 </div>
                 
-                <div class="bg-white border border-slate-200 rounded-lg p-1.5 mb-2 shadow-sm flex-shrink-0">
+                <div class="bg-white border border-slate-200 rounded-lg p-1.5 mb-0 shadow-sm flex-shrink-0">
     
-                      <button onclick="toggleImportExport()" class="w-full flex items-center justify-between text-slate-700 font-extrabold text-[13px] px-2 py-1.5 hover:bg-slate-50 hover:text-blue-600 transition-colors rounded cursor-pointer">
-                             <span class="flex items-center gap-1.5"><i class="fa-solid fa-box-archive text-blue-500"></i> 导入与导出</span>
-                             <i id="import-export-arrow" class="fa-solid fa-chevron-down transition-transform duration-200 text-slate-400 text-xs"></i>
+                      <button onclick="toggleImportExport()" class="w-full flex items-center justify-between bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs px-3 py-1 rounded-lg transition-all cursor-pointer shadow-sm border border-emerald-600">
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-box-archive text-white"></i> 导入与导出</span>
+                            <i id="import-export-arrow" class="fa-solid fa-chevron-down transition-transform duration-200 text-emerald-100 text-[10px]"></i>
                       </button>
     
                       <div id="import-export-content" class="hidden flex flex-col gap-1.5 border-t border-slate-100 pt-1.5 mt-1.5">
