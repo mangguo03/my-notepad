@@ -566,7 +566,7 @@
                     // 💡 核心修复：将“列表模式”与“图表模式”的卡片样式彻底拆开，单独调大图表字体
                     if (leftLayoutView === 'list') {
                         // ================= 1. 列表模式 (单列展示) =================
-                        box.className = `w-full h-12 p-1.5 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? 'bg-blue-500 border-blue-600 text-white shadow active-note-item' : 'bg-white border-emerald-400 hover:bg-emerald-50 shadow-sm'}`;
+                        box.className = `w-full h-13 p-1.5 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? 'bg-blue-500 border-blue-600 text-white shadow active-note-item' : 'bg-white border-emerald-400 hover:bg-emerald-50 shadow-sm'}`;
                         box.innerHTML = `
                               <button class="del-btn opacity-0 group-hover:opacity-100 absolute right-1 top-1 p-0.5 ${isSelected ? 'text-white hover:text-blue-200' : 'text-slate-600 hover:text-red-600'} transition-all z-10" onclick="event.stopPropagation(); deleteNote('${note.id}')"><i class="fa-solid fa-trash-can text-[13px]"></i></button>
                               <div class="w-full overflow-hidden flex flex-col flex-1 pr-2 justify-center">
