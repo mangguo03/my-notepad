@@ -763,53 +763,84 @@
         }
 
         function initRichTextInteractiveEvents() {
-            const editor = document.getElementById('note-editor-richtext');
-            editor.addEventListener('click', (e) => { if (e.target.tagName === 'A' && (e.ctrlKey || e.metaKey)) window.open(e.target.href, '_blank'); });
+               const editor = document.getElementById('note-editor-richtext');
+               editor.addEventListener('click', (e) => { if (e.target.tagName === 'A' && (e.ctrlKey || e.metaKey)) window.open(e.target.href, '_blank'); });
+    
+               let activeImage = null;
+               let startY = 0;
+               let startHeight = 0;
+
+               // 💡 核心新增：统一获取 Y 坐标的辅助函数（自动兼容鼠标和手机手指）
+              const getClientY = (e) => {
+                     return e.touches ? e.touches[0].clientY : e.clientY;
+              };
+
+              // 💡 核心新增：统一的开始缩放处理器
+              const startResize = (e) => {
+                     if (e.target.tagName === 'IMG') {
+                         // 如果是手机端触摸，阻止长按弹出系统菜单或放大镜
+                         if(e.touches) { e.stopPropagation(); } 
+                         else { e.preventDefault(); }
             
-            let activeImage = null;
-            let startY = 0;
-            let startHeight = 0;
-
-            editor.addEventListener('mousedown', (e) => {
-                if (e.target.tagName === 'IMG') {
-                    e.preventDefault(); 
-                    activeImage = e.target;
-                    startY = e.clientY;
-                    startHeight = activeImage.clientHeight || activeImage.offsetHeight;
-                    document.body.style.cursor = 'ns-resize'; 
-                    document.addEventListener('mousemove', resizeImg);
-                    document.addEventListener('mouseup', stopResizeImg);
-                }
-            });
-
-            function resizeImg(e) {
-                if (activeImage) {
-                    const dy = e.clientY - startY;
-                    activeImage.style.height = (startHeight + dy) + 'px';
-                    activeImage.style.width = 'auto'; 
-                }
-            }
-
-            function stopResizeImg() {
-                activeImage = null;
-                document.body.style.cursor = 'default';
-                document.removeEventListener('mousemove', resizeImg);
-                document.removeEventListener('mouseup', stopResizeImg);
-                handleEditorInput(); 
-            }
-
-            editor.addEventListener('paste', (e) => {
-                const items = (e.clipboardData || window.clipboardData).items;
-                for (let i = 0; i < items.length; i++) {
-                    if (items[i].type.indexOf("image") !== -1) {
-                        e.preventDefault(); const reader = new FileReader();
-                        reader.onload = (event) => execCmd('insertImage', event.target.result);
-                        reader.readAsDataURL(items[i].getAsFile());
+                         activeImage = e.target;
+                         startY = getClientY(e);
+                         startHeight = activeImage.clientHeight || activeImage.offsetHeight;
+            
+                         if (!e.touches) document.body.style.cursor = 'ns-resize'; // 仅在电脑端改变鼠标样式
+            
+                         // 根据当前是触摸还是鼠标，动态绑定对应的移动和结束事件
+                         if (e.touches) {
+                             document.addEventListener('touchmove', resizeImg, { passive: false });
+                             document.addEventListener('touchend', stopResizeImg);
+                         } else {
+                              document.addEventListener('mousemove', resizeImg);
+                              document.addEventListener('mouseup', stopResizeImg);
+                         }
                     }
-                }
-            });
-        }
+              };
+
+              // 同时监听电脑鼠标和手机触摸
+              editor.addEventListener('mousedown', startResize);
+              editor.addEventListener('touchstart', startResize, { passive: false });
+
+              function resizeImg(e) {
+                     if (activeImage) {
+                         // 💡 关键：如果是手机端拖动图片，阻止手机网页整体跟着上下滚屏滚动
+                         if (e.touches) {
+                             if (e.cancelable) e.preventDefault(); 
+                         }
+            
+                         const dy = getClientY(e) - startY;
+                         activeImage.style.height = (startHeight + dy) + 'px';
+                         activeImage.style.width = 'auto'; // 保持原比例缩放
+                     }
+               }
+
+               function stopResizeImg() {
+                      activeImage = null;
+                      document.body.style.cursor = 'default';
         
+                       // 一口气解绑所有双端事件，彻底释放内存
+                       document.removeEventListener('mousemove', resizeImg);
+                       document.removeEventListener('mouseup', stopResizeImg);
+                       document.removeEventListener('touchmove', resizeImg);
+                       document.removeEventListener('touchend', stopResizeImg);
+        
+                       handleEditorInput(); 
+               }
+
+               editor.addEventListener('paste', (e) => {
+                     const items = (e.clipboardData || window.clipboardData).items;
+                     for (let i = 0; i < items.length; i++) {
+                           if (items[i].type.indexOf("image") !== -1) {
+                               e.preventDefault(); const reader = new FileReader();
+                               reader.onload = (event) => execCmd('insertImage', event.target.result);
+                               reader.readAsDataURL(items[i].getAsFile());
+                           }
+                     }
+                });
+         }
+     
         function insertHyperlink() { const url = prompt("请输入超级链接地址:", "https://"); if (url) execCmd('createLink', url); }
         function insertImageUrl() { const url = prompt("请输入网络图片地址:", "https://"); if (url) execCmd('insertImage', url); }
         function execCmd(command, value = null) { document.execCommand(command, false, value); handleEditorInput(); }
