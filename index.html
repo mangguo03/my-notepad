@@ -73,45 +73,47 @@
 
     <header class="bg-slate-800 text-slate-200 py-1 pl-6 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-700 shadow-md relative z-[60]" style="-webkit-app-region: drag; padding-right: env(titlebar-area-width, 0px);">
         
-        <div class="flex items-center gap-3 z-10 flex-shrink-0" style="-webkit-app-region: no-drag;">
-            <button onclick="toggleLeftPanel()" class="bg-blue-700 hover:bg-blue-800 text-white font-black px-3 py-1 rounded-xl text-sm transition-all shadow-md flex items-center gap-2 border border-blue-600 mr-2 whitespace-nowrap flex-shrink-0">
-                <i id="left-panel-toggle-icon" class="fa-solid fa-folder-tree text-xs"></i> <span id="btn-toggle-left-text" data-i18n="nav-sidebar">侧栏</span>
-            </button>
-        </div>
-        
-        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center gap-2 pointer-events-none w-max">
-            <i class="fa-solid fa-pen-to-square text-yellow-400 text-1xl"></i>
-            <span class="font-black tracking-wider text-xl lg:text-lg bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300" data-i18n="app-title">
-                云端笔记
-            </span>
-        </div>
-            
-        <div class="flex items-center gap-3 text-slate-400 text-base z-10 flex-shrink-0" style="-webkit-app-region: no-drag;">
-            <button onclick="toggleLanguage()" class="text-slate-300 hover:text-white font-bold text-sm transition-colors whitespace-nowrap flex-shrink-0 flex items-center gap-1.5" title="切换语言 / Language">
-                <i class="fa-solid fa-language text-lg"></i> <span id="lang-text">CN</span>
-            </button>
-
-            <div class="relative flex-shrink-0 ml-1 mr-1">
-                <button onclick="toggleThemeMenu(event)" class="text-slate-300 hover:text-white transition-colors flex items-center" title="主题设置">
-                    <i id="current-theme-icon" class="fa-solid fa-circle-half-stroke text-lg"></i>
-                </button>
-                <div id="theme-dropdown" class="hidden absolute right-0 top-full mt-3 w-28 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50">
-                    <button onclick="setTheme('light')" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 font-bold"><i class="fa-solid fa-sun w-4"></i> <span data-i18n="theme-light">浅色</span></button>
-                    <button onclick="setTheme('dark')" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 font-bold"><i class="fa-solid fa-moon w-4"></i> <span data-i18n="theme-dark">深色</span></button>
-                    <button onclick="setTheme('system')" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 font-bold"><i class="fa-solid fa-desktop w-4"></i> <span data-i18n="theme-sys">系统</span></button>
-                </div>
+            <div class="flex items-center gap-3 z-10 flex-shrink-0" style="-webkit-app-region: no-drag;">
+                  <button onclick="toggleLeftPanel()" class="bg-blue-700 hover:bg-blue-800 text-white font-black px-3 py-1 rounded-xl text-sm transition-all shadow-md flex items-center gap-2 border border-blue-600 mr-2 whitespace-nowrap flex-shrink-0">
+                         <i id="left-panel-toggle-icon" class="fa-solid fa-folder-tree text-xs"></i> <span id="btn-toggle-left-text" data-i18n="nav-sidebar">侧栏</span>
+                  </button>
             </div>
+        
+            <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center gap-2 pointer-events-none w-max">
+                  <i class="fa-solid fa-pen-to-square text-yellow-400 text-1xl"></i>
+                  <span class="font-black tracking-wider text-xl lg:text-lg bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300" data-i18n="app-title">
+                         云端笔记
+                  </span>
+            </div>
+            
+            <div class="flex items-center gap-3 text-slate-400 text-base z-10 flex-shrink-0 ml-auto" style="-webkit-app-region: no-drag;">
+            
+                  <button onclick="toggleLanguage()" class="text-slate-300 hover:text-white font-bold text-sm transition-colors whitespace-nowrap flex-shrink-0 flex items-center gap-1.5" title="切换语言 / Language">
+                         <i class="fa-solid fa-language text-lg"></i> <span id="lang-text">CN</span>
+                  </button>
 
-            <button onclick="logout()" class="text-slate-300 hover:text-white font-bold text-sm transition-colors whitespace-nowrap flex-shrink-0">
-                <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="nav-logout">退出</span>
-            </button>
-            <button onclick="deleteAccount()" class="text-red-400 hover:text-red-500 font-bold text-sm transition-colors whitespace-nowrap flex-shrink-0">
-                <i class="fa-solid fa-user-xmark"></i> <span data-i18n="nav-delete">注销</span>
-            </button>
-            <button onclick="toggleRightPanel()" class="bg-red-700 hover:bg-red-800 text-white font-black px-3 py-1 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 border border-red-600 whitespace-nowrap flex-shrink-0">
-                <i id="right-panel-toggle-icon" class="fa-solid fa-dumpster-fire text-xs"></i> <span id="btn-toggle-right-text" data-i18n="nav-history">历史</span>
-            </button>
-        </div>
+                  <div class="relative flex-shrink-0 ml-1 mr-1">
+                        <button onclick="toggleThemeMenu(event)" class="text-slate-300 hover:text-white transition-colors flex items-center" title="主题设置">
+                               <i id="current-theme-icon" class="fa-solid fa-circle-half-stroke text-lg"></i>
+                        </button>
+                        <div id="theme-dropdown" class="hidden absolute right-0 top-full mt-3 w-28 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50">
+                             <button onclick="setTheme('light')" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 font-bold"><i class="fa-solid fa-sun w-4"></i> <span data-i18n="theme-light">浅色</span></button>
+                             <button onclick="setTheme('dark')" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 font-bold"><i class="fa-solid fa-moon w-4"></i> <span data-i18n="theme-dark">深色</span></button>
+                             <button onclick="setTheme('system')" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 font-bold"><i class="fa-solid fa-desktop w-4"></i> <span data-i18n="theme-sys">系统</span></button>
+                       </div>
+                 </div>
+
+                 <button onclick="logout()" class="text-slate-300 hover:text-white font-bold text-sm transition-colors whitespace-nowrap flex-shrink-0">
+                        <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="nav-logout">退出</span>
+                 </button>
+                 <button onclick="deleteAccount()" class="text-red-400 hover:text-red-500 font-bold text-sm transition-colors whitespace-nowrap flex-shrink-0">
+                        <i class="fa-solid fa-user-xmark"></i> <span data-i18n="nav-delete">注销</span>
+                 </button>
+                 <button onclick="toggleRightPanel()" class="bg-red-700 hover:bg-red-800 text-white font-black px-3 py-1 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 border border-red-600 whitespace-nowrap flex-shrink-0">
+                        <i id="right-panel-toggle-icon" class="fa-solid fa-dumpster-fire text-xs"></i> <span id="btn-toggle-right-text" data-i18n="nav-history">历史</span>
+                 </button>
+            
+            </div>
     </header>
 
     <div id="workspace-container" class="flex flex-1 overflow-hidden w-full bg-slate-200 dark:bg-slate-900 transition-colors duration-300">
