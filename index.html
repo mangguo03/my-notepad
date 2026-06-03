@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>云端记事本</title>
     
-    <script>
-        tailwind = {
-            config: {
-                darkMode: 'class', 
-            }
-        }
-    </script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        };
+    </script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="manifest" href="manifest.json">
@@ -95,7 +93,7 @@
                     <i class="fa-solid fa-gear text-lg"></i>
                 </button>
                 
-                <div id="settings-dropdown" class="hidden absolute right-0 top-full mt-3 w-44 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 flex flex-col py-1">
+                <div id="settings-dropdown" class="hidden absolute right-0 top-full mt-3 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 flex flex-col py-1">
                     
                     <button onclick="toggleLanguage(); closeSettingsMenu();" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                         <i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span>
@@ -268,12 +266,12 @@
 
     <script>
         // ==========================================
-        // 字典与翻译辅助引擎 (必须放最前面)
+        // 字典与翻译辅助引擎
         // ==========================================
         const dict = {
             zh: {
-                'nav-logout': '退出', 'nav-delete': '注销', 'nav-history': '历史',
-                'theme-title': '主题模式', 'theme-light': '浅色', 'theme-dark': '深色', 'theme-sys': '系统',
+                'nav-logout': '退出登录', 'nav-delete': '注销账号', 'nav-history': '历史',
+                'theme-title': '主题模式', 'theme-light': '浅色模式', 'theme-dark': '深色模式', 'theme-sys': '跟随系统',
                 'lang-toggle': '切换语言 / EN',
                 'nav-sidebar': '侧栏', 'app-title': '云端笔记',
                 'btn-new-note': '新建笔记', 'btn-new-folder': '新建分类',
@@ -289,8 +287,8 @@
                 '未分类': '未分类', '工作': '工作', '生活': '生活'
             },
             en: {
-                'nav-logout': 'Logout', 'nav-delete': 'Delete', 'nav-history': 'History',
-                'theme-title': 'Theme Mode', 'theme-light': 'Light', 'theme-dark': 'Dark', 'theme-sys': 'Auto',
+                'nav-logout': 'Logout', 'nav-delete': 'Delete Account', 'nav-history': 'History',
+                'theme-title': 'Theme Mode', 'theme-light': 'Light Mode', 'theme-dark': 'Dark Mode', 'theme-sys': 'System Default',
                 'lang-toggle': 'Switch Lang / 中文',
                 'nav-sidebar': 'Sidebar', 'app-title': 'Cloud Note',
                 'btn-new-note': 'New Note', 'btn-new-folder': 'New Folder',
@@ -315,7 +313,7 @@
             currentLang = currentLang === 'zh' ? 'en' : 'zh';
             localStorage.setItem('app-lang', currentLang);
             updateLanguageUI();
-            refreshAllViews(); // 强制刷新视图以更新动态 JS 文本
+            refreshAllViews(); 
         }
 
         function updateLanguageUI() {
@@ -327,7 +325,7 @@
         }
 
         // ==========================================
-        // 设置菜单统一切换逻辑 (Settings Menu)
+        // 设置菜单收纳逻辑
         // ==========================================
         function toggleSettingsMenu(e) {
             e.stopPropagation(); 
@@ -339,12 +337,10 @@
         }
 
         document.addEventListener('click', (e) => {
-            // 点击空白处关闭设置菜单
             const dropdown = document.getElementById('settings-dropdown');
             if (dropdown && !dropdown.classList.contains('hidden') && !dropdown.contains(e.target)) {
                 dropdown.classList.add('hidden');
             }
-            // 点击空白处关闭右键菜单
             document.getElementById('custom-context-menu').classList.add('hidden');
         });
 
@@ -369,7 +365,7 @@
         });
 
         // ==========================================
-        // 核心应用逻辑
+        // 核心数据模型与同步应用逻辑
         // ==========================================
         let notes = [];
         let trashBin = [];
@@ -492,7 +488,6 @@
                 document.getElementById('auth-overlay').classList.remove('hidden');
             }
 
-            // 初始化主题和语言
             applyTheme(localStorage.getItem('app-theme') || 'system');
             updateLanguageUI();
         });
@@ -865,7 +860,7 @@
                 const layerNodes = categories.filter(c => c.parentId === parentId);
                 layerNodes.forEach(cat => {
                     const opt = document.createElement('option');
-                    opt.value = cat.id;
+                    opt.value = opt.value = cat.id;
                     opt.innerHTML = '—'.repeat(depth) + ' ' + t(cat.name);
                     select.appendChild(opt);
                     appendOption(cat.id, depth + 1); 
@@ -1108,7 +1103,7 @@
         }
 
         // ==========================================
-        // PWA Service Worker 注册
+        // 3. PWA Service Worker 注册
         // ==========================================
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
