@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>云端记事本</title>
     
-    <!-- 💡 核心修复 1：必须先把配置项写在前面，Tailwind 引擎才能正确开启暗黑模式 -->
     <script>
         tailwind = {
             config: {
@@ -269,7 +268,8 @@
                 'untitled': '无标题', 'original-folder': '原位置:',
                 'fmt-size': '字号', 'sz-1': '极小', 'sz-2': '小号', 'sz-3': '正常', 'sz-4': '大号', 'sz-5': '特大', 'sz-6': '超大', 'sz-7': '极巨',
                 'color-red': '红', 'color-yellow': '黄', 'color-blue': '蓝', 'color-green': '绿', 'color-black': '黑',
-                'fmt-img': '图', 'btn-recover': '恢复', 'btn-empty': '清空', 'ctx-rename': '重命名分类', 'ctx-delete': '安全删除分类'
+                'fmt-img': '图', 'btn-recover': '恢复', 'btn-empty': '清空', 'ctx-rename': '重命名分类', 'ctx-delete': '安全删除分类',
+                '未分类': '未分类', '工作': '工作', '生活': '生活'
             },
             en: {
                 'nav-logout': 'Logout', 'nav-delete': 'Delete', 'nav-history': 'History',
@@ -284,20 +284,20 @@
                 'untitled': 'Untitled', 'original-folder': 'From:',
                 'fmt-size': 'Size', 'sz-1': 'Tiny', 'sz-2': 'Small', 'sz-3': 'Normal', 'sz-4': 'Large', 'sz-5': 'X-Large', 'sz-6': 'XXL', 'sz-7': 'Huge',
                 'color-red': 'R', 'color-yellow': 'Y', 'color-blue': 'B', 'color-green': 'G', 'color-black': 'Bk',
-                'fmt-img': 'Img', 'btn-recover': 'Restore', 'btn-empty': 'Empty', 'ctx-rename': 'Rename', 'ctx-delete': 'Delete safely'
+                'fmt-img': 'Img', 'btn-recover': 'Restore', 'btn-empty': 'Empty', 'ctx-rename': 'Rename', 'ctx-delete': 'Delete safely',
+                '未分类': 'Uncategorized', '工作': 'Work', '生活': 'Life'
             }
         };
 
         let currentLang = localStorage.getItem('app-lang') || 'zh';
 
-        // 动态翻译助手
         function t(key) { return dict[currentLang][key] || key; }
 
         function toggleLanguage() {
             currentLang = currentLang === 'zh' ? 'en' : 'zh';
             localStorage.setItem('app-lang', currentLang);
             updateLanguageUI();
-            refreshAllViews(); // 强制重新渲染左侧列表，确保 JS 文字也变为英文
+            refreshAllViews(); // 强制刷新视图以更新动态 JS 文本
         }
 
         function updateLanguageUI() {
@@ -534,7 +534,6 @@
 
             const allBtn = document.createElement('div');
             allBtn.className = `px-3 py-1 rounded-lg border flex items-center gap-1 cursor-pointer transition-all text-xs font-black ${currentFilterCategory === '全部' ? activeStyle : defaultStyle}`;
-            // 💡 使用 t() 动态翻译内部内容
             allBtn.innerHTML = `<i class="fa-solid fa-list-check text-[12px]"></i> ${t('all-docs')}`;
             allBtn.onclick = () => { currentFilterCategory = "全部"; refreshAllViews(); };
             
@@ -579,7 +578,7 @@
                             <div class="truncate w-full pr-1">
                                 <div class="flex items-center gap-1.5 truncate">
                                     ${iconHtml}
-                                    <span class="font-extrabold text-[12px] truncate">${cat.name}</span>
+                                    <span class="font-extrabold text-[12px] truncate">${t(cat.name)}</span>
                                 </div>
                                 <span class="text-[10px] block mt-0.5 font-bold ${isSelected ? 'opacity-100 text-blue-100' : 'opacity-60'}">(${noteCount})</span>
                             </div>
@@ -591,7 +590,7 @@
                         cell.innerHTML = `
                             <div class="flex items-center gap-1.5 truncate flex-1 pr-1">
                                 ${iconHtml}
-                                <span class="font-extrabold text-[12px] truncate">${cat.name}</span>
+                                <span class="font-extrabold text-[12px] truncate">${t(cat.name)}</span>
                             </div>
                             <span class="text-[10px] font-bold ${isSelected ? 'opacity-100 text-blue-100' : 'opacity-60'} shrink-0">(${noteCount})</span>
                         `;
@@ -644,7 +643,7 @@
                 box.onclick = (e) => { if (!e.target.closest('.del-btn')) openNote(note.id); };
         
                 const plainText = note.content ? note.content.replace(/<[^>]+>/g, '').substring(0, 15) : '...';
-                const displayTitle = note.title || t('untitled'); // 动态翻译“无标题”
+                const displayTitle = note.title || t('untitled'); 
         
                 const defaultBoxStyle = 'bg-white dark:bg-slate-800 border-emerald-400 dark:border-emerald-600 hover:bg-emerald-50 dark:hover:bg-slate-700 shadow-sm';
                 const activeBoxStyle = 'bg-blue-500 border-blue-600 text-white shadow active-note-item';
@@ -687,7 +686,7 @@
                 card.innerHTML = `
                     <div class="pr-16 truncate">
                         <div class="font-bold text-slate-900 dark:text-slate-100 truncate mb-1 text-sm">${displayTitle}</div>
-                        <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium block flex items-center gap-1"><i class="fa-solid fa-folder-open text-slate-400"></i> ${t('original-folder')} ${catObj.name}</span>
+                        <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium block flex items-center gap-1"><i class="fa-solid fa-folder-open text-slate-400"></i> ${t('original-folder')} ${t(catObj.name)}</span>
                     </div>
                     <div class="absolute right-2 top-2 flex gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
                         <button onclick="recoverDeletedFile('${note.id}')" title="恢复" class="p-1.5 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-lg text-emerald-600 dark:text-emerald-400 font-bold"><i class="fa-solid fa-rotate-left"></i></button>
@@ -749,7 +748,7 @@
             if (!rightClickedCategoryId) return;
             const catObj = categories.find(c => c.id === rightClickedCategoryId);
             if(!catObj) return;
-            const name = prompt(`重命名分类【${catObj.name}】:`, catObj.name);
+            const name = prompt(`${t('ctx-rename')} 【${catObj.name}】:`, catObj.name);
             if (!name || name.trim() === "") return;
             catObj.name = name.trim();
             saveCloudData(); refreshAllViews();
@@ -809,7 +808,7 @@
                 layerNodes.forEach(cat => {
                     const opt = document.createElement('option');
                     opt.value = cat.id;
-                    opt.innerHTML = '—'.repeat(depth) + ' ' + cat.name;
+                    opt.innerHTML = '—'.repeat(depth) + ' ' + t(cat.name);
                     select.appendChild(opt);
                     appendOption(cat.id, depth + 1); 
                 });
