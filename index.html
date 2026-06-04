@@ -97,7 +97,7 @@
             </div>
         </div>
             
-        <div class="flex items-center gap-4 text-slate-400 text-base z-10 flex-shrink-0 pr-[260px]" style="-webkit-app-region: no-drag;">
+        <div class="flex items-center gap-4 text-slate-400 text-base z-10 flex-shrink-0 pr-[200px]" style="-webkit-app-region: no-drag;">
             
             <div class="relative flex-shrink-0 z-[70]">
                 <button onclick="toggleSettingsMenu(event)" class="text-slate-300 hover:text-white transition-all hover:rotate-90 duration-300 flex items-center p-1" title="系统设置">
@@ -158,8 +158,12 @@
                     <div id="import-export-content" class="hidden flex flex-col gap-1.5 border-t border-slate-100 dark:border-slate-700 pt-1.5 mt-1.5">
                         <div class="flex flex-col gap-0.5 bg-white/70 dark:bg-slate-900/50 p-1 rounded-lg border border-slate-200/60 dark:border-slate-700/60">
                             <div class="flex items-center gap-1.5">
-                                <button onclick="triggerImport('md')" class="flex-1 py-1 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-import"></i> MD</button>
-                                <button onclick="exportFile('md')" class="flex-1 py-1 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-export"></i> MD</button>
+                                  <button onclick="triggerImport('md')" class="flex-1 py-1 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-import"></i> MD</button><button onclick="triggerFolderImport()" class="flex-1 py-1 px-1 bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm">
+                                         <i class="fa-solid fa-folder-tree text-amber-400"></i> <span data-i18n="btn-import-folder">导入文件夹</span>
+                                  </button>         
+                                  <button onclick="exportCurrentFolder()" class="flex-1 py-1 px-1 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm">
+                                         <i class="fa-solid fa-file-zipper text-blue-200"></i> <span data-i18n="btn-export-folder">导出文件夹</span>
+                                  </button>
                             </div>
                             <div class="flex items-center gap-1.5">
                                 <button onclick="triggerImport('txt')" class="flex-1 py-1 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-import"></i> TXT</button>
@@ -308,7 +312,8 @@
                 'fmt-heading': '标题', 'h1': '一级标题', 'h2': '二级标题', 'h3': '三级标题', 'p': '正文',
                 'color-white': '白', 'color-red': '红', 'color-yellow': '黄', 'color-blue': '蓝', 'color-green': '绿', 'color-black': '黑',
                 'fmt-img': '图', 'btn-recover': '恢复', 'btn-empty': '清空', 'ctx-rename': '重命名分类', 'ctx-delete': '安全删除分类',
-                '未分类': '未分类', '工作': '工作', '生活': '生活'
+                '未分类': '未分类', '工作': '工作', '生活': '生活',
+                'btn-import-folder': '导入文件夹', 'btn-export-folder': '导出文件夹'
             },
             en: {
                 'nav-logout': 'Logout', 'nav-delete': 'Delete Account', 'nav-history': 'History',
@@ -326,7 +331,8 @@
                 'fmt-heading': 'Heading', 'h1': 'Heading 1', 'h2': 'Heading 2', 'h3': 'Heading 3', 'p': 'Normal Text',
                 'color-white': 'W', 'color-red': 'R', 'color-yellow': 'Y', 'color-blue': 'B', 'color-green': 'G', 'color-black': 'Bk',
                 'fmt-img': 'Img', 'btn-recover': 'Restore', 'btn-empty': 'Empty', 'ctx-rename': 'Rename', 'ctx-delete': 'Delete safely',
-                '未分类': 'Uncategorized', '工作': 'Work', '生活': 'Life'
+                '未分类': 'Uncategorized', '工作': 'Work', '生活': 'Life',
+                'btn-import-folder': 'Import Folder', 'btn-export-folder': 'Export Folder'
             }
         };
 
