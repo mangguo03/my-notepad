@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -141,7 +142,7 @@
 
     <div id="workspace-container" class="flex flex-1 overflow-hidden w-full bg-slate-200 dark:bg-slate-900 transition-colors duration-300">
         
-        <aside id="left-panel" class="bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-r border-slate-200 panel-large-text transition-all absolute md:relative z-50 h-full max-h-screen shadow-2xl md:shadow-none" style="width: 220px; min-width: 160px; max-width: 480px;">
+        <aside id="left-panel" class="bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-r border-slate-200 panel-large-text transition-all absolute md:relative z-50 h-full shadow-2xl md:shadow-none" style="width: 220px; min-width: 160px; max-width: 480px;">
             <div class="p-1.5 border-b border-slate-200 dark:border-slate-700 bg-slate-100/80 dark:bg-slate-800/80 flex flex-col gap-1 flex-shrink-0">
                 <div class="flex items-center gap-1.5 px-1">
                     <button id="btn-new-note" onclick="createNewNote()" class="flex-1 py-1 px-1 flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black transition-all shadow-sm text-xs"><i class="fa-solid fa-file-plus"></i> <span data-i18n="btn-new-note">新建笔记</span></button>
@@ -156,8 +157,6 @@
                 </div>
                 
                 <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-1.5 mb-0 shadow-sm flex-shrink-0 mt-1">
-                
-                <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-1.5 mb-0 shadow-sm flex-shrink-0">
                     <button onclick="toggleImportExport()" class="w-full flex items-center justify-between bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs px-3 py-1 rounded-lg transition-all cursor-pointer shadow-sm border border-emerald-600">
                         <span class="flex items-center gap-1"><i class="fa-solid fa-box-archive text-white"></i> <span data-i18n="btn-import-export">导入与导出</span></span>
                         <i id="import-export-arrow" class="fa-solid fa-chevron-down transition-transform duration-200 text-emerald-100 text-[10px]"></i>
@@ -165,20 +164,14 @@
     
                     <div id="import-export-content" class="hidden flex flex-col gap-1.5 border-t border-slate-100 dark:border-slate-700 pt-1.5 mt-1.5">
                         <div class="flex flex-col gap-0.5 bg-white/70 dark:bg-slate-900/50 p-1 rounded-lg border border-slate-200/60 dark:border-slate-700/60">
-                            
-                            <!-- 第一排：MD 导入导出 -->
                             <div class="flex items-center gap-1.5">
                                 <button onclick="triggerImport('md')" class="flex-1 py-1 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-import"></i> MD</button>
                                 <button onclick="exportFile('md')" class="flex-1 py-1 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-export"></i> MD</button>
                             </div>
-                            
-                            <!-- 第二排：TXT 导入导出 -->
                             <div class="flex items-center gap-1.5">
                                 <button onclick="triggerImport('txt')" class="flex-1 py-1 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-import"></i> TXT</button>
                                 <button onclick="exportFile('txt')" class="flex-1 py-1 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-export"></i> TXT</button>
                             </div>
-                            
-                            <!-- 第三排：文件夹 导入导出 (带有正确的翻译标签) -->
                             <div class="flex items-center gap-1.5">
                                 <button onclick="triggerFolderImport()" class="flex-1 py-1 px-1 bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm">
                                     <i class="fa-solid fa-folder-tree text-amber-400"></i> <span data-i18n="btn-import-folder">导入文件夹</span>
@@ -187,9 +180,9 @@
                                     <i class="fa-solid fa-file-zipper text-blue-200"></i> <span data-i18n="btn-export-folder">导出文件夹</span>
                                 </button>
                             </div>
-                            
                         </div>
                     </div>
+                </div>
 
                 <input type="file" id="import-md-input" accept=".md" class="hidden" onchange="handleImportFile(event, 'md')">
                 <input type="file" id="import-txt-input" accept=".txt" class="hidden" onchange="handleImportFile(event, 'txt')">
@@ -205,6 +198,7 @@
                     <button id="view-tree-grid" onclick="toggleTreeLayout('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200" data-i18n="btn-grid">图表</button>
                 </div>
             </div>
+            
             <div id="category-tree-container" class="p-2 border-b border-slate-200 dark:border-slate-700 bg-slate-100/40 dark:bg-slate-800/40 flex-shrink-0 max-h-72 overflow-y-auto space-y-1"></div>
             
             <div class="px-3.5 py-2 bg-slate-200/60 dark:bg-slate-900/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200 dark:border-slate-700">
@@ -214,7 +208,11 @@
                     <button id="view-left-grid" onclick="toggleLeftView('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200" style="background-color: transparent;" data-i18n="btn-grid">图表</button>
                 </div>
             </div>
-            <div id="left-notes-container" class="flex-1 min-h-0 overflow-y-auto p-2 bg-slate-50/50 dark:bg-slate-800/50"></div>
+            
+            <div class="flex-1 relative min-h-0 bg-slate-50/50 dark:bg-slate-800/50">
+                <div id="left-notes-container" class="absolute inset-0 overflow-y-auto p-2 pb-6"></div>
+            </div>
+            
         </aside>
         
         <div id="resizer-left" class="resizer hidden md:block dark:bg-slate-700"></div>
