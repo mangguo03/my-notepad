@@ -6,14 +6,11 @@
 <img width="1920" height="1040" alt="PixPin_2026-06-04_17-31-01" src="https://github.com/user-attachments/assets/982a17f0-aece-4df8-b133-c477544753c4" />
 
 ## 核心优势
+
   - 完全的数据控制权
-
   - 自托管部署：所有数据仅存储在您自己的服务器中
-
   - 无第三方依赖：不依赖任何云服务，确保完全的数据所有权
-
   - 隐私保护：数据永远不会离开您的控制范围
-
   - 实时云储存备份：数据自动保存在Cloudflare 后台
 
 # 主要功能介绍
@@ -21,20 +18,15 @@
 ## 完全的数据控制权
 
   - 自托管部署：所有数据仅存储在您自己的服务器中
-
   - 无第三方依赖：不依赖任何云服务，确保完全的数据所有权
-
   - 隐私保护：数据永远不会离开您的控制范围
-
+  - 
 ## 强大的笔记功能
+
   - Markdown 编辑：实时编辑+预览为一体的 Markdown 编辑器，支持丰富的语法
-
   - 分类管理：灵活的分类系统，构建清晰的知识结构
- 
   - 标签系统：多维度标签管理，快速定位相关笔记
-
   - 全文检索：强大的搜索功能，快速找到所需内容
-
   - 数据导出：丰富的数据导出、导入格式，支持一键导出、导入markdonwn主+子文件夹
 
 ## 账号限定功能
@@ -44,9 +36,7 @@
 ## 优秀的用户体验
 
   - 响应式设计：在桌面和移动设备上均可获得良好体验
-
   - 主题切换：支持深色/浅色主题切换
-
   - 多语言支持：中英文切换
       
 # 快速部署指南
@@ -58,13 +48,12 @@ Fock 本项目，同时请帮忙点个 Star，万分感谢
 
 ## 步骤 2: 创建 kv 数据库
 
-手动创建 kv 数据库，数据库名：xa-note-db
-
-登入Cloudflare 平台 > 储存和数据库 > workers kv > 创建数据库，数据库名称为 My_Note 或随意
+- 登入Cloudflare 平台 > 储存和数据库 > workers kv > 创建数据库，数据库名称为 My_Note 或随意
 
 <img width="1011" height="650" alt="PixPin_2026-06-04_21-47-53" src="https://github.com/user-attachments/assets/15188d5f-9c78-415e-99e5-a971bac2d8f9" />
 
 ## 步骤 3: 创建项目
+
 - 前往 Cloudflare 控制台 > Workers和Pages > 创建应用程序 > 想要部署 Pages？开始使用 > 连接你的 Git 仓库
 
 - <img width="807" height="476" alt="PixPin_2026-06-04_21-50-57" src="https://github.com/user-attachments/assets/13305cc7-f8ef-42dd-ac53-a7eda69ede77" />
@@ -81,20 +70,16 @@ Fock 本项目，同时请帮忙点个 Star，万分感谢
 
 2、添加 kv 数据库：
 - 变量名: NOTE_KV (固定值，不能更改）
-
 - kv 数据库: My_Note (填你创建的名称）
 
-- <img width="1623" height="664" alt="PixPin_2026-06-04_22-01-20" src="https://github.com/user-attachments/assets/93245ca2-962a-404d-98dc-dcaa63de101c" />
-
+<img width="1623" height="664" alt="PixPin_2026-06-04_22-01-20" src="https://github.com/user-attachments/assets/93245ca2-962a-404d-98dc-dcaa63de101c" />
 
 ## 步骤 5: 设置账号数量
 
 1、前往 设置 > 变量与机密
 
 2、添加 变量：
-
 - 变量名称：MAX_USERS (固定值）
-
 - 值：限制注册账号数量由你随意设定
 
 <img width="1575" height="670" alt="PixPin_2026-06-04_22-02-36" src="https://github.com/user-attachments/assets/1fc5e6e0-c591-472c-b2fa-6d1124f88d00" />
