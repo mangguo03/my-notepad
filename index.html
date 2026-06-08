@@ -79,31 +79,32 @@
         </div>
     </div>
 
-    <header id="app-header" class="bg-slate-800 text-slate-200 py-1 pl-6 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-700 shadow-md relative z-[60]" style="-webkit-app-region: drag;">
+    <header id="app-header" class="bg-slate-800 text-slate-200 py-1.5 px-4 flex items-center select-none border-b border-slate-700 shadow-md relative z-[70]" style="-webkit-app-region: drag;">
+        <div class="flex items-center gap-2 pointer-events-none" style="-webkit-app-region: no-drag;">
+            <i class="fa-solid fa-pen-to-square text-yellow-400 text-1xl"></i>
+            <span class="font-black tracking-wider text-xl lg:text-lg bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300" data-i18n="app-title">
+                云端笔记
+            </span>
+        </div>
+    </header>
+
+    <div id="global-toolbar" class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-2 select-none flex-shrink-0 z-[60] relative shadow-sm">
         
-        <div class="flex items-center gap-3 z-10 flex-shrink-0" style="-webkit-app-region: no-drag;">
-            <button onclick="toggleLeftPanel()" class="bg-blue-700 hover:bg-blue-800 text-white font-black px-3 py-1 rounded-xl text-sm transition-all shadow-md flex items-center gap-2 border border-blue-600 mr-2 whitespace-nowrap flex-shrink-0">
-                <i id="left-panel-toggle-icon" class="fa-solid fa-folder-tree text-xs"></i> <span id="btn-toggle-left-text" data-i18n="nav-sidebar">侧栏</span>
+        <div class="flex items-center gap-2">
+            <button onclick="toggleLeftPanel()" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                <i id="left-panel-toggle-icon" class="fa-solid fa-folder-tree"></i> <span id="btn-toggle-left-text" data-i18n="nav-sidebar">侧栏</span>
             </button>
-        </div>
-        
-        <div class="flex-1 flex justify-center items-center pointer-events-none pr-8">
-            <div class="hidden md:flex items-center gap-2 w-max">
-                <i class="fa-solid fa-pen-to-square text-yellow-400 text-1xl"></i>
-                <span class="font-black tracking-wider text-xl lg:text-lg bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300" data-i18n="app-title">
-                    云端笔记
-                </span>
-            </div>
-        </div>
-            
-        <div class="flex items-center gap-4 text-slate-400 text-base z-10 flex-shrink-0 pr-[260px]" style="-webkit-app-region: no-drag;">
-            
+
+            <button onclick="toggleRightPanel()" class="bg-red-600 hover:bg-red-700 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                <i id="right-panel-toggle-icon" class="fa-solid fa-dumpster-fire"></i> <span id="btn-toggle-right-text" data-i18n="nav-history">历史</span>
+            </button>
+
             <div class="relative flex-shrink-0 z-[70]">
-                <button onclick="toggleSettingsMenu(event)" class="text-slate-300 hover:text-white transition-all hover:rotate-90 duration-300 flex items-center p-1" title="系统设置">
-                    <i class="fa-solid fa-gear text-lg"></i>
+                <button onclick="toggleSettingsMenu(event)" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1 border border-slate-700 whitespace-nowrap" title="系统设置">
+                    <i class="fa-solid fa-gear"></i>
                 </button>
                 
-                <div id="settings-dropdown" class="hidden absolute right-0 top-full mt-3 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 flex flex-col py-1">
+                <div id="settings-dropdown" class="hidden absolute left-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 flex flex-col py-1">
                     <button onclick="toggleLanguage(); closeSettingsMenu();" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                         <i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span>
                     </button>
@@ -132,12 +133,22 @@
                 </div>
             </div>
 
-            <button onclick="toggleRightPanel()" class="bg-red-700 hover:bg-red-800 text-white font-black px-3 py-1 rounded-xl text-sm transition-all shadow-md flex items-center justify-center gap-2 border border-red-600 whitespace-nowrap flex-shrink-0">
-                <i id="right-panel-toggle-icon" class="fa-solid fa-dumpster-fire text-xs"></i> <span id="btn-toggle-right-text" data-i18n="nav-history">历史</span>
-            </button>
-            
+            <div class="relative flex items-center w-56 ml-1 flex-shrink-0">
+                <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-[11px]"></i>
+                <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索标题或内容..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-lg py-1 pl-6 pr-2 text-xs font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
+            </div>
         </div>
-    </header>
+
+        <div class="flex items-center justify-end flex-wrap gap-2">
+            <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-lg shadow-sm font-black text-xs">
+                <i class="fa-solid fa-pen-nib"></i> <span data-i18n="label-editor">编辑栏</span>
+            </div>
+            <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 px-2.5 py-1 rounded-lg shadow-sm">
+                <span class="text-xs font-black text-blue-600 dark:text-blue-400"><i class="fa-solid fa-folder text-blue-500"></i> <span data-i18n="label-category">归属地:</span></span>
+                <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="text-xs font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer"></select>
+            </div>
+        </div>
+    </div>
 
     <div id="workspace-container" class="flex flex-1 overflow-hidden w-full bg-slate-200 dark:bg-slate-900 transition-colors duration-300">
         
@@ -146,13 +157,6 @@
                 <div class="flex items-center gap-1.5 px-1">
                     <button id="btn-new-note" onclick="createNewNote()" class="flex-1 py-1 px-1 flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black transition-all shadow-sm text-xs"><i class="fa-solid fa-file-plus"></i> <span data-i18n="btn-new-note">新建笔记</span></button>
                     <button onclick="createNewCategory()" class="flex-1 py-1 px-1 flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black transition-all shadow-sm text-xs"><i class="fa-solid fa-folder-plus"></i> <span data-i18n="btn-new-folder">新建分类</span></button>
-                </div>
-                
-                <div class="px-1 mt-0.5">
-                    <div class="relative flex items-center w-full">
-                        <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-[11px]"></i>
-                        <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索标题或内容..." class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg py-1 pl-6 pr-2 text-xs font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
-                    </div>
                 </div>
                 
                 <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-1.5 mb-0 shadow-sm flex-shrink-0 mt-1">
@@ -224,16 +228,6 @@
         
         <section id="middle-panel" class="bg-white dark:bg-slate-950 flex flex-col flex-1 overflow-hidden min-w-0 md:min-w-[450px] transition-colors duration-300">
             <div class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-2 flex flex-col gap-2 select-none flex-shrink-0 shadow-sm z-10">
-                <div class="flex items-center justify-between flex-wrap gap-2">
-                    <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-lg shadow-sm font-black text-xs">
-                        <i class="fa-solid fa-pen-nib"></i> <span data-i18n="label-editor">编辑栏</span>
-                    </div>
-                    <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 px-2.5 py-1 rounded-lg shadow-sm">
-                        <span class="text-xs font-black text-blue-600 dark:text-blue-400"><i class="fa-solid fa-folder text-blue-500"></i> <span data-i18n="label-category">归属地:</span></span>
-                        <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="text-xs font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer"></select>
-                    </div>
-                </div>
-                
                 <div id="editor-format-bar" class="flex items-center gap-1 flex-wrap bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-1.5 rounded-lg shadow-inner">
                     <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="px-1.5 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="" data-i18n="fmt-size">字号</option>
@@ -302,7 +296,7 @@
         </aside>
     </div>
     
-    <div id="custom-context-menu" class="hidden fixed bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl py-1.5 w-44 z-50 text-xs font-bold text-slate-700 dark:text-slate-200 select-none">
+    <div id="custom-context-menu" class="hidden fixed bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl py-1.5 w-44 z-[110] text-xs font-bold text-slate-700 dark:text-slate-200 select-none">
         <button onclick="handleContextMenuRename()" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 font-black"><i class="fa-regular fa-pen-to-square text-blue-500"></i> <span data-i18n="ctx-rename">重命名分类</span></button>
         <button id="ctx-delete-btn" onclick="handleContextMenuDelete()" class="w-full text-left px-4 py-2 hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 border-t border-slate-100 dark:border-slate-700 flex items-center gap-2 font-black"><i class="fa-regular fa-trash-can text-red-500"></i> <span data-i18n="ctx-delete">安全删除分类</span></button>
     </div>
@@ -1133,7 +1127,7 @@
                          activeImage.style.height = (startHeight + dy) + 'px';
                          activeImage.style.width = 'auto';
                      }
-               }
+                }
 
                function stopResizeImg() {
                       activeImage = null;
