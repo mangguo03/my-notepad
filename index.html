@@ -190,9 +190,12 @@
             
             <div id="all-docs-container" class="py-1 px-[9px] border-b border-slate-200 dark:border-slate-700 bg-slate-100/40 dark:bg-slate-800 flex-shrink-0"></div>
 
-            <div class="px-3.5 py-2 bg-slate-200/60 dark:bg-slate-900/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200 dark:border-slate-700">
-                <span class="sync-btn-font text-slate-700 dark:text-slate-300" data-i18n="label-folder">文件夹</span>
-                <div class="flex items-center gap-0.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded p-0.5 shadow-inner scale-95 origin-right">
+            <div class="px-3.5 py-2 bg-slate-200/60 dark:bg-slate-900/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-300/60 dark:hover:bg-slate-800 transition-colors" onclick="toggleFolderSection()">
+                <span class="sync-btn-font text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <i id="folder-section-icon" class="fa-solid fa-chevron-down text-[11px] transition-transform duration-200"></i>
+                    <span data-i18n="label-folder">文件夹</span>
+                </span>
+                <div class="flex items-center gap-0.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded p-0.5 shadow-inner scale-95 origin-right" onclick="event.stopPropagation()">
                     <button id="view-tree-list" onclick="toggleTreeLayout('list')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200" data-i18n="btn-list">列表</button>
                     <button id="view-tree-grid" onclick="toggleTreeLayout('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200" data-i18n="btn-grid">图表</button>
                 </div>
@@ -421,6 +424,22 @@
         let currentFilterCategory = "全部"; 
         let activeNoteId = null;
         let saveTimeout = null;
+        let draggedNoteId = null; // 用于记录当前正在拖拽的笔记ID
+        let isFolderSectionExpanded = true; // 记录文件夹区域是否展开
+
+        // 控制文件夹区域折叠/展开的函数
+        function toggleFolderSection() {
+            isFolderSectionExpanded = !isFolderSectionExpanded;
+            const container = document.getElementById('category-tree-container');
+            const icon = document.getElementById('folder-section-icon');
+            if (isFolderSectionExpanded) {
+                container.classList.remove('hidden');
+                icon.classList.remove('-rotate-90');
+            } else {
+                container.classList.add('hidden');
+                icon.classList.add('-rotate-90');
+            }
+        }
         
         let leftPanelClosed = false;
         let rightPanelClosed = true;
@@ -702,7 +721,33 @@
                             refreshAllViews();
                         }
                     };
-                    
+                   
+                    // --- 新增：文件夹拖放接收逻辑 ---
+                    cell.classList.add('folder-drop-target'); // 打个标记，方便清理样式
+                    cell.ondragover = (e) => {
+                        if (draggedNoteId) {
+                            e.preventDefault(); // 必须阻止默认行为，允许元素放入
+                            cell.classList.add('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed'); // 移入时高亮变色
+                        }
+                    };
+                    cell.ondragleave = (e) => {
+                        cell.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed');
+                    };
+                    cell.ondrop = (e) => {
+                        e.preventDefault();
+                        cell.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed');
+                        if (draggedNoteId) {
+                            // 找到拖拽的笔记，修改它的 category
+                            const idx = notes.findIndex(n => n.id === draggedNoteId);
+                            if (idx !== -1 && notes[idx].category !== cat.id) {
+                                notes[idx].category = cat.id; 
+                                saveCloudData();
+                                refreshAllViews(); // 刷新视图，你会看到侧边栏数量和列表瞬间变化
+                            }
+                        }
+                    };
+                    // -----------------------------
+ 
                     bindCategoryContextMenu(cell, cat.id);
                     treeRootWrapper.appendChild(cell);
 
@@ -737,7 +782,8 @@
                 });
             }
     
-            const sorted = [...displayNotes].sort((a,b) => b.updatedAt - a.updatedAt);
+            // 💡 改为直接使用数组的物理顺序，不再强制按时间排序，让拖拽排序生效
+            const sorted = displayNotes;
             if (sorted.length === 0) { container.innerHTML = `<p class="text-slate-400 text-center text-sm py-4 font-bold">${t('no-data')}</p>`; return; }
     
             const gridWrapper = document.createElement('div'); 
@@ -773,6 +819,53 @@
                         </div>
                     `;
                 }
+
+                // --- 新增：笔记拖拽与排序逻辑 ---
+                box.draggable = true;
+                
+                // 开始拖拽：记录ID，变半透明
+                box.ondragstart = (e) => {
+                    draggedNoteId = note.id;
+                    e.dataTransfer.effectAllowed = 'move';
+                    setTimeout(() => box.classList.add('opacity-40', 'scale-95'), 0);
+                };
+                
+                // 拖拽结束：清理样式
+                box.ondragend = (e) => {
+                    draggedNoteId = null;
+                    box.classList.remove('opacity-40', 'scale-95');
+                    document.querySelectorAll('.folder-drop-target').forEach(el => el.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed'));
+                };
+                
+                // 拖拽悬停在其他笔记上方：显示蓝色的顶部边框作为插入提示
+                box.ondragover = (e) => {
+                    if (draggedNoteId && draggedNoteId !== note.id) {
+                        e.preventDefault(); 
+                        box.classList.add('border-t-2', 'border-blue-500'); 
+                    }
+                };
+                box.ondragleave = (e) => {
+                    box.classList.remove('border-t-2', 'border-blue-500');
+                };
+                
+                // 松开鼠标：执行位置互换
+                box.ondrop = (e) => {
+                    e.preventDefault();
+                    box.classList.remove('border-t-2', 'border-blue-500');
+                    if (draggedNoteId && draggedNoteId !== note.id) {
+                        const fromIdx = notes.findIndex(n => n.id === draggedNoteId);
+                        const toIdx = notes.findIndex(n => n.id === note.id);
+                        if (fromIdx !== -1 && toIdx !== -1) {
+                            // 从原位置抽离，并插入到目标位置
+                            const [movedItem] = notes.splice(fromIdx, 1);
+                            const newToIdx = notes.findIndex(n => n.id === note.id);
+                            notes.splice(newToIdx, 0, movedItem);
+                            saveCloudData();
+                            renderLeftNotesView();
+                        }
+                    }
+                };
+                // -----------------------------
                 gridWrapper.appendChild(box);
             });
             container.appendChild(gridWrapper);
@@ -806,7 +899,9 @@
         function createNewNote() {
             const defaultCat = currentFilterCategory !== "全部" ? currentFilterCategory : "未分类";
             const newDoc = { id: 'md_' + Date.now(), title: '', content: '', category: defaultCat, updatedAt: Date.now() };
-            notes.push(newDoc); saveCloudData(); openNote(newDoc.id);
+            // 💡 改用 unshift，让新插入的笔记永远排在数组最顶端（第一位）
+            notes.unshift(newDoc); 
+            saveCloudData(); openNote(newDoc.id);
         }
         
         function openNote(id) {
