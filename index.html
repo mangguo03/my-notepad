@@ -154,7 +154,7 @@
 
     <div id="workspace-container" class="flex flex-1 overflow-hidden w-full bg-slate-200 dark:bg-slate-900 transition-colors duration-300">
         
-        <aside id="left-panel" class="bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-r border-slate-200 panel-large-text transition-all absolute md:relative z-50 h-full shadow-2xl md:shadow-none" style="width: 200px; min-width: 160px; max-width: 480px;">
+        <aside id="left-panel" class="bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-r border-slate-200 panel-large-text transition-all absolute md:relative z-50 h-full shadow-2xl md:shadow-none" style="width: 160px; min-width: 130px; max-width: 480px;">
             
             <div class="p-1 border-b border-slate-200 dark:border-slate-700 bg-slate-100/80 dark:bg-slate-800/80 flex flex-col gap-0.5 flex-shrink-0">
                 
@@ -286,7 +286,7 @@
         
         <div id="resizer-right" class="resizer hidden dark:bg-slate-700"></div>
         
-        <aside id="right-panel" class="hidden bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-l border-slate-200 panel-large-text" style="width: 200px; min-width: 160px; max-width: 480px;">
+        <aside id="right-panel" class="hidden bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-l border-slate-200 panel-large-text" style="width: 160px; min-width: 130px; max-width: 480px;">
             <div class="p-4 bg-slate-800 dark:bg-slate-900 text-white flex flex-col gap-3 flex-shrink-0 shadow-md">
                 <span class="sync-btn-font tracking-wide flex items-center gap-1.5 text-slate-200 text-lg">
                     <i class="fa-solid fa-dumpster-fire text-red-500"></i> <span data-i18n="trash-title">回收站</span> (<span id="trash-count-badge">0</span>)
@@ -1067,12 +1067,12 @@
             const leftPanel = document.getElementById('left-panel'); const resizerLeft = document.getElementById('resizer-left');
             const rightPanel = document.getElementById('right-panel'); const resizerRight = document.getElementById('resizer-right');
             resizerLeft.addEventListener('mousedown', function(e) { e.preventDefault(); resizerLeft.classList.add('resizing'); document.body.classList.add('no-select'); document.addEventListener('mousemove', resizeLeft); document.addEventListener('mouseup', stopResizeLeft); });
-            function resizeLeft(e) { let newWidth = e.clientX - container.getBoundingClientRect().left; if (newWidth >= 160 && newWidth <= 480) leftPanel.style.width = newWidth + 'px'; }
+            function resizeLeft(e) { let newWidth = e.clientX - container.getBoundingClientRect().left; if (newWidth >= 130 && newWidth <= 480) leftPanel.style.width = newWidth + 'px'; }
             function stopResizeLeft() { resizerLeft.classList.remove('resizing'); document.body.classList.remove('no-select'); document.removeEventListener('mousemove', resizeLeft); document.removeEventListener('mouseup', stopResizeLeft); }
             
             resizerRight.addEventListener('mousedown', function(e) { e.preventDefault(); resizerRight.classList.add('resizing'); document.body.classList.add('no-select'); document.addEventListener('mousemove', resizeRight); document.addEventListener('mouseup', stopResizeRight); });
             // 💡 将 newWidth >= 270 改为 newWidth >= 160
-            function resizeRight(e) { let newWidth = container.getBoundingClientRect().right - e.clientX; if (newWidth >= 160 && newWidth <= 480) rightPanel.style.width = newWidth + 'px'; }
+            function resizeRight(e) { let newWidth = container.getBoundingClientRect().right - e.clientX; if (newWidth >= 130 && newWidth <= 480) rightPanel.style.width = newWidth + 'px'; }
             function stopResizeRight() { resizerRight.classList.remove('resizing'); document.body.classList.remove('no-select'); document.removeEventListener('mousemove', resizeRight); document.removeEventListener('mouseup', stopResizeRight); }
         }
 
