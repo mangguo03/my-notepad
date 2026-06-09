@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -287,7 +288,7 @@
         <div id="resizer-right" class="resizer hidden dark:bg-slate-700"></div>
         
         <aside id="right-panel" class="hidden bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-l border-slate-200 panel-large-text" style="width: 170px; min-width: 130px; max-width: 480px;">
-            <div class="p-4 bg-slate-800 dark:bg-slate-900 text-white flex flex-col gap-3 flex-shrink-0 shadow-md">
+            <div class="p-2 bg-slate-800 dark:bg-slate-900 text-white flex flex-col gap-1.5 flex-shrink-0 shadow-md">
                 <span class="sync-btn-font tracking-wide flex items-center gap-1.5 text-slate-200 text-lg">
                     <i class="fa-solid fa-dumpster-fire text-red-500"></i> <span data-i18n="trash-title">回收站</span> (<span id="trash-count-badge">0</span>)
                 </span>
@@ -821,7 +822,8 @@
                if (leftLayoutView === 'list') {
                     box.className = `w-full py-1 px-2 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? activeBoxStyle : defaultBoxStyle}`;
                     box.innerHTML = `
-                        <button class="del-btn absolute right-1 top-1 p-0.5 ${isSelected ? 'text-white hover:text-red-200' : 'text-red-500 hover:text-red-700'} transition-all z-10" onclick="confirmDelete(event, '${note.id}')"><i class="fa-solid fa-trash-can text-[9px]"></i></button>
+                        // 2. 图表模式下的删除按钮（修改后）
+                        <button class="del-btn absolute right-1 top-1 p-0.5 ${isSelected ? 'block text-white hover:text-red-200' : 'hidden'} transition-all z-10" onclick="confirmDelete(event, '${note.id}')"><i class="fa-solid fa-trash-can text-[9px]"></i></button>
                         <div class="w-full overflow-hidden flex flex-col flex-1 pr-4 justify-center">
                             <div class="font-black text-[12px] ${isSelected ? 'text-yellow-200' : 'text-yellow-600 dark:text-yellow-400'} line-clamp-1 leading-snug mb-0" title="${displayTitle}">${displayTitle}</div>
                             <p class="text-[12px] ${isSelected ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400'} line-clamp-1 leading-none">${plainText}</p>
@@ -830,7 +832,8 @@
                 } else {
                     box.className = `w-full h-[72px] p-1.5 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? activeBoxStyle : defaultBoxStyle}`;
                     box.innerHTML = `
-                        <button class="del-btn absolute right-1 top-1 p-0.5 ${isSelected ? 'text-white hover:text-red-200' : 'text-red-500 hover:text-red-700'} transition-all z-10" onclick="confirmDelete(event, '${note.id}')"><i class="fa-solid fa-trash-can text-[9px]"></i></button>
+                        // 1. 列表模式下的删除按钮（修改后）
+                        <button class="del-btn absolute right-1 top-1 p-0.5 ${isSelected ? 'block text-white hover:text-red-200' : 'hidden'} transition-all z-10" onclick="confirmDelete(event, '${note.id}')"><i class="fa-solid fa-trash-can text-[9px]"></i></button>
                         <div class="w-full overflow-hidden flex flex-col flex-1 justify-center">
                             <div class="font-black text-[10px] ${isSelected ? 'text-yellow-200' : 'text-yellow-600 dark:text-yellow-400'} line-clamp-1 leading-tight mb-1" title="${displayTitle}">${displayTitle}</div>
                             <p class="text-[10px] ${isSelected ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400'} line-clamp-2 leading-tight">${plainText}</p>
@@ -885,17 +888,28 @@
                 return; 
             }
             trashBin.forEach((note) => {
-                const card = document.createElement('div'); card.className = "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-xl relative group text-xs shadow-sm hover:shadow transition-all mb-2";
+                // 💡 优化 1：缩小卡片上下宽度（p-3 变 py-1 px-2，mb-2 变 mb-1），并赋予点击小手势 cursor-pointer
+                const card = document.createElement('div'); card.className = "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1 px-2 rounded-lg relative group text-xs shadow-sm hover:shadow transition-all mb-1 cursor-pointer";
+                
+                // 💡 优化 2：实现点击删除笔记立即将内容载入中央编辑栏预览的功能
+                card.onclick = (e) => {
+                    // 如果点击的不是右侧的操作按钮，才触发预览
+                    if (!e.target.closest('button')) {
+                        document.getElementById('note-title-input').value = "[回收站预览] " + (note.title || t('untitled'));
+                        document.getElementById('note-editor-richtext').innerHTML = note.content;
+                    }
+                };
+
                 const catObj = categories.find(c => c.id === note.category) || {name: '未分类'};
                 const displayTitle = note.title || t('untitled');
                 card.innerHTML = `
                     <div class="pr-16 truncate">
-                        <div class="font-bold text-slate-900 dark:text-slate-100 truncate mb-1 text-sm">${displayTitle}</div>
+                        <div class="font-bold text-slate-900 dark:text-slate-100 truncate mb-0 text-sm">${displayTitle}</div>
                         <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium block flex items-center gap-1"><i class="fa-solid fa-folder-open text-slate-400"></i> ${t('original-folder')} ${t(catObj.name)}</span>
                     </div>
-                    <div class="absolute right-2 top-2 flex gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
-                        <button onclick="recoverDeletedFile('${note.id}')" title="恢复" class="p-1.5 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-lg text-emerald-600 dark:text-emerald-400 font-bold"><i class="fa-solid fa-rotate-left"></i></button>
-                        <button onclick="permanentlyDeleteFile('${note.id}')" title="彻底删除" class="p-1.5 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="absolute right-1 top-1/2 -translate-y-1/2 flex gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                        <button onclick="recoverDeletedFile('${note.id}'); event.stopPropagation();" title="恢复" class="p-1 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-lg text-emerald-600 dark:text-emerald-400 font-bold"><i class="fa-solid fa-rotate-left text-[10px]"></i></button>
+                        <button onclick="permanentlyDeleteFile('${note.id}'); event.stopPropagation();" title="彻底删除" class="p-1 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400"><i class="fa-solid fa-xmark text-[10px]"></i></button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -1310,6 +1324,7 @@
             });
         }
     </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"c67fd155821c4d4bb15f60ba3dc67861","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"c67fd155821c4d4bb15f60ba3dc67861","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"c67fd155821c4d4bb15f60ba3dc67861","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"c67fd155821c4d4bb15f60ba3dc67861","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
