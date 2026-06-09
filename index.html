@@ -569,6 +569,17 @@
                 if (response.status === 401) { logout(); return; }
                 if (!response.ok) throw new Error('网络响应异常');
                 const data = await response.json();
+                
+                // 💡 新增：如果云端传回了自定义名称，则动态修改网页标题和顶栏名字
+                if (data.appName) {
+                    document.title = data.appName; // 修改浏览器标签页名字
+                    const titleEl = document.querySelector('[data-i18n="app-title"]');
+                    if (titleEl) titleEl.innerText = data.appName; // 修改左上角顶栏名字
+                    // 同时更新翻译字典，防止切换语言时被覆盖
+                    if (dict.zh) dict.zh['app-title'] = data.appName;
+                    if (dict.en) dict.en['app-title'] = data.appName;
+                }
+
                 if (data.notes) notes = data.notes;
                 if (data.categories) {
                     if (data.categories.length > 0 && typeof data.categories[0] === 'string') {
