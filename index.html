@@ -21,8 +21,9 @@
     
     <style>
         body { font-size: 19px; }
-        .panel-large-text { font-size: 16px !important; font-weight: 800 !important; }
-        .sync-btn-font { font-size: 14px !important; font-weight: 900 !important; }
+        /* 💡 将 16px 修改为 14px，使其与归属地的 text-xs 大小完全一致 */
+        .panel-large-text { font-size: 12px !important; font-weight: 800 !important; }
+        .sync-btn-font { font-size: 12px !important; font-weight: 900 !important; }
         
         /* 💡 去掉了标题下划线 border-bottom */
         .md-preview h1 { font-size: 2.6rem; font-weight: 800; padding-bottom: 0.3em; margin-top: 1.6rem; margin-bottom: 1rem; }
@@ -153,7 +154,7 @@
 
     <div id="workspace-container" class="flex flex-1 overflow-hidden w-full bg-slate-200 dark:bg-slate-900 transition-colors duration-300">
         
-        <aside id="left-panel" class="bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-r border-slate-200 panel-large-text transition-all absolute md:relative z-50 h-full shadow-2xl md:shadow-none" style="width: 180px; min-width: 160px; max-width: 480px;">
+        <aside id="left-panel" class="bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-r border-slate-200 panel-large-text transition-all absolute md:relative z-50 h-full shadow-2xl md:shadow-none" style="width: 140px; min-width: 160px; max-width: 480px;">
             
             <div class="p-1 border-b border-slate-200 dark:border-slate-700 bg-slate-100/80 dark:bg-slate-800/80 flex flex-col gap-0.5 flex-shrink-0">
                 
@@ -657,7 +658,7 @@
             const defaultStyle = 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 shadow-sm';
 
             const allBtn = document.createElement('div');
-            allBtn.className = `px-3 py-1 rounded-lg border flex items-center gap-1 cursor-pointer transition-all text-xs font-black ${currentFilterCategory === '全部' ? activeStyle : defaultStyle}`;
+            allBtn.className = `px-2.5 py-1 rounded-lg border flex items-center gap-1 cursor-pointer transition-all text-xs font-black ${currentFilterCategory === '全部' ? activeStyle : defaultStyle}`;
             allBtn.innerHTML = `<i class="fa-solid fa-list-check text-[12px]"></i> ${t('all-docs')}`;
             allBtn.onclick = () => { currentFilterCategory = "全部"; refreshAllViews(); };
             if(allDocsContainer) allDocsContainer.appendChild(allBtn);
@@ -676,7 +677,7 @@
                     
                     const cell = document.createElement('div');
                     const paddingLeft = `${level * 12 + 6}px`;
-                    cell.className = `py-1 px-1.5 rounded-lg border cursor-pointer transition-all flex items-center justify-between relative h-6 folder-drop-target ${isSelected ? activeStyle : defaultStyle}`;
+                    cell.className = `py-1 px-2.5 rounded-lg border cursor-pointer transition-all flex items-center justify-between relative h-6 folder-drop-target ${isSelected ? activeStyle : defaultStyle}`;
                     cell.style.paddingLeft = paddingLeft;
                     
                     // --- 恢复：根据文件夹层级动态分配颜色 ---
