@@ -88,7 +88,9 @@
         </div>
     </header>
 
-    <div id="global-toolbar" class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-2 select-none flex-shrink-0 z-[60] relative shadow-sm">
+    <button onclick="toggleRightPanel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                <i id="right-panel-toggle-icon" class="fa-solid fa-clock-rotate-left"></i> <span id="btn-toggle-right-text" data-i18n="nav-history">历史</span>
+            </button>
         
         <div class="flex items-center gap-2">
             <button onclick="toggleLeftPanel()" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
@@ -165,7 +167,21 @@
                         <i id="import-export-arrow" class="fa-solid fa-chevron-down transition-transform duration-200 text-emerald-100 text-[10px]"></i>
                     </button>
     
-                    <div id="import-export-content" class="hidden flex flex-col gap-1.5 border-t border-slate-100 dark:border-slate-700 pt-1.5 mt-1.5">
+                    <aside id="left-panel" class="bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-r border-slate-200 panel-large-text transition-all absolute md:relative z-50 h-full shadow-2xl md:shadow-none" style="width: 180px; min-width: 160px; max-width: 480px;">
+            
+            <div class="p-1 border-b border-slate-200 dark:border-slate-700 bg-slate-100/80 dark:bg-slate-800/80 flex flex-col gap-0.5 flex-shrink-0">
+                <div class="flex items-center gap-1 px-1">
+                    <button id="btn-new-note" onclick="createNewNote()" class="flex-1 py-1 px-1 flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black transition-all shadow-sm text-xs"><i class="fa-solid fa-file-plus"></i> <span data-i18n="btn-new-note">新建笔记</span></button>
+                    <button onclick="createNewCategory()" class="flex-1 py-1 px-1 flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-black transition-all shadow-sm text-xs"><i class="fa-solid fa-folder-plus"></i> <span data-i18n="btn-new-folder">新建分类</span></button>
+                </div>
+                
+                <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-1 mb-0 shadow-sm flex-shrink-0 mt-0.5">
+                    <button onclick="toggleImportExport()" class="w-full flex items-center justify-between bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs px-2 py-1 rounded-lg transition-all cursor-pointer shadow-sm border border-emerald-600">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-box-archive text-white"></i> <span data-i18n="btn-import-export">导入与导出</span></span>
+                        <i id="import-export-arrow" class="fa-solid fa-chevron-down transition-transform duration-200 text-emerald-100 text-[10px]"></i>
+                    </button>
+    
+                    <div id="import-export-content" class="hidden flex flex-col gap-1.5 border-t border-slate-100 dark:border-slate-700 pt-1 mt-1">
                         <div class="flex flex-col gap-0.5 bg-white/70 dark:bg-slate-900/50 p-1 rounded-lg border border-slate-200/60 dark:border-slate-700/60">
                             <div class="flex items-center gap-1.5">
                                 <button onclick="triggerImport('md')" class="flex-1 py-1 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm"><i class="fa-solid fa-file-import"></i> MD</button>
@@ -177,10 +193,10 @@
                             </div>
                             <div class="flex items-center gap-1.5">
                                 <button onclick="triggerFolderImport()" class="flex-1 py-1 px-1 bg-slate-700 hover:bg-slate-800 dark:bg-slate-600 dark:hover:bg-slate-500 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm">
-                                    <i class="fa-solid fa-folder-tree text-amber-400"></i> <span data-i18n="btn-import-folder">导入文件夹</span>
+                                    <i class="fa-solid fa-folder-tree text-amber-400"></i> <span data-i18n="btn-import-folder">导入</span>
                                 </button>
                                 <button onclick="exportCurrentFolder()" class="flex-1 py-1 px-1 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-lg font-black transition-all text-center truncate text-xs shadow-sm">
-                                    <i class="fa-solid fa-file-zipper text-blue-200"></i> <span data-i18n="btn-export-folder">导出文件夹</span>
+                                    <i class="fa-solid fa-file-zipper text-blue-200"></i> <span data-i18n="btn-export-folder">导出</span>
                                 </button>
                             </div>
                         </div>
@@ -192,7 +208,7 @@
                 <input type="file" id="import-folder-input" webkitdirectory directory multiple class="hidden" onchange="handleFolderImport(event)">
             </div>
             
-            <div id="all-docs-container" class="py-1 px-[9px] border-b border-slate-200 dark:border-slate-700 bg-slate-100/40 dark:bg-slate-800 flex-shrink-0"></div>
+            <div id="all-docs-container" class="py-0.5 px-[9px] border-b border-slate-200 dark:border-slate-700 bg-slate-100/40 dark:bg-slate-800 flex-shrink-0"></div>
 
             <div class="px-3.5 py-2 bg-slate-200/60 dark:bg-slate-900/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-300/60 dark:hover:bg-slate-800 transition-colors" onclick="toggleFolderSection()">
                 <span class="sync-btn-font text-yellow-600 dark:text-yellow-400 font-black flex items-center gap-1.5">
