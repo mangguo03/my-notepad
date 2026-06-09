@@ -40,6 +40,7 @@ Fock 本项目，同时请帮忙点个 Star，万分感谢
 
 ## 步骤 2: 创建 kv 数据库
 - 登入Cloudflare 平台 > 储存和数据库 > workers kv > 创建数据库，数据库名称为 My_Note 或随意
+- cf云端 KV 数据库存了你的笔记和分类数据
 
 <img width="1011" height="650" alt="PixPin_2026-06-04_21-47-53" src="https://github.com/user-attachments/assets/15188d5f-9c78-415e-99e5-a971bac2d8f9" />
 
@@ -63,7 +64,7 @@ Fock 本项目，同时请帮忙点个 Star，万分感谢
 
 <img width="1623" height="664" alt="PixPin_2026-06-04_22-01-20" src="https://github.com/user-attachments/assets/93245ca2-962a-404d-98dc-dcaa63de101c" />
 
-## 步骤 5: 设置账号数量
+## 步骤 5: 设置账号数量、自定义名称
 1、前往 设置 > 变量与机密
 
 2、添加 变量：
@@ -71,6 +72,12 @@ Fock 本项目，同时请帮忙点个 Star，万分感谢
 - 值：限制注册账号数量由你随意设定
 
 <img width="1575" height="670" alt="PixPin_2026-06-04_22-02-36" src="https://github.com/user-attachments/assets/1fc5e6e0-c591-472c-b2fa-6d1124f88d00" />
+
+3、自定义名称
+- 变量名称：APP_NAME (固定值）
+- 值：笔记名称随意
+  
+<img width="402" height="352" alt="PixPin_2026-06-10_06-38-46" src="https://github.com/user-attachments/assets/9ad6cb24-8f8c-47f6-abec-5816593579cb" />
 
 ## 步骤 6：重置部署
 导航到 部署 > 所有部署，最新的部署... 重试部署
@@ -96,8 +103,6 @@ Fock 本项目，同时请帮忙点个 Star，万分感谢
 <img width="442" height="326" alt="PixPin_2026-06-05_11-13-23" src="https://github.com/user-attachments/assets/e6aa24d1-af0c-42b9-974d-bbe0e674c452" />
 
 <img width="338" height="464" alt="PixPin_2026-06-05_11-14-13" src="https://github.com/user-attachments/assets/aa4105ee-76b7-4c24-8b72-4892e2ae872c" />
-
-
 
 ## 步骤 9: 桌面端设置快捷呼出键
 - 零代码实现“一键呼出”的终极秘籍：
