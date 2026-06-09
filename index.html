@@ -822,7 +822,6 @@
                if (leftLayoutView === 'list') {
                     box.className = `w-full py-1 px-2 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? activeBoxStyle : defaultBoxStyle}`;
                     box.innerHTML = `
-                        // 2. 图表模式下的删除按钮（修改后）
                         <button class="del-btn absolute right-1 top-1 p-0.5 ${isSelected ? 'block text-white hover:text-red-200' : 'hidden'} transition-all z-10" onclick="confirmDelete(event, '${note.id}')"><i class="fa-solid fa-trash-can text-[9px]"></i></button>
                         <div class="w-full overflow-hidden flex flex-col flex-1 pr-4 justify-center">
                             <div class="font-black text-[12px] ${isSelected ? 'text-yellow-200' : 'text-yellow-600 dark:text-yellow-400'} line-clamp-1 leading-snug mb-0" title="${displayTitle}">${displayTitle}</div>
@@ -832,7 +831,6 @@
                 } else {
                     box.className = `w-full h-[72px] p-1.5 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? activeBoxStyle : defaultBoxStyle}`;
                     box.innerHTML = `
-                        // 1. 列表模式下的删除按钮（修改后）
                         <button class="del-btn absolute right-1 top-1 p-0.5 ${isSelected ? 'block text-white hover:text-red-200' : 'hidden'} transition-all z-10" onclick="confirmDelete(event, '${note.id}')"><i class="fa-solid fa-trash-can text-[9px]"></i></button>
                         <div class="w-full overflow-hidden flex flex-col flex-1 justify-center">
                             <div class="font-black text-[10px] ${isSelected ? 'text-yellow-200' : 'text-yellow-600 dark:text-yellow-400'} line-clamp-1 leading-tight mb-1" title="${displayTitle}">${displayTitle}</div>
