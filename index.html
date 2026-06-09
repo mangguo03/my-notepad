@@ -47,9 +47,9 @@
             object-fit: contain;
         }
         .md-preview img:hover {
-            outline: 3px dashed #60a5fa; outline-offset: 2px;
+            outline: 3px dashed #eab308; outline-offset: 2px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            cursor: ns-resize;
+            cursor: nwse-resize;
         }
         [contenteditable]:empty:before { content: attr(placeholder); color: #cbd5e1; pointer-events: none; display: block; }
         .resizer { width: 6px; cursor: col-resize; background-color: #e2e8f0; transition: background-color 0.2; position: relative; z-index: 10; }
@@ -90,17 +90,17 @@
 
     <div id="global-toolbar" class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-2 py-1.5 flex flex-wrap items-center justify-start gap-1 select-none flex-shrink-0 z-[60] relative shadow-sm">
         
-        <div class="flex items-center gap-2">
-            <button onclick="toggleLeftPanel()" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-2 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+        <div class="flex items-center gap-1.5">
+            <button onclick="toggleLeftPanel()" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
                 <i id="left-panel-toggle-icon" class="fa-solid fa-folder-tree"></i> <span id="btn-toggle-left-text" data-i18n="nav-sidebar">侧栏</span>
             </button>
 
-            <button onclick="toggleRightPanel()" class="bg-red-600 hover:bg-red-700 text-white font-black px-2 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0">
+            <button onclick="toggleRightPanel()" class="bg-red-600 hover:bg-red-700 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0">
                 <i id="right-panel-toggle-icon" class="fa-solid fa-clock-rotate-left"></i> <span id="btn-toggle-right-text" data-i18n="nav-history">历史</span>
             </button>
 
             <div class="relative flex-shrink-0 z-[70]">
-                <button onclick="toggleSettingsMenu(event)" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-2 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1 border border-slate-700 whitespace-nowrap" title="系统设置">
+                <button onclick="toggleSettingsMenu(event)" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1 border border-slate-700 whitespace-nowrap" title="系统设置">
                     <i class="fa-solid fa-gear"></i>
                 </button>
                 
@@ -133,16 +133,17 @@
                 </div>
             </div>
 
-            <div class="relative flex items-center w-40 ml-1 flex-shrink-0">
-                <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-[11px]"></i>
-                <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索标题或内容..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-lg py-1 pl-6 pr-2 text-xs font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
-            </div>
-        </div>
-
-        <div class="flex items-center justify-end flex-wrap gap-2">
             <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-lg shadow-sm font-black text-xs">
                 <i class="fa-solid fa-pen-nib"></i> <span data-i18n="label-editor">编辑栏</span>
             </div>
+        </div>
+
+        <div class="flex items-center justify-end flex-wrap gap-2 ml-auto">
+            <div class="relative flex items-center w-40 flex-shrink-0">
+                <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-[11px]"></i>
+                <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索标题或内容..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-lg py-1 pl-6 pr-2 text-xs font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
+            </div>
+
             <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 px-2.5 py-1 rounded-lg shadow-sm">
                 <span class="text-xs font-black text-blue-600 dark:text-blue-400"><i class="fa-solid fa-folder text-blue-500"></i> <span data-i18n="label-category">归属地:</span></span>
                 <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="text-xs font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer"></select>
@@ -1076,7 +1077,7 @@
                          startY = getClientY(e);
                          startHeight = activeImage.clientHeight || activeImage.offsetHeight;
             
-                         if (!e.touches) document.body.style.cursor = 'ns-resize'; 
+                         if (!e.touches) document.body.style.cursor = 'nwse-resize';
             
                          if (e.touches) {
                              document.addEventListener('touchmove', resizeImg, { passive: false });
