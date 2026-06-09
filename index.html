@@ -88,17 +88,15 @@
         </div>
     </header>
 
-    <button onclick="toggleRightPanel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0">
-                <i id="right-panel-toggle-icon" class="fa-solid fa-clock-rotate-left"></i> <span id="btn-toggle-right-text" data-i18n="nav-history">历史</span>
-            </button>
+    <div id="global-toolbar" class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-2 select-none flex-shrink-0 z-[60] relative shadow-sm">
         
         <div class="flex items-center gap-2">
             <button onclick="toggleLeftPanel()" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
                 <i id="left-panel-toggle-icon" class="fa-solid fa-folder-tree"></i> <span id="btn-toggle-left-text" data-i18n="nav-sidebar">侧栏</span>
             </button>
 
-            <button onclick="toggleRightPanel()" class="bg-red-600 hover:bg-red-700 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0">
-                <i id="right-panel-toggle-icon" class="fa-solid fa-dumpster-fire"></i> <span id="btn-toggle-right-text" data-i18n="nav-history">历史</span>
+            <button onclick="toggleRightPanel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                <i id="right-panel-toggle-icon" class="fa-solid fa-clock-rotate-left"></i> <span id="btn-toggle-right-text" data-i18n="nav-history">历史</span>
             </button>
 
             <div class="relative flex-shrink-0 z-[70]">
@@ -327,7 +325,7 @@
                 'color-white': '白', 'color-red': '红', 'color-yellow': '黄', 'color-blue': '蓝', 'color-green': '绿', 'color-black': '黑',
                 'fmt-img': '图', 'btn-recover': '恢复', 'btn-empty': '清空', 'ctx-rename': '重命名分类', 'ctx-delete': '安全删除分类',
                 '未分类': '未分类', '工作': '工作', '生活': '生活',
-                'btn-import-folder': '导入文件夹', 'btn-export-folder': '导出文件夹'
+                'btn-import-folder': '导入', 'btn-export-folder': '导出'
             },
             en: {
                 'nav-logout': 'Logout', 'nav-delete': 'Delete Account', 'nav-history': 'History',
@@ -346,7 +344,7 @@
                 'color-white': 'W', 'color-red': 'R', 'color-yellow': 'Y', 'color-blue': 'B', 'color-green': 'G', 'color-black': 'Bk',
                 'fmt-img': 'Img', 'btn-recover': 'Restore', 'btn-empty': 'Empty', 'ctx-rename': 'Rename', 'ctx-delete': 'Delete safely',
                 '未分类': 'Uncategorized', '工作': 'Work', '生活': 'Life',
-                'btn-import-folder': 'Import Folder', 'btn-export-folder': 'Export Folder'
+                'btn-import-folder': 'Import', 'btn-export-folder': 'Export'
             }
         };
 
