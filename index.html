@@ -208,7 +208,7 @@
                 </div>
             </div>
             
-            <div id="category-tree-container" class="p-2 border-b border-slate-200 dark:border-slate-700 bg-slate-100/40 dark:bg-slate-800/40 flex-shrink-0 max-h-72 overflow-y-scroll space-y-1"></div>
+            <div id="category-tree-container" class="p-2 border-b border-slate-200 dark:border-slate-700 bg-slate-100/40 dark:bg-slate-800/40 flex-shrink-0 max-h-[30vh] overflow-y-auto space-y-1"></div>
             
             <div class="px-3.5 py-2 bg-slate-200/60 dark:bg-slate-900/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-300/60 dark:hover:bg-slate-800 transition-colors" onclick="toggleContentSection()">
                 <span class="sync-btn-font text-yellow-600 dark:text-yellow-400 font-black flex items-center gap-1.5">
@@ -679,9 +679,15 @@
                     cell.className = `py-1 px-1.5 rounded-lg border cursor-pointer transition-all flex items-center justify-between relative h-6 folder-drop-target ${isSelected ? activeStyle : defaultStyle}`;
                     cell.style.paddingLeft = paddingLeft;
                     
+                    // --- 恢复：根据文件夹层级动态分配颜色 ---
+                    let folderIconColor = 'text-amber-500';         // 1级目录（最顶层）：黄色
+                    if (level === 1) folderIconColor = 'text-blue-500';       // 2级目录：蓝色
+                    else if (level === 2) folderIconColor = 'text-emerald-500'; // 3级目录：绿色
+                    else if (level >= 3) folderIconColor = 'text-purple-500';   // 4级及更深：紫色
+                    
                     const iconHtml = hasChildren ? 
-                        `<i class="fa-solid ${isExpanded ? 'fa-caret-down' : 'fa-caret-right'} text-[10px] w-3 shrink-0 opacity-50"></i><i class="fa-solid fa-folder text-blue-500 text-[12px] shrink-0"></i>` : 
-                        `<span class="w-3 inline-block shrink-0"></span><i class="fa-solid fa-folder text-blue-500 text-[12px] shrink-0"></i>`;
+                        `<i class="fa-solid ${isExpanded ? 'fa-caret-down' : 'fa-caret-right'} text-[10px] w-3 shrink-0 opacity-50"></i><i class="fa-solid fa-folder ${folderIconColor} text-[12px] shrink-0"></i>` : 
+                        `<span class="w-3 inline-block shrink-0"></span><i class="fa-solid fa-folder ${folderIconColor} text-[12px] shrink-0"></i>`;
 
                     cell.innerHTML = `
                         <div class="flex items-center gap-1.5 truncate flex-1 pr-1">
@@ -811,12 +817,12 @@
                 const defaultBoxStyle = 'bg-white dark:bg-slate-800 border-emerald-400 dark:border-emerald-600 hover:bg-emerald-50 dark:hover:bg-slate-700 shadow-sm';
                 const activeBoxStyle = 'bg-blue-500 border-blue-600 text-white shadow active-note-item';
 
-                if (leftLayoutView === 'list') {
+               if (leftLayoutView === 'list') {
                     box.className = `w-full py-1 px-2 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? activeBoxStyle : defaultBoxStyle}`;
                     box.innerHTML = `
                         <button class="del-btn absolute right-1 top-1 p-0.5 ${isSelected ? 'text-white hover:text-red-200' : 'text-red-500 hover:text-red-700'} transition-all z-10" onclick="confirmDelete(event, '${note.id}')"><i class="fa-solid fa-trash-can text-[9px]"></i></button>
                         <div class="w-full overflow-hidden flex flex-col flex-1 pr-4 justify-center">
-                            <div class="font-black text-[14px] ${isSelected ? 'text-white' : 'text-slate-900 dark:text-slate-100'} line-clamp-1 leading-snug mb-0" title="${displayTitle}">${displayTitle}</div>
+                            <div class="font-black text-[14px] ${isSelected ? 'text-yellow-200' : 'text-yellow-600 dark:text-yellow-400'} line-clamp-1 leading-snug mb-0" title="${displayTitle}">${displayTitle}</div>
                             <p class="text-[12px] ${isSelected ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400'} line-clamp-1 leading-none">${plainText}</p>
                         </div>
                     `;
@@ -825,7 +831,7 @@
                     box.innerHTML = `
                         <button class="del-btn absolute right-1 top-1 p-0.5 ${isSelected ? 'text-white hover:text-red-200' : 'text-red-500 hover:text-red-700'} transition-all z-10" onclick="confirmDelete(event, '${note.id}')"><i class="fa-solid fa-trash-can text-[9px]"></i></button>
                         <div class="w-full overflow-hidden flex flex-col flex-1 justify-center">
-                            <div class="font-black text-[12px] ${isSelected ? 'text-white' : 'text-slate-950 dark:text-slate-50'} line-clamp-1 leading-tight mb-1" title="${displayTitle}">${displayTitle}</div>
+                            <div class="font-black text-[12px] ${isSelected ? 'text-yellow-200' : 'text-yellow-600 dark:text-yellow-400'} line-clamp-1 leading-tight mb-1" title="${displayTitle}">${displayTitle}</div>
                             <p class="text-[10px] ${isSelected ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400'} line-clamp-2 leading-tight">${plainText}</p>
                         </div>
                     `;
@@ -929,15 +935,25 @@
         function changeNoteCategory(newCatId) { const idx = notes.findIndex(n => n.id === activeNoteId); if (idx !== -1) { notes[idx].category = newCatId; saveCloudData(); refreshAllViews(); } }
         
         function handleEditorInput() { 
-            if (!activeNoteId) return; if (saveTimeout) clearTimeout(saveTimeout);
+            if (!activeNoteId) return; 
+            
+            // 💡 1. 立即更新本地数据并重刷列表，实现打字时标题和内容“秒同步”
+            const idx = notes.findIndex(n => n.id === activeNoteId);
+            if (idx !== -1) {
+                notes[idx].title = document.getElementById('note-title-input').value;
+                notes[idx].content = document.getElementById('note-editor-richtext').innerHTML;
+            }
+            renderLeftNotesView(); // 实时渲染左侧列表文字，不再等待 1.5 秒
+
+            // 💡 2. 云端同步和时间戳更新依然使用防抖延迟，防止打字时频繁请求服务器或频繁打乱排序
+            if (saveTimeout) clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => {
-                const idx = notes.findIndex(n => n.id === activeNoteId);
-                if (idx !== -1) {
-                    notes[idx].title = document.getElementById('note-title-input').value;
-                    notes[idx].content = document.getElementById('note-editor-richtext').innerHTML;
-                    notes[idx].updatedAt = Date.now(); 
-                    saveCloudData(); renderLeftNotesView(); 
+                const idx2 = notes.findIndex(n => n.id === activeNoteId);
+                if (idx2 !== -1) {
+                    notes[idx2].updatedAt = Date.now(); // 停止打字后才真正更新时间戳完成最终重排
                 }
+                saveCloudData();
+                renderLeftNotesView(); 
             }, 1500); 
         }
         
