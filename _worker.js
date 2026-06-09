@@ -80,8 +80,22 @@ export default {
                 if (!username) return new Response(JSON.stringify({ message: "未授权" }), { status: 401, headers: jsonHeaders });
 
                 if (request.method === 'GET') {
-                    let data = await env.NOTE_KV.get(`data:${username}`);
-                    return new Response(data || "{}", { status: 200, headers: jsonHeaders });
+                    // 1. 先从 KV 数据库读取原本的笔记和分类文本
+                    let dataText = await env.NOTE_KV.get(`data:${username}`);
+                    let dataObj = {};
+                    
+                    try {
+                        // 2. 如果数据库有数据，把它解析成 JSON 对象
+                        if (dataText) dataObj = JSON.parse(dataText);
+                    } catch(e) {
+                        dataObj = {};
+                    }
+                    
+                    // 💡 3. 核心新增：向打包大礼包里注入你在 Cloudflare 环境变量里配置的自定义名称
+                    dataObj.appName = env.APP_NAME || "云笔记";
+                    
+                    // 4. 将塞入了名字的新大礼包重新转成文本，返回给前端
+                    return new Response(JSON.stringify(dataObj), { status: 200, headers: jsonHeaders });
                 }
                 
                 if (request.method === 'POST') {
