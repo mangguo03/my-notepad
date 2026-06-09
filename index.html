@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>云端记事本</title>
+    <title>云笔记</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -79,16 +79,16 @@
         </div>
     </div>
 
-    <header id="app-header" class="bg-slate-800 text-slate-200 py-1.5 px-4 flex items-center select-none border-b border-slate-700 shadow-md relative z-[70]" style="-webkit-app-region: drag;">
+    <header id="app-header" class="bg-slate-800 text-slate-200 py-0.5 px-4 flex items-center select-none border-b border-slate-700 shadow-md relative z-[70]" style="-webkit-app-region: drag;">
         <div class="flex items-center gap-2 pointer-events-none" style="-webkit-app-region: no-drag;">
             <i class="fa-solid fa-pen-to-square text-yellow-400 text-1xl"></i>
             <span class="font-black tracking-wider text-xl lg:text-lg bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300" data-i18n="app-title">
-                云端笔记
+                云笔记
             </span>
         </div>
     </header>
 
-    <div id="global-toolbar" class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-2 select-none flex-shrink-0 z-[60] relative shadow-sm">
+    <div id="global-toolbar" class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-2 py-1.5 flex flex-wrap items-center justify-between gap-2 select-none flex-shrink-0 z-[60] relative shadow-sm">
         
         <div class="flex items-center gap-2">
             <button onclick="toggleLeftPanel()" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-2.5 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
@@ -312,7 +312,7 @@
                 'nav-logout': '退出登录', 'nav-delete': '注销账号', 'nav-history': '历史',
                 'theme-title': '主题模式', 'theme-light': '浅色模式', 'theme-dark': '深色模式', 'theme-sys': '跟随系统',
                 'lang-toggle': '切换语言 / EN',
-                'nav-sidebar': '侧栏', 'app-title': '云端笔记',
+                'nav-sidebar': '侧栏', 'app-title': '云笔记',
                 'btn-new-note': '新建笔记', 'btn-new-folder': '新建分类',
                 'btn-import-export': '导入与导出', 'label-folder': '文件夹',
                 'label-content': '笔记集', 'label-editor': '编辑栏',
@@ -325,7 +325,7 @@
                 'color-white': '白', 'color-red': '红', 'color-yellow': '黄', 'color-blue': '蓝', 'color-green': '绿', 'color-black': '黑',
                 'fmt-img': '图', 'btn-recover': '恢复', 'btn-empty': '清空', 'ctx-rename': '重命名分类', 'ctx-delete': '安全删除分类',
                 '未分类': '未分类', '工作': '工作', '生活': '生活',
-                'btn-import-folder': '导入', 'btn-export-folder': '导出'
+                'btn-import-folder': '导入文件夹', 'btn-export-folder': '导出文件夹'
             },
             en: {
                 'nav-logout': 'Logout', 'nav-delete': 'Delete Account', 'nav-history': 'History',
@@ -344,7 +344,7 @@
                 'color-white': 'W', 'color-red': 'R', 'color-yellow': 'Y', 'color-blue': 'B', 'color-green': 'G', 'color-black': 'Bk',
                 'fmt-img': 'Img', 'btn-recover': 'Restore', 'btn-empty': 'Empty', 'ctx-rename': 'Rename', 'ctx-delete': 'Delete safely',
                 '未分类': 'Uncategorized', '工作': 'Work', '生活': 'Life',
-                'btn-import-folder': 'Import', 'btn-export-folder': 'Export'
+                'btn-import-folder': 'Import Folder', 'btn-export-folder': 'Export Folder'
             }
         };
 
