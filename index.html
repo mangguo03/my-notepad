@@ -30,7 +30,7 @@
         .md-preview h1, .md-preview h1 *, .md-preview h1 font { font-size: 2.6rem !important; font-weight: 800 !important; line-height: 1.3 !important; }
         .md-preview h2, .md-preview h2 *, .md-preview h2 font { font-size: 2.1rem !important; font-weight: 700 !important; line-height: 1.3 !important; }
         .md-preview h3, .md-preview h3 *, .md-preview h3 font { font-size: 1.8rem !important; font-weight: 600 !important; line-height: 1.3 !important; }
-        .md-preview p, .md-preview div { margin-bottom: 0.3rem; line-height: 1.3; font-size: 18px; }
+        .md-preview p, .md-preview div { margin-bottom: 0.3rem; line-height: 1.3; font-size: 16px; }
         
         /* 💡 重新唤醒 Tailwind 默认屏蔽的列表样式 */
         .md-preview ul { list-style-type: disc !important; margin-left: 1.5rem !important; padding-left: 0.5rem; margin-bottom: 0.5rem; }
@@ -236,13 +236,13 @@
                 <div id="editor-format-bar" class="flex items-center gap-1 flex-wrap bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-1.5 rounded-lg shadow-inner">
                     <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="px-1.5 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="" data-i18n="fmt-size">字号</option>
-                        <option value="1" data-i18n="sz-1">极小</option>
-                        <option value="2" data-i18n="sz-2">小号</option>
-                        <option value="3" data-i18n="sz-3">正常</option>
-                        <option value="4" data-i18n="sz-4">大号</option>
-                        <option value="5" data-i18n="sz-5">特大</option>
-                        <option value="6" data-i18n="sz-6">超大</option>
-                        <option value="7" data-i18n="sz-7">极巨</option>
+                        <option value="1" data-i18n="sz-1">1号 (10px)</option>
+                        <option value="2" data-i18n="sz-2">2号 (13px)</option>
+                        <option value="3" data-i18n="sz-3">3号 (16px 正常)</option>
+                        <option value="4" data-i18n="sz-4">4号 (18px)</option>
+                        <option value="5" data-i18n="sz-5">5号 (24px)</option>
+                        <option value="6" data-i18n="sz-6">6号 (32px)</option>
+                        <option value="7" data-i18n="sz-7">7号 (48px)</option>
                     </select>
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
 
@@ -324,7 +324,7 @@
                 'btn-list': '列表', 'btn-grid': '图表',
                 'all-docs': '全笔记展示', 'no-data': '无数据', 'trash-empty': '回收站空空如也',
                 'untitled': '无标题', 'original-folder': '原位置:',
-                'fmt-size': '字号', 'sz-1': '极小', 'sz-2': '小号', 'sz-3': '正常', 'sz-4': '大号', 'sz-5': '特大', 'sz-6': '超大', 'sz-7': '极巨',
+                'fmt-size': '字号', 'sz-1': '1号 (10px)', 'sz-2': '2号 (13px)', 'sz-3': '3号 (16px)', 'sz-4': '4号 (18px 正常)', 'sz-5': '5号 (24px)', 'sz-6': '6号 (32px)', 'sz-7': '7号 (48px)',
                 'fmt-heading': '标题', 'h1': '一级标题', 'h2': '二级标题', 'h3': '三级标题', 'p': '正文',
                 'color-white': '白', 'color-red': '红', 'color-yellow': '黄', 'color-blue': '蓝', 'color-green': '绿', 'color-black': '黑',
                 'fmt-img': '图', 'btn-recover': '恢复', 'btn-empty': '清空', 'ctx-rename': '重命名分类', 'ctx-delete': '安全删除分类',
@@ -343,7 +343,7 @@
                 'btn-list': 'List', 'btn-grid': 'Grid',
                 'all-docs': 'All Documents', 'no-data': 'No Data', 'trash-empty': 'Trash is empty',
                 'untitled': 'Untitled', 'original-folder': 'From:',
-                'fmt-size': 'Size', 'sz-1': 'Tiny', 'sz-2': 'Small', 'sz-3': 'Normal', 'sz-4': 'Large', 'sz-5': 'X-Large', 'sz-6': 'XXL', 'sz-7': 'Huge',
+                'fmt-size': 'Size', 'sz-1': 'Sz 1 (10px)', 'sz-2': 'Sz 2 (13px)', 'sz-3': 'Sz 3 (16px)', 'sz-4': 'Sz 4 (18px Normal)', 'sz-5': 'Sz 5 (24px)', 'sz-6': 'Sz 6 (32px)', 'sz-7': 'Sz 7 (48px)',
                 'fmt-heading': 'Heading', 'h1': 'Heading 1', 'h2': 'Heading 2', 'h3': 'Heading 3', 'p': 'Normal Text',
                 'color-white': 'W', 'color-red': 'R', 'color-yellow': 'Y', 'color-blue': 'B', 'color-green': 'G', 'color-black': 'Bk',
                 'fmt-img': 'Img', 'btn-recover': 'Restore', 'btn-empty': 'Empty', 'ctx-rename': 'Rename', 'ctx-delete': 'Delete safely',
