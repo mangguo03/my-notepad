@@ -94,10 +94,10 @@
         </div>
     </div>
 
-    <header id="app-header" class="bg-slate-800 text-slate-200 py-0.5 px-4 flex items-center select-none border-b border-slate-700 shadow-md relative z-[70]" style="-webkit-app-region: drag;">
-        <div class="flex items-center gap-2 pointer-events-none" style="-webkit-app-region: no-drag;">
-            <i class="fa-solid fa-pen-to-square text-yellow-400 text-1xl"></i>
-            <span class="font-black tracking-wider text-xl lg:text-lg bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300" data-i18n="app-title">
+    <header id="app-header" class="bg-slate-800 text-slate-200 py-0.5 px-3 flex items-center select-none border-b border-slate-700 relative z-[70]" style="-webkit-app-region: drag;">
+        <div class="flex items-center gap-1.5 pointer-events-none" style="-webkit-app-region: no-drag;">
+            <i class="fa-solid fa-pen-to-square text-yellow-400 text-sm"></i>
+            <span class="font-black tracking-wide text-sm bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300" data-i18n="app-title">
                 云笔记
             </span>
         </div>
@@ -156,21 +156,21 @@
 
             <div class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-col select-none flex-shrink-0 z-10 shadow-sm">
                 
-                <div class="px-4 py-2 flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 relative z-[60]">
+                <div class="px-3 py-1.5 flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 relative z-[60]">
                     
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-lg shadow-sm font-black text-xs mr-1">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded shadow-sm font-black text-[10px] mr-1">
                             <i class="fa-solid fa-pen-nib"></i> <span data-i18n="label-editor">编辑栏</span>
                         </div>
-                        <button id="btn-new-note" onclick="createNewNote()" class="px-2.5 py-1 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm flex items-center gap-1"><i class="fa-solid fa-file-lines"></i> <span data-i18n="btn-new-note">新笔记</span></button>
-                        <button onclick="createNewCategory()" class="px-2.5 py-1 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm flex items-center gap-1"><i class="fa-solid fa-folder-plus"></i> <span data-i18n="btn-new-folder">新分类</span></button>
+                        <button id="btn-new-note" onclick="createNewNote()" class="px-2 py-0.5 text-[11px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-file-lines"></i> <span data-i18n="btn-new-note">新笔记</span></button>
+                        <button onclick="createNewCategory()" class="px-2 py-0.5 text-[11px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-folder-plus"></i> <span data-i18n="btn-new-folder">新分类</span></button>
                         
                         <div class="relative flex-shrink-0" id="btn-import-export-wrap">
-                            <button onclick="toggleImportExport()" class="px-2.5 py-1 text-xs font-bold bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg shadow-sm flex items-center gap-1">
+                            <button onclick="toggleImportExport()" class="px-2 py-0.5 text-[11px] font-bold bg-emerald-500 hover:bg-emerald-600 text-white rounded shadow-sm flex items-center gap-1">
                                 <i class="fa-solid fa-box-archive"></i> <span data-i18n="btn-import-export">导入与导出</span>
                                 <i id="import-export-arrow" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 ml-0.5"></i>
                             </button>
-                            <div id="import-export-content" class="hidden absolute left-0 top-full mt-1.5 w-52 bg-white dark:bg-slate-800 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col p-1.5 gap-1.5 z-[100]">
+                            <div id="import-export-content" class="hidden absolute left-0 top-full mt-1 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col p-1.5 gap-1.5 z-[100]">
                                 <div class="flex items-center gap-1.5">
                                     <button onclick="triggerImport('md')" class="flex-1 py-1 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded font-black transition-all text-center truncate text-[10px] shadow-sm"><i class="fa-solid fa-file-import"></i> MD</button>
                                     <button onclick="exportFile('md')" class="flex-1 py-1 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-black transition-all text-center truncate text-[10px] shadow-sm"><i class="fa-solid fa-file-export"></i> MD</button>
@@ -192,31 +192,43 @@
                     </div>
 
                     <div class="flex items-center justify-end flex-wrap gap-2 ml-auto">
-                        <div class="relative flex items-center w-40 flex-shrink-0">
-                            <i class="fa-solid fa-magnifying-glass absolute left-2.5 text-slate-400 text-[11px]"></i>
-                            <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索标题或内容..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-full py-1 pl-7 pr-2 text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
+                        <div class="relative flex items-center w-36 flex-shrink-0">
+                            <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-[10px]"></i>
+                            <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索标题或内容..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-full py-0.5 pl-6 pr-2 text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
                         </div>
-                        <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 px-3 py-1 rounded-full shadow-sm">
-                            <span class="text-xs font-black text-blue-600 dark:text-blue-400"><i class="fa-solid fa-folder text-blue-500"></i> <span data-i18n="label-category">归属地:</span></span>
-                            <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="text-xs font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer"></select>
+                        <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 px-2 py-0.5 rounded shadow-sm">
+                            <span class="text-[11px] font-black text-blue-600 dark:text-blue-400"><i class="fa-solid fa-folder text-blue-500"></i> <span data-i18n="label-category">归属地:</span></span>
+                            <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="text-[11px] font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer"></select>
                         </div>
-                        <button onclick="toggleRightPanel()" class="bg-red-600 hover:bg-red-700 text-white font-black px-3 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                        <button onclick="toggleRightPanel()" class="bg-red-600 hover:bg-red-700 text-white font-black px-2 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center gap-1 whitespace-nowrap flex-shrink-0">
                             <i id="right-panel-toggle-icon" class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="nav-history">历史</span>
                         </button>
                         <div class="relative flex-shrink-0 z-[70]">
-                            <button onclick="toggleSettingsMenu(event)" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-2 py-1 rounded-lg text-xs transition-all shadow-sm flex items-center justify-center gap-1 border border-slate-700 whitespace-nowrap" title="系统设置">
+                            <button onclick="toggleSettingsMenu(event)" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-1.5 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center gap-1 border border-slate-700 whitespace-nowrap" title="系统设置">
                                 <i class="fa-solid fa-gear"></i>
                             </button>
                             <div id="settings-dropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 flex flex-col py-1">
-                                <button onclick="toggleLanguage(); closeSettingsMenu();" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span></button>
+                                <button onclick="toggleLanguage(); closeSettingsMenu();" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
+                                    <i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span>
+                                </button>
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
                                 <div class="px-4 py-1.5 text-[11px] text-slate-400 dark:text-slate-500 font-black tracking-widest uppercase" data-i18n="theme-title">主题模式</div>
-                                <button onclick="setTheme('light'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-sun text-yellow-500 w-4 text-center"></i> <span data-i18n="theme-light">浅色</span></button>
-                                <button onclick="setTheme('dark'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-moon text-blue-400 w-4 text-center"></i> <span data-i18n="theme-dark">深色</span></button>
-                                <button onclick="setTheme('system'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-desktop text-slate-400 w-4 text-center"></i> <span data-i18n="theme-sys">系统</span></button>
+                                <button onclick="setTheme('light'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
+                                    <i class="fa-solid fa-sun text-yellow-500 w-4 text-center"></i> <span data-i18n="theme-light">浅色</span>
+                                </button>
+                                <button onclick="setTheme('dark'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
+                                    <i class="fa-solid fa-moon text-blue-400 w-4 text-center"></i> <span data-i18n="theme-dark">深色</span>
+                                </button>
+                                <button onclick="setTheme('system'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
+                                    <i class="fa-solid fa-desktop text-slate-400 w-4 text-center"></i> <span data-i18n="theme-sys">系统</span>
+                                </button>
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
-                                <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-right-from-bracket text-slate-400 w-4 text-center"></i> <span data-i18n="nav-logout">退出登录</span></button>
-                                <button onclick="deleteAccount()" class="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-user-xmark w-4 text-center"></i> <span data-i18n="nav-delete">注销账号</span></button>
+                                <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
+                                    <i class="fa-solid fa-right-from-bracket text-slate-400 w-4 text-center"></i> <span data-i18n="nav-logout">退出登录</span>
+                                </button>
+                                <button onclick="deleteAccount()" class="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center gap-3 font-bold transition-colors">
+                                    <i class="fa-solid fa-user-xmark w-4 text-center"></i> <span data-i18n="nav-delete">注销账号</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -225,24 +237,21 @@
                 <div class="px-4 py-1.5 flex flex-col gap-2 select-none flex-shrink-0 z-10">
                     <div id="editor-format-bar" class="flex items-center gap-1 flex-wrap w-max">
 
-                    <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="px-1.5 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
-                        <option value="" data-i18n="fmt-size">字号</option>
+                    <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="px-1.5 py-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="1" data-i18n="sz-1">1号 (10px)</option>
                         <option value="2" data-i18n="sz-2">2号 (13px)</option>
-                        <option value="3" data-i18n="sz-3">3号 (16px 正常)</option>
+                        <option value="3" data-i18n="sz-3" selected>3号 (16px 正常)</option>
                         <option value="4" data-i18n="sz-4">4号 (18px)</option>
                         <option value="5" data-i18n="sz-5">5号 (24px)</option>
                         <option value="6" data-i18n="sz-6">6号 (32px)</option>
                         <option value="7" data-i18n="sz-7">7号 (48px)</option>
                     </select>
-                    <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
-
-                    <select onchange="if(this.value){execCmd('formatBlock', this.value);}" class="px-1.5 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
-                        <option value="" data-i18n="fmt-heading">标题</option>
+                    
+                    <select onchange="if(this.value){execCmd('formatBlock', this.value);}" class="px-1.5 py-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="<H1>" data-i18n="h1">一级标题</option>
                         <option value="<H2>" data-i18n="h2">二级标题</option>
                         <option value="<H3>" data-i18n="h3">三级标题</option>
-                        <option value="<P>" data-i18n="p">正文</option>
+                        <option value="<P>" data-i18n="p" selected>正文</option>
                     </select>
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
                     
