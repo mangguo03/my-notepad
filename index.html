@@ -84,14 +84,19 @@
 </head>
 <body class="bg-slate-900 font-sans h-screen flex flex-col overflow-hidden text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300">
     
-    <div id="auth-overlay" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center transition-opacity" style="-webkit-app-region: no-drag;">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 flex flex-col gap-4">
-            <h2 class="text-2xl font-black mb-2 text-center text-slate-800" id="auth-title">登入云端工作台</h2>
+    <div id="auth-overlay" class="fixed inset-0 bg-slate-900 z-[9999] flex items-center justify-center transition-opacity" style="-webkit-app-region: no-drag; pointer-events: auto;">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 flex flex-col gap-4" style="-webkit-app-region: no-drag; pointer-events: auto;">
+            <h2 class="text-2xl font-black mb-2 text-center text-slate-800" id="auth-title" style="pointer-events: auto;">登入云端工作台</h2>
+            
             <div id="auth-error" class="hidden bg-red-100 text-red-600 p-2 rounded text-sm font-bold text-center"></div>
-            <input type="text" id="auth-username" placeholder="请输入账号" class="w-full border-2 border-slate-200 p-3 rounded-xl outline-none focus:border-blue-500 transition-colors font-bold text-slate-700">
-            <input type="password" id="auth-password" placeholder="请输入密码" class="w-full border-2 border-slate-200 p-3 rounded-xl outline-none focus:border-blue-500 transition-colors font-bold text-slate-700">
-            <button onclick="handleAuth()" id="auth-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl shadow-md transition-all mt-2">登入</button>
-            <div class="text-center text-sm font-bold text-slate-500 cursor-pointer hover:text-blue-600 transition-colors mt-2" onclick="toggleAuthMode()" id="auth-toggle">没有账号？点击注册新账号</div>
+            
+            <input type="text" id="auth-username" placeholder="请输入账号" class="w-full border-2 border-slate-200 p-3 rounded-xl outline-none focus:border-blue-500 transition-colors font-bold text-slate-700" style="-webkit-app-region: no-drag; pointer-events: auto; user-select: text;">
+            
+            <input type="password" id="auth-password" placeholder="请输入密码" class="w-full border-2 border-slate-200 p-3 rounded-xl outline-none focus:border-blue-500 transition-colors font-bold text-slate-700" style="-webkit-app-region: no-drag; pointer-events: auto; user-select: text;">
+            
+            <button onclick="handleAuth()" id="auth-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl shadow-md transition-all mt-2" style="-webkit-app-region: no-drag; pointer-events: auto; cursor: pointer;">登入</button>
+            
+            <div class="text-center text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors mt-2" onclick="toggleAuthMode()" id="auth-toggle" style="-webkit-app-region: no-drag; pointer-events: auto; cursor: pointer;">没有账号？点击注册新账号</div>
         </div>
     </div>
 
