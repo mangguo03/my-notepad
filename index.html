@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -710,9 +709,12 @@
                         <span class="text-[10px] font-bold ${isSelected ? 'opacity-100 text-blue-100' : 'opacity-60'} shrink-0">(${noteCount})</span>
                     `;
 
-                    // 💡 文件夹拖拽实现（完美区分文件夹互相嵌套和笔记分类）
+                    // 💡 适配 PakePlus (WebView2) 的文件夹拖拽与归档
                     cell.setAttribute('draggable', 'true');
                     cell.ondragstart = (e) => {
+                        e.dataTransfer.effectAllowed = 'move';
+                        // 🔥 核心修复1：PakePlus 必须设置标准的 text/plain 数据，否则系统会直接屏蔽拖拽手势
+                        e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'folder', id: cat.id }));
                         e.dataTransfer.setData('text/folder-id', cat.id);
                         setTimeout(() => cell.classList.add('opacity-40'), 0);
                     };
@@ -721,7 +723,8 @@
                         document.querySelectorAll('.folder-drop-target').forEach(el => el.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed'));
                     };
                     cell.ondragover = (e) => {
-                        e.preventDefault(); // 必须保留，这是允许 ondrop 触发的前提
+                        e.preventDefault(); // 🔥 核心修复2：必须无条件阻止默认事件，允许 Drop
+                        e.dataTransfer.dropEffect = 'move';
                         cell.classList.add('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed');
                     };
                     cell.ondragleave = () => {
@@ -731,46 +734,49 @@
                         e.preventDefault();
                         cell.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed');
                         
-                        // 情况A：如果识别到拖拽的是笔记文件
-                        if (draggedNoteId) {
-                            const idx = notes.findIndex(n => n.id === draggedNoteId);
+                        // 解析从 PakePlus 底层传回来的安全数据
+                        let dropData = { type: null, id: null };
+                        try {
+                            const plainText = e.dataTransfer.getData('text/plain');
+                            if (plainText) dropData = JSON.parse(plainText);
+                        } catch (err) {}
+
+                        const sourceNoteId = dropData.type === 'note' ? dropData.id : draggedNoteId;
+                        const sourceFolderId = dropData.type === 'folder' ? dropData.id : e.dataTransfer.getData('text/folder-id');
+
+                        // 情况A：如果拖拽的是笔记文件 -> 归档到该文件夹
+                        if (sourceNoteId) {
+                            const idx = notes.findIndex(n => n.id === sourceNoteId);
                             if (idx !== -1 && notes[idx].category !== cat.id) {
                                 notes[idx].category = cat.id; 
                                 saveCloudData(); refreshAllViews();
                             }
                         } 
-                        // 情况B：如果拖拽的是文件夹本身
-                        else {
-                            const sourceId = e.dataTransfer.getData('text/folder-id');
-                            if (sourceId && sourceId !== cat.id) {
-                                // 安全校验 1：系统默认目录不可被移动（未分类、工作、生活）
-                                if (sourceId === '未分类' || sourceId === '工作' || sourceId === '生活') {
-                                    alert('系统默认分类目录不可改变层级！');
-                                    return;
-                                }
+                        // 情况B：如果拖拽的是文件夹本身 -> 目录树互相嵌套
+                        else if (sourceFolderId && sourceFolderId !== cat.id) {
+                            if (sourceFolderId === '未分类' || sourceFolderId === '工作' || sourceFolderId === '生活') {
+                                alert('系统默认分类目录不可改变层级！'); return;
+                            }
 
-                                // 安全校验 2：防死循环检测（不能把父辈文件夹拖进自己的子文件夹中）
-                                let isCircular = false;
-                                function checkChild(targetId) {
-                                    const children = categories.filter(c => c.parentId === targetId);
-                                    if (children.some(c => c.id === cat.id)) { isCircular = true; return; }
-                                    children.forEach(c => checkChild(c.id));
-                                }
-                                checkChild(sourceId);
+                            let isCircular = false;
+                            function checkChild(targetId) {
+                                const children = categories.filter(c => c.parentId === targetId);
+                                if (children.some(c => c.id === cat.id)) { isCircular = true; return; }
+                                children.forEach(c => checkChild(c.id));
+                            }
+                            checkChild(sourceFolderId);
 
-                                if (!isCircular) {
-                                    const sourceCat = categories.find(c => c.id === sourceId);
-                                    if (sourceCat) {
-                                        sourceCat.parentId = cat.id; // 更新父ID归属成功
-                                        saveCloudData(); refreshAllViews();
-                                    }
-                                } else {
-                                    alert("🚨 逻辑错误：不能将父级目录移动到它自身的子目录下！");
+                            if (!isCircular) {
+                                const sourceCat = categories.find(c => c.id === sourceFolderId);
+                                if (sourceCat) {
+                                    sourceCat.parentId = cat.id;
+                                    saveCloudData(); refreshAllViews();
                                 }
+                            } else {
+                                alert("🚨 逻辑错误：不能将父级目录移动到它自身的子目录下！");
                             }
                         }
                     };
-
                     cell.onclick = (e) => {
                         if (e.target.closest('.fa-caret-down') || e.target.closest('.fa-caret-right')) {
                             leftExpandedFolders[cat.id] = !isExpanded;
@@ -850,10 +856,13 @@
                     `;
                 }
 
-                box.draggable = true;
+                // 💡 适配 PakePlus (WebView2) 的笔记上下排序拖拽
+                box.setAttribute('draggable', 'true');
                 box.ondragstart = (e) => {
                     draggedNoteId = note.id;
                     e.dataTransfer.effectAllowed = 'move';
+                    // 🔥 核心修复：注入 text/plain 标准通讯协议，给 PakePlus 开绿灯
+                    e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'note', id: note.id }));
                     setTimeout(() => box.classList.add('opacity-40', 'scale-95'), 0);
                 };
                 box.ondragend = () => {
@@ -862,8 +871,10 @@
                     document.querySelectorAll('.folder-drop-target').forEach(el => el.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed'));
                 };
                 box.ondragover = (e) => {
+                    e.preventDefault(); // 🔥 无条件阻断系统级事件拦截
+                    e.dataTransfer.dropEffect = 'move';
+                    // 仅在确认是笔记拖拽时才显示蓝色提示线
                     if (draggedNoteId && draggedNoteId !== note.id) {
-                        e.preventDefault(); 
                         box.classList.add('border-t-2', 'border-blue-500'); 
                     }
                 };
@@ -873,8 +884,19 @@
                 box.ondrop = (e) => {
                     e.preventDefault();
                     box.classList.remove('border-t-2', 'border-blue-500');
-                    if (draggedNoteId && draggedNoteId !== note.id) {
-                        const fromIdx = notes.findIndex(n => n.id === draggedNoteId);
+                    
+                    // 安全提取数据：防止 PakePlus 跨进程时丢失变量
+                    let dropNoteId = draggedNoteId;
+                    try {
+                        const plainText = e.dataTransfer.getData('text/plain');
+                        if (plainText) {
+                            const data = JSON.parse(plainText);
+                            if (data.type === 'note') dropNoteId = data.id;
+                        }
+                    } catch(err) {}
+
+                    if (dropNoteId && dropNoteId !== note.id) {
+                        const fromIdx = notes.findIndex(n => n.id === dropNoteId);
                         const toIdx = notes.findIndex(n => n.id === note.id);
                         if (fromIdx !== -1 && toIdx !== -1) {
                             const [movedItem] = notes.splice(fromIdx, 1);
