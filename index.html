@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -108,6 +106,10 @@
     <input type="file" id="import-md-input" accept=".md" class="hidden" onchange="handleImportFile(event, 'md')">
     <input type="file" id="import-txt-input" accept=".txt" class="hidden" onchange="handleImportFile(event, 'txt')">
     <input type="file" id="import-folder-input" webkitdirectory directory multiple class="hidden" onchange="handleFolderImport(event)">
+
+    <div id="workspace-container" class="flex flex-1 overflow-hidden w-full bg-slate-200 dark:bg-slate-900 transition-colors duration-300">
+        
+        <input type="file" id="import-md-input" accept=".md" class="hidden" onchange="handleImportFile(event, 'md')">
         <input type="file" id="import-txt-input" accept=".txt" class="hidden" onchange="handleImportFile(event, 'txt')">
         <input type="file" id="import-folder-input" webkitdirectory directory multiple class="hidden" onchange="handleFolderImport(event)">
 
@@ -206,35 +208,24 @@
                                 <i class="fa-solid fa-gear"></i>
                             </button>
                             <div id="settings-dropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 flex flex-col py-1">
-                                <button onclick="toggleLanguage(); closeSettingsMenu();" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
-                                    <i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span>
-                                </button>
+                                <button onclick="toggleLanguage(); closeSettingsMenu();" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span></button>
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
                                 <div class="px-4 py-1.5 text-[11px] text-slate-400 dark:text-slate-500 font-black tracking-widest uppercase" data-i18n="theme-title">主题模式</div>
-                                <button onclick="setTheme('light'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
-                                    <i class="fa-solid fa-sun text-yellow-500 w-4 text-center"></i> <span data-i18n="theme-light">浅色</span>
-                                </button>
-                                <button onclick="setTheme('dark'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
-                                    <i class="fa-solid fa-moon text-blue-400 w-4 text-center"></i> <span data-i18n="theme-dark">深色</span>
-                                </button>
-                                <button onclick="setTheme('system'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
-                                    <i class="fa-solid fa-desktop text-slate-400 w-4 text-center"></i> <span data-i18n="theme-sys">系统</span>
-                                </button>
+                                <button onclick="setTheme('light'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-sun text-yellow-500 w-4 text-center"></i> <span data-i18n="theme-light">浅色</span></button>
+                                <button onclick="setTheme('dark'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-moon text-blue-400 w-4 text-center"></i> <span data-i18n="theme-dark">深色</span></button>
+                                <button onclick="setTheme('system'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-desktop text-slate-400 w-4 text-center"></i> <span data-i18n="theme-sys">系统</span></button>
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
-                                <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
-                                    <i class="fa-solid fa-right-from-bracket text-slate-400 w-4 text-center"></i> <span data-i18n="nav-logout">退出登录</span>
-                                </button>
-                                <button onclick="deleteAccount()" class="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center gap-3 font-bold transition-colors">
-                                    <i class="fa-solid fa-user-xmark w-4 text-center"></i> <span data-i18n="nav-delete">注销账号</span>
-                                </button>
+                                <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-right-from-bracket text-slate-400 w-4 text-center"></i> <span data-i18n="nav-logout">退出登录</span></button>
+                                <button onclick="deleteAccount()" class="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center gap-3 font-bold transition-colors"><i class="fa-solid fa-user-xmark w-4 text-center"></i> <span data-i18n="nav-delete">注销账号</span></button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="px-4 py-2">
+                <div class="px-4 py-1.5 flex flex-col gap-2 select-none flex-shrink-0 z-10">
                     <div id="editor-format-bar" class="flex items-center gap-1 flex-wrap w-max">
-                        <select onchange="if(this.value){execCmd('fontSize', this.value);}"
+
+                    <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="px-1.5 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="" data-i18n="fmt-size">字号</option>
                         <option value="1" data-i18n="sz-1">1号 (10px)</option>
                         <option value="2" data-i18n="sz-2">2号 (13px)</option>
@@ -244,40 +235,38 @@
                         <option value="6" data-i18n="sz-6">6号 (32px)</option>
                         <option value="7" data-i18n="sz-7">7号 (48px)</option>
                     </select>
-                    
-                    <select onchange="if(this.value){execCmd('formatBlock', this.value);}" class="px-1.5 py-1 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
+                    <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
+
+                    <select onchange="if(this.value){execCmd('formatBlock', this.value);}" class="px-1.5 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="" data-i18n="fmt-heading">标题</option>
                         <option value="<H1>" data-i18n="h1">一级标题</option>
                         <option value="<H2>" data-i18n="h2">二级标题</option>
                         <option value="<H3>" data-i18n="h3">三级标题</option>
                         <option value="<P>" data-i18n="p">正文</option>
                     </select>
-                    
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
                     
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('insertUnorderedList')" class="px-2 py-1 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="无序列表"><i class="fa-solid fa-list-ul"></i></button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('insertOrderedList')" class="px-2 py-1 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="有序列表"><i class="fa-solid fa-list-ol"></i></button>
-                    
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('insertUnorderedList')" class="px-2 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="无序列表"><i class="fa-solid fa-list-ul"></i></button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('insertOrderedList')" class="px-2 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="有序列表"><i class="fa-solid fa-list-ol"></i></button>
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
-                    
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('bold')" class="px-2 py-1 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600"><i class="fa-solid fa-bold"></i></button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('underline')" class="px-2 py-1 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600"><i class="fa-solid fa-underline"></i></button>
-                    
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#000000')" class="px-2 py-1 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #0f172a;" data-i18n="color-black">黑</button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#ffffff')" class="px-2 py-1 text-[11px] font-bold text-slate-800 hover:opacity-80 rounded shadow-sm border border-slate-300" style="background-color: #ffffff;" data-i18n="color-white">白</button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#ef4444')" class="px-2 py-1 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #ef4444;" data-i18n="color-red">红</button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#eab308')" class="px-2 py-1 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #eab308;" data-i18n="color-yellow">黄</button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#3b82f6')" class="px-2 py-1 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #3b82f6;" data-i18n="color-blue">蓝</button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#22c55e')" class="px-2 py-1 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #22c55e;" data-i18n="color-green">绿</button>
+    
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('bold')" class="px-2 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600"><i class="fa-solid fa-bold"></i></button>
+
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('underline')" class="px-2 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600"><i class="fa-solid fa-underline"></i></button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#000000')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #0f172a;" data-i18n="color-black">黑</button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#ffffff')" class="px-1.5 py-0.5 text-[11px] font-bold text-slate-800 hover:opacity-80 rounded shadow-sm border border-slate-300" style="background-color: #ffffff;" data-i18n="color-white">白</button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#ef4444')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #ef4444;" data-i18n="color-red">红</button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#eab308')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #eab308;" data-i18n="color-yellow">黄</button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#3b82f6')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #3b82f6;" data-i18n="color-blue">蓝</button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#22c55e')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #22c55e;" data-i18n="color-green">绿</button>
                     
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
 
-                    <button onmousedown="event.preventDefault();" onclick="wrapHTML('<code>', '</code>')" class="px-2 py-1 text-xs font-mono text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600"><i class="fa-solid fa-code"></i></button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('removeFormat')" class="px-2 py-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700"><i class="fa-solid fa-eraser"></i></button>
-                    
+                    <button onmousedown="event.preventDefault();" onclick="wrapHTML('<code>', '</code>')" class="px-2 py-0.5 text-xs font-mono text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600"><i class="fa-solid fa-code"></i></button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('removeFormat')" class="px-2 py-0.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700"><i class="fa-solid fa-eraser"></i></button>
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
-                    
-                    <button onmousedown="event.preventDefault(); document.getElementById('local-img-input').click()" class="px-2 py-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-700 rounded border border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-slate-700"><i class="fa-regular fa-image"></i> <span data-i18n="fmt-img">图</span></button>
+    
+                    <button onmousedown="event.preventDefault(); document.getElementById('local-img-input').click()" class="px-2 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-700 rounded border border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-slate-700"><i class="fa-regular fa-image"></i> <span data-i18n="fmt-img">图</span></button>
                 </div>
                 <input type="file" id="local-img-input" accept="image/*" multiple class="hidden" onchange="handleLocalImageUpload(event)">
             </div>
