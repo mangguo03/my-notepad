@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -26,9 +27,10 @@
         .sync-btn-font { font-size: 12px !important; font-weight: 900 !important; }
         
         /* 💡 去掉了标题下划线 border-bottom */
-        .md-preview h1 { font-size: 2.6rem; font-weight: 800; padding-bottom: 0.3em; margin-top: 1.6rem; margin-bottom: 1rem; }
-        .md-preview h2 { font-size: 2.1rem; font-weight: 700; padding-bottom: 0.3em; margin-top: 1.4rem; margin-bottom: 0.8rem; }
-        .md-preview h3 { font-size: 1.8rem; font-weight: 600; margin-top: 1.2rem; margin-bottom: 0.6rem; }
+        /* 💡 强制覆盖内部的 font 标签，确保各级标题尺寸绝对生效 */
+        .md-preview h1, .md-preview h1 *, .md-preview h1 font { font-size: 2.6rem !important; font-weight: 800 !important; line-height: 1.3 !important; }
+        .md-preview h2, .md-preview h2 *, .md-preview h2 font { font-size: 2.1rem !important; font-weight: 700 !important; line-height: 1.3 !important; }
+        .md-preview h3, .md-preview h3 *, .md-preview h3 font { font-size: 1.8rem !important; font-weight: 600 !important; line-height: 1.3 !important; }
         .md-preview p, .md-preview div { margin-bottom: 0.3rem; line-height: 1.3; font-size: 18px; }
         
         /* 💡 重新唤醒 Tailwind 默认屏蔽的列表样式 */
@@ -247,10 +249,10 @@
 
                     <select onchange="if(this.value){execCmd('formatBlock', this.value);}" class="px-1.5 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="" data-i18n="fmt-heading">标题</option>
-                        <option value="H1" data-i18n="h1">一级标题</option>
-                        <option value="H2" data-i18n="h2">二级标题</option>
-                        <option value="H3" data-i18n="h3">三级标题</option>
-                        <option value="P" data-i18n="p">正文</option>
+                        <option value="<H1>" data-i18n="h1">一级标题</option>
+                        <option value="<H2>" data-i18n="h2">二级标题</option>
+                        <option value="<H3>" data-i18n="h3">三级标题</option>
+                        <option value="<P>" data-i18n="p">正文</option>
                     </select>
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
                     
@@ -408,6 +410,7 @@
 
         let notes = [];
         let trashBin = [];
+        let isCloudDataLoaded = false; // 🔒 新增：云端防覆盖安全锁
         let categories = [
             { id: "未分类", name: "未分类", parentId: null },
             { id: "工作", name: "工作", parentId: null },
@@ -569,12 +572,10 @@
                 if (!response.ok) throw new Error('网络响应异常');
                 const data = await response.json();
                 
-                // 💡 新增：如果云端传回了自定义名称，则动态修改网页标题和顶栏名字
                 if (data.appName) {
-                    document.title = data.appName; // 修改浏览器标签页名字
+                    document.title = data.appName; 
                     const titleEl = document.querySelector('[data-i18n="app-title"]');
-                    if (titleEl) titleEl.innerText = data.appName; // 修改左上角顶栏名字
-                    // 同时更新翻译字典，防止切换语言时被覆盖
+                    if (titleEl) titleEl.innerText = data.appName; 
                     if (dict.zh) dict.zh['app-title'] = data.appName;
                     if (dict.en) dict.en['app-title'] = data.appName;
                 }
@@ -591,20 +592,30 @@
                 if (data.trashBin) trashBin = data.trashBin;
                 if (data.folderTreeRelations) folderTreeRelations = data.folderTreeRelations;
                 if (data.leftExpandedFolders) leftExpandedFolders = data.leftExpandedFolders;
+                
+                // 💡 只有完整且成功地获取了云端数据，才解开安全锁！
+                isCloudDataLoaded = true; 
+                
+                refreshAllViews();
+                if (notes.length > 0) {
+                    const sorted = [...notes].sort((a,b) => b.updatedAt - a.updatedAt);
+                    openNote(sorted[0].id);
+                } else {
+                    createNewNote(); // 只有真的是新用户，且网络没问题，才创建新笔记
+                }
             } catch (error) {
-                console.log("数据拉取失败或首次使用", error);
-            }
-            refreshAllViews();
-            if (notes.length > 0) {
-                const sorted = [...notes].sort((a,b) => b.updatedAt - a.updatedAt);
-                openNote(sorted[0].id);
-            } else {
-                createNewNote();
+                console.error("数据拉取失败", error);
+                // 🚨 如果断网或CF抽风，绝对禁止新建空笔记，并锁定编辑器防止误操作！
+                alert("🚨 云端数据加载失败！为防止数据被异常覆盖，已锁定自动保存功能。请检查网络并重启软件。");
+                document.getElementById('note-editor-richtext').innerHTML = "<h2 style='color:red; text-align:center; margin-top:20px;'>⚠️ 数据加载失败，请重启软件重试！</h2>";
+                document.getElementById('note-editor-richtext').setAttribute('contenteditable', 'false');
             }
         }
         
         async function saveCloudData() {
-            if(!cfUser) return;
+            // 💡 如果防覆盖安全锁没有解开，直接拒绝保存操作，保护云端数据！
+            if(!cfUser || !isCloudDataLoaded) return; 
+            
             const allData = {
                 notes: notes,
                 categories: categories,
