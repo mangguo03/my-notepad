@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -239,8 +238,12 @@
 
                 <div class="px-4 py-1.5 flex flex-col gap-2 select-none flex-shrink-0 z-10">
                     <div id="editor-format-bar" class="flex items-center gap-1 flex-wrap w-max">
-
-                    <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="w-[100px] px-1.5 py-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
+                        
+                        <div class="flex items-center justify-center bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded shadow-sm mr-0.5 cursor-help" title="文字排版与编辑区域">
+                            <i class="fa-solid fa-pen-nib text-[11px]"></i>
+                        </div>
+                        
+                        <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="w-[100px] px-1.5 py-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="" data-i18n="fmt-size">字号</option>
                         <option value="1" data-i18n="sz-1">1号 (10px)</option>
                         <option value="2" data-i18n="sz-2">2号 (13px)</option>
