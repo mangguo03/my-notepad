@@ -82,7 +82,7 @@
         #left-notes-container div.active-note-item:hover { background-color: #3b82f6 !important; }
     </style>
 </head>
-<body class="bg-slate-900 font-sans fixed inset-0 w-full flex flex-col overflow-hidden text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300">
+<body class="bg-slate-900 font-sans h-screen flex flex-col overflow-hidden text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300">
     
     <div id="auth-overlay" class="fixed inset-0 bg-slate-900 z-[9999] flex items-center justify-center transition-opacity" style="-webkit-app-region: no-drag;">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 flex flex-col gap-4" style="-webkit-app-region: no-drag;">
@@ -149,17 +149,15 @@
         
         <div id="resizer-left" class="resizer hidden md:block dark:bg-slate-700"></div>
         
-        <section id="middle-panel" class="bg-white dark:bg-slate-950 flex flex-col flex-1 overflow-hidden min-w-0 min-h-0 md:min-w-[450px] transition-colors duration-300 relative">
+        <section id="middle-panel" class="bg-white dark:bg-slate-950 flex flex-col flex-1 overflow-hidden min-w-0 md:min-w-[450px] transition-colors duration-300 relative">
             
-            <div class="absolute left-0 top-0 bottom-0 flex items-center z-[90] pointer-events-none">
-                <div id="float-toggle-handle" onclick="toggleLeftPanel()" class="pointer-events-auto w-3.5 h-20 bg-gradient-to-b from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white cursor-pointer flex items-center justify-center rounded-r-xl shadow-lg transition-all border border-l-0 border-orange-400 opacity-90 hover:opacity-100" title="展开/收起侧栏">
-                    <i id="sidebar-float-icon" class="fa-solid fa-caret-left text-[11px] transition-transform duration-300"></i>
-                </div>
+            <div id="float-toggle-handle" onclick="toggleLeftPanel()" class="absolute left-0 top-1/2 -translate-y-1/2 w-3.5 h-20 bg-gradient-to-b from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white cursor-pointer flex items-center justify-center rounded-r-xl shadow-lg z-[60] transition-all border border-l-0 border-orange-400 opacity-90 hover:opacity-100" title="展开/收起侧栏">
+                <i id="sidebar-float-icon" class="fa-solid fa-caret-left text-[11px] transition-transform duration-300"></i>
             </div>
 
-            <div class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-col select-none flex-shrink-0 z-10 shadow-sm">
+            <div class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-col select-none flex-shrink-0 z-[80] shadow-sm relative">
                 
-                <div class="px-2 py-1.5 flex flex-nowrap items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-800 relative z-[60] overflow-x-auto w-full" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <div class="px-2 py-1.5 flex flex-nowrap items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-800 relative z-[90] w-full">
                     
                     <div class="flex items-center gap-1 flex-nowrap flex-shrink-0">
                         <div class="flex items-center justify-center bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded shadow-sm mr-1 cursor-help" title="文字排版与编辑区域">
@@ -268,16 +266,16 @@
                     <button onmousedown="event.preventDefault();" onclick="execCmd('bold')" class="px-2 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600"><i class="fa-solid fa-bold"></i></button>
 
                     <button onmousedown="event.preventDefault();" onclick="execCmd('underline')" class="px-2 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600"><i class="fa-solid fa-underline"></i></button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#000000')" class="px-1 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #0f172a;" data-i18n="color-black">黑</button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#ffffff')" class="px-1 py-0.5 text-[11px] font-bold text-slate-800 hover:opacity-80 rounded shadow-sm border border-slate-300" style="background-color: #ffffff;" data-i18n="color-white">白</button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#ef4444')" class="px-1 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #ef4444;" data-i18n="color-red">红</button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#eab308')" class="px-1 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #eab308;" data-i18n="color-yellow">黄</button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#3b82f6')" class="px-1 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #3b82f6;" data-i18n="color-blue">蓝</button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#22c55e')" class="px-1 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #22c55e;" data-i18n="color-green">绿</button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#000000')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #0f172a;" data-i18n="color-black">黑</button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#ffffff')" class="px-1.5 py-0.5 text-[11px] font-bold text-slate-800 hover:opacity-80 rounded shadow-sm border border-slate-300" style="background-color: #ffffff;" data-i18n="color-white">白</button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#ef4444')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #ef4444;" data-i18n="color-red">红</button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#eab308')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #eab308;" data-i18n="color-yellow">黄</button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#3b82f6')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #3b82f6;" data-i18n="color-blue">蓝</button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#22c55e')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #22c55e;" data-i18n="color-green">绿</button>
                     
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
 
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('formatBlock', '<PRE>')" class="px-2 py-0.5 text-[11px] font-mono text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="插入大代码块"><i class="fa-solid fa-code"></i></button>
+                    <button onmousedown="event.preventDefault();" onclick="wrapHTML('<code>', '</code>')" class="px-2 py-0.5 text-[11px] font-mono text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="插入代码块"><i class="fa-solid fa-code"></i></button>
                     <button onmousedown="event.preventDefault();" onclick="execCmd('removeFormat')" class="px-2 py-0.5 text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700" title="清除格式"><i class="fa-solid fa-eraser"></i></button>
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
     
@@ -286,9 +284,9 @@
                 <input type="file" id="local-img-input" accept="image/*" multiple class="hidden" onchange="handleLocalImageUpload(event)">
             </div>
             
-            <div class="flex-1 flex flex-col px-3 py-2 sm:px-5 sm:py-4 overflow-y-auto w-full bg-white dark:bg-slate-950 relative">
-                <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-2xl sm:text-3xl border-0 border-b-2 border-dashed border-slate-300 dark:border-slate-700 outline-none pb-1.5 mb-1.5 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent flex-shrink-0">
-                <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full flex-1 outline-none text-slate-800 dark:text-slate-200 break-words mt-1"></div>
+            <div class="flex-1 flex flex-col p-5 overflow-y-auto w-full bg-white dark:bg-slate-950 relative">
+                <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-2xl border-0 border-b-2 border-dashed border-slate-300 dark:border-slate-700 outline-none pb-3 mb-3 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent flex-shrink-0">
+                <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full flex-1 outline-none text-slate-800 dark:text-slate-200 break-words"></div>
             </div>
         </section>
         
@@ -386,16 +384,19 @@
             document.getElementById('settings-dropdown').classList.add('hidden');
         }
 
+        // 💡 修复：点击空白处关闭悬浮菜单的精准逻辑
         document.addEventListener('click', (e) => {
-            const dropdown = document.getElementById('settings-dropdown');
-            if (dropdown && !dropdown.classList.contains('hidden') && !dropdown.contains(e.target)) {
-                dropdown.classList.add('hidden');
+            // 设置菜单的检测
+            const settingsDropdown = document.getElementById('settings-dropdown');
+            const settingsBtn = e.target.closest('button[onclick="toggleSettingsMenu(event)"]');
+            if (settingsDropdown && !settingsDropdown.classList.contains('hidden') && !settingsDropdown.contains(e.target) && !settingsBtn) {
+                settingsDropdown.classList.add('hidden');
             }
             
-            // 💡 新增：点击其他地方时，自动关闭新的导入导出悬浮下拉菜单
+            // 导入导出菜单的检测
             const ieDropdown = document.getElementById('import-export-content');
-            const ieWrap = document.getElementById('btn-import-export-wrap');
-            if (ieDropdown && !ieDropdown.classList.contains('hidden') && (!ieWrap || !ieWrap.contains(e.target))) {
+            const ieBtn = e.target.closest('button[onclick="toggleImportExport()"]');
+            if (ieDropdown && !ieDropdown.classList.contains('hidden') && !ieDropdown.contains(e.target) && !ieBtn) {
                 ieDropdown.classList.add('hidden');
                 const arrow = document.getElementById('import-export-arrow');
                 if(arrow) arrow.classList.remove('rotate-180');
