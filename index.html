@@ -1029,11 +1029,41 @@
         }
         
         function bindCategoryContextMenu(element, catId) {
+            // 💡 禁用手机端系统默认的长按呼出文字选择或系统菜单
+            element.style.userSelect = 'none';
+            element.style.webkitUserSelect = 'none';
+            element.style.webkitTouchCallout = 'none';
+
+            // 💻 电脑端：依然保留标准的右键点击逻辑
             element.oncontextmenu = (e) => {
                 e.preventDefault(); e.stopPropagation(); rightClickedCategoryId = catId;
                 const menu = document.getElementById('custom-context-menu');
                 menu.classList.remove('hidden'); menu.style.left = e.clientX + 'px'; menu.style.top = e.clientY + 'px';
             };
+
+            // 📱 手机端：新增优雅的长按逻辑
+            let pressTimer;
+            
+            // 1. 手指按住时，开始倒计时
+            element.addEventListener('touchstart', (e) => {
+                pressTimer = setTimeout(() => {
+                    e.preventDefault(); e.stopPropagation();
+                    rightClickedCategoryId = catId;
+                    const menu = document.getElementById('custom-context-menu');
+                    menu.classList.remove('hidden');
+                    
+                    // 手机端获取触摸点的坐标（使用 touches[0]）
+                    const touch = e.touches[0];
+                    menu.style.left = touch.clientX + 'px';
+                    menu.style.top = touch.clientY + 'px';
+                }, 500); // ⏱️ 500毫秒算作长按，可以根据手感自行调整
+            }, { passive: false });
+
+            // 2. 只要手指松开、滑动、或者系统打断，立刻取消倒计时
+            const clearTimer = () => { if (pressTimer) clearTimeout(pressTimer); };
+            element.addEventListener('touchend', clearTimer);
+            element.addEventListener('touchmove', clearTimer);
+            element.addEventListener('touchcancel', clearTimer);
         }
         
         function handleContextMenuRename() {
