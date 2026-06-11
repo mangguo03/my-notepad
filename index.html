@@ -236,8 +236,8 @@
                     </div>
                 </div>
 
-                <div class="px-2 py-1.5 flex flex-col gap-2 select-none flex-shrink-0 z-10">
-                    <div id="editor-format-bar" class="flex items-center gap-1 flex-wrap w-full">
+                <div class="px-2 py-1.5 flex flex-col gap-2 select-none flex-shrink-0 z-10 overflow-hidden w-full">
+                    <div id="editor-format-bar" class="flex items-center gap-1 flex-nowrap w-full overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
                         
                         <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="w-[70px] px-1.5 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="" data-i18n="fmt-size">字号</option>
