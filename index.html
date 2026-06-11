@@ -82,7 +82,7 @@
         #left-notes-container div.active-note-item:hover { background-color: #3b82f6 !important; }
     </style>
 </head>
-<body class="bg-slate-900 font-sans h-screen flex flex-col overflow-hidden text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300">
+<body class="bg-slate-900 font-sans fixed inset-0 w-full flex flex-col overflow-hidden text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300">
     
     <div id="auth-overlay" class="fixed inset-0 bg-slate-900 z-[9999] flex items-center justify-center transition-opacity" style="-webkit-app-region: no-drag;">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 flex flex-col gap-4" style="-webkit-app-region: no-drag;">
@@ -108,7 +108,7 @@
     <input type="file" id="import-txt-input" accept=".txt" class="hidden" onchange="handleImportFile(event, 'txt')">
     <input type="file" id="import-folder-input" webkitdirectory directory multiple class="hidden" onchange="handleFolderImport(event)">
 
-    <div id="workspace-container" class="flex flex-1 overflow-hidden w-full bg-slate-200 dark:bg-slate-900 transition-colors duration-300">
+    <div id="workspace-container" class="flex flex-1 min-h-0 overflow-hidden w-full bg-slate-200 dark:bg-slate-900 transition-colors duration-300">
         
         <input type="file" id="import-md-input" accept=".md" class="hidden" onchange="handleImportFile(event, 'md')">
         <input type="file" id="import-txt-input" accept=".txt" class="hidden" onchange="handleImportFile(event, 'txt')">
@@ -149,7 +149,7 @@
         
         <div id="resizer-left" class="resizer hidden md:block dark:bg-slate-700"></div>
         
-        <section id="middle-panel" class="bg-white dark:bg-slate-950 flex flex-col flex-1 overflow-hidden min-w-0 md:min-w-[450px] transition-colors duration-300 relative">
+        <section id="middle-panel" class="bg-white dark:bg-slate-950 flex flex-col flex-1 min-h-0 overflow-hidden min-w-0 md:min-w-[450px] transition-colors duration-300 relative">
             
             <div id="float-toggle-handle" onclick="toggleLeftPanel()" class="absolute left-0 top-1/2 -translate-y-1/2 w-3.5 h-20 bg-gradient-to-b from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white cursor-pointer flex items-center justify-center rounded-r-xl shadow-lg z-[100] transition-all border border-l-0 border-orange-400 opacity-90 hover:opacity-100" title="展开/收起侧栏">
                 <i id="sidebar-float-icon" class="fa-solid fa-caret-left text-[11px] transition-transform duration-300"></i>
@@ -284,9 +284,11 @@
                 <input type="file" id="local-img-input" accept="image/*" multiple class="hidden" onchange="handleLocalImageUpload(event)">
             </div>
             
-            <div class="flex-1 min-h-0 flex flex-col px-3 py-2 sm:px-5 sm:py-4 overflow-y-auto w-full bg-white dark:bg-slate-950 relative">
-                <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-xl sm:text-2xl border-0 border-b border-dashed border-slate-300 dark:border-slate-700 outline-none pb-1 mb-1.5 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent flex-shrink-0">
-                <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full flex-1 outline-none text-slate-800 dark:text-slate-200 break-words mt-1"></div>
+            <div class="flex-1 min-h-0 relative w-full bg-white dark:bg-slate-950 z-0">
+                <div class="absolute inset-0 flex flex-col px-3 py-2 sm:px-5 sm:py-4 overflow-y-auto">
+                    <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-xl sm:text-2xl border-0 border-b border-dashed border-slate-300 dark:border-slate-700 outline-none pb-1 mb-1.5 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent flex-shrink-0">
+                    <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full flex-1 outline-none text-slate-800 dark:text-slate-200 break-words mt-1"></div>
+                </div>
             </div>
         </section>
         
