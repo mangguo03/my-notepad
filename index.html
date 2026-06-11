@@ -199,7 +199,7 @@
                         </div>
                         <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-200 dark:border-blue-800 px-1.5 py-0.5 rounded shadow-sm transition-colors" title="修改归属文件夹">
                             <i class="fa-solid fa-folder text-blue-500 text-[11px]"></i>
-                            <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="text-[11px] font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer max-w-[90px]"></select>
+                            <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="text-[11px] font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer max-w-[65px]"></select>
                         </div>
                         <button onclick="toggleRightPanel()" class="bg-red-600 hover:bg-red-700 text-white font-black px-1.5 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-red-700 whitespace-nowrap flex-shrink-0" title="历史记录">
                             <i id="right-panel-toggle-icon" class="fa-solid fa-clock-rotate-left"></i>
@@ -239,7 +239,7 @@
                 <div class="px-2 py-1.5 flex flex-col gap-2 select-none flex-shrink-0 z-10">
                     <div id="editor-format-bar" class="flex items-center gap-1 flex-wrap w-full">
                         
-                        <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="w-[100px] px-1.5 py-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
+                        <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="w-[70px] px-1.5 py-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="" data-i18n="fmt-size">字号</option>
                         <option value="1" data-i18n="sz-1">1号 (10px)</option>
                         <option value="2" data-i18n="sz-2">2号 (13px)</option>
@@ -250,7 +250,7 @@
                         <option value="7" data-i18n="sz-7">7号 (48px)</option>
                     </select>
                     
-                    <select onchange="if(this.value){execCmd('formatBlock', this.value);}" class="px-1.5 py-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
+                    <select onchange="if(this.value){execCmd('formatBlock', this.value);}" class="w-[70px] px-1.5 py-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="" data-i18n="fmt-heading">标题</option>
                         <option value="<H1>" data-i18n="h1">一级标题</option>
                         <option value="<H2>" data-i18n="h2">二级标题</option>
