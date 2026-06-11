@@ -157,9 +157,9 @@
 
             <div class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-col select-none flex-shrink-0 z-10 shadow-sm">
                 
-                <div class="px-3 py-1.5 flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 relative z-[60]">
+                <div class="px-2 py-1.5 flex flex-nowrap items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-800 relative z-[60] overflow-x-auto w-full" style="scrollbar-width: none; -ms-overflow-style: none;">
                     
-                    <div class="flex items-center gap-1.5 flex-wrap">
+                    <div class="flex items-center gap-1 flex-nowrap flex-shrink-0">
                         <div class="flex items-center justify-center bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded shadow-sm mr-1 cursor-help" title="文字排版与编辑区域">
                             <i class="fa-solid fa-pen-nib text-[11px]"></i>
                         </div>
@@ -192,8 +192,8 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-end flex-wrap gap-2 ml-auto">
-                        <div class="relative flex items-center w-28 flex-shrink-0">
+                    <div class="flex items-center justify-end flex-nowrap gap-1 ml-auto flex-shrink-0">
+                        <div class="relative flex items-center w-20 sm:w-28 flex-shrink-0">
                             <i class="fa-solid fa-magnifying-glass absolute left-2.5 text-slate-400 text-[11px]"></i>
                             <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-full py-0.5 pl-7 pr-2 text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
                         </div>
