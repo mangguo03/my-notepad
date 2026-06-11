@@ -80,6 +80,9 @@
         .tree-node-wrapper:hover { background-color: #f1f5f9; }
         .active-tree-node { background-color: #3b82f6 !important; color: white !important; }
         #left-notes-container div.active-note-item:hover { background-color: #3b82f6 !important; }
+/* 🔒 终极系统级锁定：绝对禁止整个网页发生任何滑动，强行按住底盘！ */
+        html, body { position: fixed !important; inset: 0 !important; overflow: hidden !important; width: 100vw; height: 100vh; }
+        #workspace-container, #middle-panel { min-height: 0 !important; overflow: hidden !important; }
     </style>
 </head>
 <body class="bg-slate-900 font-sans fixed inset-0 w-full flex flex-col overflow-hidden text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300">
@@ -284,10 +287,10 @@
                 <input type="file" id="local-img-input" accept="image/*" multiple class="hidden" onchange="handleLocalImageUpload(event)">
             </div>
             
-            <div class="flex-1 min-h-0 overflow-y-auto w-full bg-white dark:bg-slate-950 z-0">
-                <div class="flex flex-col min-h-full px-3 py-2 sm:px-5 sm:py-4">
+            <div class="flex-1 h-0 overflow-y-auto w-full bg-white dark:bg-slate-950 z-0 relative">
+                <div class="px-3 py-2 sm:px-5 sm:py-4">
                     <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-xl sm:text-2xl border-0 border-b border-dashed border-slate-300 dark:border-slate-700 outline-none pb-1 mb-1.5 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent flex-shrink-0">
-                    <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full flex-1 outline-none text-slate-800 dark:text-slate-200 break-words mt-1"></div>
+                    <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full outline-none text-slate-800 dark:text-slate-200 break-words mt-1 pb-32"></div>
                 </div>
             </div>
         </section>
