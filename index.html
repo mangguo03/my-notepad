@@ -237,7 +237,7 @@
 
             <div class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-col select-none flex-shrink-0 z-10 shadow-sm">
                 
-                <div class="px-2 py-1.5 flex flex-wrap items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-800 relative z-[60] w-full">
+                <div class="px-2 py-1.5 flex flex-nowrap items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-800 relative z-[80] overflow-x-auto w-full" style="scrollbar-width: none; -ms-overflow-style: none;">
                     
                     <div class="flex items-center gap-1 flex-nowrap flex-shrink-0">
                         <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded shadow-sm font-black text-[11px] mr-1">
@@ -246,12 +246,12 @@
                         <button id="btn-new-note" onclick="createNewNote()" class="px-2 py-0.5 text-[11px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-file-lines"></i> <span data-i18n="btn-new-note">新笔记</span></button>
                         <button onclick="createNewCategory()" class="px-2 py-0.5 text-[11px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-folder-plus"></i> <span data-i18n="btn-new-folder">新分类</span></button>
                         
-                        <div class="relative flex-shrink-0" id="btn-import-export-wrap">
-                            <button onclick="toggleImportExport()" title="导入导出" class="px-2 py-1 text-[11px] font-bold bg-emerald-500 hover:bg-emerald-600 text-white rounded shadow-sm flex items-center gap-1">
-                                   <i class="fa-solid fa-right-left text-[11px]"></i>
-                                   <i id="import-export-arrow" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200"></i>
+                        <div class="relative flex-shrink-0 z-[90]" id="btn-import-export-wrap">
+                            <button onclick="document.getElementById('import-export-content').classList.toggle('hidden'); document.getElementById('import-export-arrow').classList.toggle('rotate-180'); event.stopPropagation();" title="导入导出" class="px-2 py-1 text-[11px] font-bold bg-emerald-500 hover:bg-emerald-600 text-white rounded shadow-sm flex items-center gap-1">
+                                   <i class="fa-solid fa-right-left text-[11px] pointer-events-none"></i>
+                                   <i id="import-export-arrow" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 pointer-events-none"></i>
                             </button>
-                            <div id="import-export-content" class="hidden absolute left-0 top-full mt-1 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col p-1.5 gap-1.5 z-[100]">
+                            <div id="import-export-content" class="hidden fixed left-2 top-10 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col p-1.5 gap-1.5 z-[100]">
                                 <div class="flex items-center gap-1.5">
                                     <button onclick="triggerImport('md')" class="flex-1 py-0.5 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded font-black transition-all text-center truncate text-[10px] shadow-sm"><i class="fa-solid fa-file-import"></i> MD</button>
                                     <button onclick="exportFile('md')" class="flex-1 py-0.5 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-black transition-all text-center truncate text-[10px] shadow-sm"><i class="fa-solid fa-file-export"></i> MD</button>
@@ -282,25 +282,26 @@
                             <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="w-[40px] truncate text-[11px] font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer"></select>
                         </div>
                         <button onclick="toggleRightPanel()" title="历史记录" class="bg-red-600 hover:bg-red-700 text-white font-black px-1.5 py-1 rounded text-[11px] transition-all shadow-sm flex items-center justify-center whitespace-nowrap flex-shrink-0">
-                               <i id="right-panel-toggle-icon" class="fa-solid fa-clock-rotate-left"></i>
+                               <i id="right-panel-toggle-icon" class="fa-solid fa-clock-rotate-left pointer-events-none"></i>
                         </button>
-                        <div class="relative flex-shrink-0 z-[70]">
-                            <button onclick="toggleSettingsMenu(event)" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-1.5 py-1 rounded text-[11px] transition-all shadow-sm flex items-center justify-center gap-1 border border-slate-700 whitespace-nowrap" title="系统设置">
-                                <i class="fa-solid fa-gear"></i>
+                        
+                        <div class="relative flex-shrink-0 z-[90]">
+                            <button onclick="document.getElementById('settings-dropdown').classList.toggle('hidden'); event.stopPropagation();" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-1.5 py-1 rounded text-[11px] transition-all shadow-sm flex items-center justify-center gap-1 border border-slate-700 whitespace-nowrap" title="系统设置">
+                                <i class="fa-solid fa-gear pointer-events-none"></i>
                             </button>
-                            <div id="settings-dropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 flex flex-col py-1">
-                                <button onclick="toggleLanguage(); closeSettingsMenu();" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
+                            <div id="settings-dropdown" class="hidden fixed right-2 top-10 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 z-[100] flex flex-col py-1">
+                                <button onclick="toggleLanguage(); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span>
                                 </button>
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
                                 <div class="px-4 py-1.5 text-[11px] text-slate-400 dark:text-slate-500 font-black tracking-widest uppercase" data-i18n="theme-title">主题模式</div>
-                                <button onclick="setTheme('light'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
+                                <button onclick="setTheme('light'); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-sun text-yellow-500 w-4 text-center"></i> <span data-i18n="theme-light">浅色</span>
                                 </button>
-                                <button onclick="setTheme('dark'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
+                                <button onclick="setTheme('dark'); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-moon text-blue-400 w-4 text-center"></i> <span data-i18n="theme-dark">深色</span>
                                 </button>
-                                <button onclick="setTheme('system'); closeSettingsMenu();" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
+                                <button onclick="setTheme('system'); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-desktop text-slate-400 w-4 text-center"></i> <span data-i18n="theme-sys">系统</span>
                                 </button>
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
