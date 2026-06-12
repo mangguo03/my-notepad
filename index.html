@@ -71,7 +71,6 @@
         .resizer { width: 6px; cursor: col-resize; background-color: #e2e8f0; transition: background-color 0.2; position: relative; z-index: 10; }
         .resizer:hover, .resizer.resizing { background-color: #2563eb; width: 6px; }
         .no-select { user-select: none; -webkit-user-select: none; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
@@ -80,6 +79,32 @@
         .tree-node-wrapper:hover { background-color: #f1f5f9; }
         .active-tree-node { background-color: #3b82f6 !important; color: white !important; }
         #left-notes-container div.active-note-item:hover { background-color: #3b82f6 !important; }
+        
+        /* 💡 2. 强化右侧文本滚动条滑块（手机端更易触控） */
+        #note-editor-richtext::-webkit-scrollbar { width: 12px; }
+        #note-editor-richtext::-webkit-scrollbar-track { background: rgba(0,0,0,0.03); border-radius: 8px; }
+        .dark #note-editor-richtext::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
+        #note-editor-richtext::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 8px; border: 2px solid transparent; background-clip: content-box; }
+        .dark #note-editor-richtext::-webkit-scrollbar-thumb { background: #64748b; }
+
+        /* 💡 1 & 4. 全新图片包装组件样式 */
+        .custom-img-wrapper {
+            position: relative; display: inline-block; max-width: 100%; margin: 10px 0; vertical-align: top;
+            transition: all 0.2s;
+        }
+        .custom-img-wrapper img { margin: 0 !important; display: block; max-width: 100%; border-radius: 10px; }
+        
+        /* 核心绝杀：上锁状态下，彻底屏蔽图片触摸，手指划过图片等同于划过空白，完美恢复滚动 */
+        .custom-img-wrapper.locked img { pointer-events: none; outline: none !important; box-shadow: none !important; -webkit-user-drag: none; }
+        
+        .img-lock-btn {
+            position: absolute; top: 8px; right: 8px; width: 32px; height: 32px;
+            background-color: rgba(239, 68, 68, 0.9); color: white; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-size: 14px;
+            z-index: 50; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.2); pointer-events: auto;
+        }
+        .custom-img-wrapper:not(.locked) .img-lock-btn { background-color: rgba(16, 185, 129, 0.9); }
+        .custom-img-wrapper.dragging { opacity: 0.4; border: 2px dashed #3b82f6; transform: scale(0.98); }
     </style>
 </head>
 <body class="bg-slate-900 font-sans h-screen flex flex-col overflow-hidden text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300">
