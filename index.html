@@ -1619,6 +1619,13 @@
                 };
                 editorRichText.addEventListener('contextmenu', handleImageMenuEvent);
                 editorRichText.addEventListener('dblclick', handleImageMenuEvent);
+
+                // 👇 新增这 4 行：消除无效图标，给编辑器开启“接收拖放”的绿灯 👇
+                editorRichText.addEventListener('dragenter', (e) => { e.preventDefault(); });
+                editorRichText.addEventListener('dragover', (e) => { 
+                    e.preventDefault(); 
+                    e.dataTransfer.dropEffect = 'move'; // 让鼠标变成合法的移动图标
+                });
             }
             
             // 点击空白处自动隐藏图片菜单
