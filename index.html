@@ -83,8 +83,8 @@
         .resizer:hover, .resizer.resizing { background-color: #2563eb; width: 6px; }
         .no-select { user-select: none; -webkit-user-select: none; }
         
-        /* 💡 修复后的滚动条代码 */
-        ::-webkit-scrollbar { width: 16px; height: 16px; }
+        /* 💡 修复后的滚动条代码（已调窄为 8px） */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background-color: #f1f5f9; border-radius: 8px; }
         ::-webkit-scrollbar-thumb { background-color: #94a3b8; border-radius: 8px; }
         ::-webkit-scrollbar-thumb:hover { background-color: #64748b; }
@@ -457,7 +457,7 @@
                 dropdown.classList.add('hidden');
             }
             
-            // 💡 新增：点击其他地方时，自动关闭新的导入导出悬浮下拉菜单
+            // 自动关闭新的导入导出悬浮下拉菜单
             const ieDropdown = document.getElementById('import-export-content');
             const ieWrap = document.getElementById('btn-import-export-wrap');
             if (ieDropdown && !ieDropdown.classList.contains('hidden') && (!ieWrap || !ieWrap.contains(e.target))) {
@@ -466,7 +466,13 @@
                 if(arrow) arrow.classList.remove('rotate-180');
             }
             
-            document.getElementById('custom-context-menu').classList.add('hidden');
+            // 隐藏文件夹右键菜单
+            const customMenu = document.getElementById('custom-context-menu');
+            if (customMenu) customMenu.classList.add('hidden');
+
+            // 👇 核心修复：点击页面任意空白处，自动隐藏“图片专属弹出菜单”
+            const imgMenu = document.getElementById('img-context-menu');
+            if (imgMenu) imgMenu.classList.add('hidden');
         });
 
         function setTheme(theme) {
