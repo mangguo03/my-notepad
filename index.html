@@ -100,8 +100,8 @@
             box-sizing: border-box;
         }
         .custom-img-wrapper img { 
-            width: 100% !important; /* 强制图片撑满容器 */
-            height: auto !important; 
+            width: 100%; /* 去掉 !important，允许 JS 代码拉伸改变尺寸 */
+            height: auto; 
             border-radius: 10px; 
             display: block; 
             margin: 0; 
@@ -1298,8 +1298,8 @@
                                hasImage = true;
                                const reader = new FileReader();
                                reader.onload = (event) => {
-                                      // 插入自带红锁的外壳
-                                      const html = `<span class="custom-img-wrapper locked" contenteditable="false"><img src="${event.target.result}" alt="图片"><span class="img-lock-btn" onclick="toggleImgLock(this, event)"><i class="fa-solid fa-lock"></i></span></span><br>`;
+                                      // 插入自带红锁的外壳，并加上拖拽识别代码
+                                      const html = `<span class="custom-img-wrapper locked" contenteditable="false" draggable="true" ondragstart="imgDragStart(event)" ondragend="imgDragEnd(event)"><img src="${event.target.result}" alt="图片"><span class="img-lock-btn" onclick="toggleImgLock(this, event)"><i class="fa-solid fa-lock"></i></span></span><br>`;
                                       document.execCommand('insertHTML', false, html);
                                };
                                reader.readAsDataURL(items[i].getAsFile());
@@ -1464,8 +1464,8 @@
                    const reader = new FileReader();
                    reader.onload = function(e) {
                         const base64Image = e.target.result;
-                        // 插入自带红锁的外壳
-                        const html = `<span class="custom-img-wrapper locked" contenteditable="false"><img src="${base64Image}" alt="图片"><span class="img-lock-btn" onclick="toggleImgLock(this, event)"><i class="fa-solid fa-lock"></i></span></span><br>`;
+                        // 插入自带红锁的外壳，并加上拖拽识别代码
+                        const html = `<span class="custom-img-wrapper locked" contenteditable="false" draggable="true" ondragstart="imgDragStart(event)" ondragend="imgDragEnd(event)"><img src="${base64Image}" alt="图片"><span class="img-lock-btn" onclick="toggleImgLock(this, event)"><i class="fa-solid fa-lock"></i></span></span><br>`;
                         document.execCommand('insertHTML', false, html);
                         handleEditorInput(); 
                    };
