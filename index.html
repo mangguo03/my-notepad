@@ -1026,11 +1026,36 @@
         }
         
         function bindCategoryContextMenu(element, catId) {
+            // 💡 保留原有的右键点击逻辑（适配电脑端）
             element.oncontextmenu = (e) => {
                 e.preventDefault(); e.stopPropagation(); rightClickedCategoryId = catId;
-                const menu = document.getElementById('custom-context-menu');
-                menu.classList.remove('hidden'); menu.style.left = e.clientX + 'px'; menu.style.top = e.clientY + 'px';
+                showContextMenu(e.clientX, e.clientY);
             };
+
+            // 💡 新增双击/双指连按逻辑（适配手机端）
+            element.ondblclick = (e) => {
+                e.preventDefault(); e.stopPropagation(); rightClickedCategoryId = catId;
+                
+                // 清除双击时可能产生的文字选中阴影，保持 UI 干净
+                if (window.getSelection) { window.getSelection().removeAllRanges(); }
+                
+                showContextMenu(e.clientX, e.clientY);
+            };
+
+            // 💡 提取公共的菜单展示逻辑，加入手机屏幕边缘防溢出保护
+            function showContextMenu(x, y) {
+                const menu = document.getElementById('custom-context-menu');
+                menu.classList.remove('hidden'); 
+                
+                // 获取菜单宽度（默认大概 176px），如果超出屏幕右侧边缘，则向左偏移
+                let finalX = x;
+                if (finalX + 180 > window.innerWidth) {
+                    finalX = window.innerWidth - 190;
+                }
+                
+                menu.style.left = finalX + 'px'; 
+                menu.style.top = y + 'px';
+            }
         }
         
         function handleContextMenuRename() {
