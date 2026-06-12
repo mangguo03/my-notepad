@@ -1253,7 +1253,22 @@
 
         function initRichTextInteractiveEvents() {
                const editor = document.getElementById('note-editor-richtext');
-               editor.addEventListener('click', (e) => { if (e.target.tagName === 'A' && (e.ctrlKey || e.metaKey)) window.open(e.target.href, '_blank'); });
+               
+               // 💡 升级版点击监听：同时处理超链接和图片锁
+               editor.addEventListener('click', (e) => { 
+                   // 1. 保留原本的超链接快捷打开逻辑
+                   if (e.target.tagName === 'A' && (e.ctrlKey || e.metaKey)) {
+                       window.open(e.target.href, '_blank'); 
+                   }
+                   
+                   // 2. 🚨 强制拦截锁按钮的点击（修复部分锁失灵的问题）
+                   const lockBtn = e.target.closest('.img-lock-btn');
+                   if (lockBtn) {
+                       e.preventDefault(); 
+                       e.stopPropagation();
+                       window.toggleImgLock(lockBtn, e);
+                   }
+               });
     
                let activeImage = null;
                let startY = 0;
@@ -1590,7 +1605,7 @@
             document.addEventListener('click', (e) => {
                 const imgMenu = document.getElementById('img-context-menu');
                 if (imgMenu && !imgMenu.contains(e.target)) imgMenu.classList.add('hidden');
-            });
+            }, true); // 👈 就是这里！加了一个 `, true`，开启“上帝视角”强行捕获点击！
         });
 
         if ('serviceWorker' in navigator) {
