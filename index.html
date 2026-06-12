@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -80,14 +82,11 @@
         .tree-node-wrapper:hover { background-color: #f1f5f9; }
         .active-tree-node { background-color: #3b82f6 !important; color: white !important; }
         #left-notes-container div.active-note-item:hover { background-color: #3b82f6 !important; }
-/* 🔒 终极系统级锁定：绝对禁止整个网页发生任何滑动，强行按住底盘！ */
-        html, body { position: fixed !important; inset: 0 !important; overflow: hidden !important; width: 100vw; height: 100vh; }
-        #workspace-container, #middle-panel { min-height: 0 !important; overflow: hidden !important; }
     </style>
 </head>
-<body class="bg-slate-900 font-sans fixed inset-0 w-full flex flex-col overflow-hidden text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300">
+<body class="bg-slate-900 font-sans h-screen flex flex-col overflow-hidden text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300">
     
-    <div id="auth-overlay" class="fixed inset-0 bg-slate-900 z-[9999] flex items-center justify-center transition-opacity" style="-webkit-app-region: no-drag;">
+    <div id="auth-overlay" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center transition-opacity" style="-webkit-app-region: drag;">
         <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 flex flex-col gap-4" style="-webkit-app-region: no-drag;">
             <h2 class="text-2xl font-black mb-2 text-center text-slate-800" id="auth-title">登入云端工作台</h2>
             <div id="auth-error" class="hidden bg-red-100 text-red-600 p-2 rounded text-sm font-bold text-center"></div>
@@ -111,7 +110,7 @@
     <input type="file" id="import-txt-input" accept=".txt" class="hidden" onchange="handleImportFile(event, 'txt')">
     <input type="file" id="import-folder-input" webkitdirectory directory multiple class="hidden" onchange="handleFolderImport(event)">
 
-    <div id="workspace-container" class="flex flex-1 min-h-0 overflow-hidden w-full bg-slate-200 dark:bg-slate-900 transition-colors duration-300">
+    <div id="workspace-container" class="flex flex-1 overflow-hidden w-full bg-slate-200 dark:bg-slate-900 transition-colors duration-300">
         
         <input type="file" id="import-md-input" accept=".md" class="hidden" onchange="handleImportFile(event, 'md')">
         <input type="file" id="import-txt-input" accept=".txt" class="hidden" onchange="handleImportFile(event, 'txt')">
@@ -152,29 +151,29 @@
         
         <div id="resizer-left" class="resizer hidden md:block dark:bg-slate-700"></div>
         
-        <section id="middle-panel" class="bg-white dark:bg-slate-950 flex flex-col flex-1 min-h-0 overflow-hidden min-w-0 md:min-w-[450px] transition-colors duration-300 relative">
+        <section id="middle-panel" class="bg-white dark:bg-slate-950 flex flex-col flex-1 overflow-hidden min-w-0 md:min-w-[450px] transition-colors duration-300 relative">
             
-            <div id="float-toggle-handle" onclick="toggleLeftPanel()" class="absolute left-0 top-1/2 -translate-y-1/2 w-3.5 h-20 bg-gradient-to-b from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white cursor-pointer flex items-center justify-center rounded-r-xl shadow-lg z-[100] transition-all border border-l-0 border-orange-400 opacity-90 hover:opacity-100" title="展开/收起侧栏">
+            <div id="float-toggle-handle" onclick="toggleLeftPanel()" class="absolute left-0 top-1/2 -translate-y-1/2 w-3.5 h-20 bg-gradient-to-b from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white cursor-pointer flex items-center justify-center rounded-r-xl shadow-lg z-[60] transition-all border border-l-0 border-orange-400 opacity-90 hover:opacity-100" title="展开/收起侧栏">
                 <i id="sidebar-float-icon" class="fa-solid fa-caret-left text-[11px] transition-transform duration-300"></i>
             </div>
 
-            <div class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-col select-none flex-shrink-0 z-[80] shadow-sm relative">
+            <div class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-col select-none flex-shrink-0 z-10 shadow-sm">
                 
-                <div class="px-2 py-1.5 flex flex-nowrap items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-800 w-full overflow-x-auto hide-scroll" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <div class="px-3 py-1.5 flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 relative z-[60]">
                     
-                    <div class="flex items-center gap-1 flex-nowrap flex-shrink-0">
-                        <div class="flex items-center justify-center bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded shadow-sm mr-1 cursor-help" title="文字排版与编辑区域">
-                            <i class="fa-solid fa-pen-nib text-[11px]"></i>
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded shadow-sm font-black text-[10px] mr-1">
+                            <i class="fa-solid fa-pen-nib"></i> <span data-i18n="label-editor">编辑栏</span>
                         </div>
                         <button id="btn-new-note" onclick="createNewNote()" class="px-2 py-0.5 text-[11px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-file-lines"></i> <span data-i18n="btn-new-note">新笔记</span></button>
                         <button onclick="createNewCategory()" class="px-2 py-0.5 text-[11px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-folder-plus"></i> <span data-i18n="btn-new-folder">新分类</span></button>
                         
-                        <div class="flex-shrink-0" id="btn-import-export-wrap">
-                            <button onclick="toggleImportExport()" class="flex items-center justify-center gap-1.5 px-4 py-0.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded shadow-sm transition-colors cursor-pointer" title="导入导出文档">
-                                <i class="fa-solid fa-right-left text-[14px] ml-0.5"></i>
-                                <i id="import-export-arrow" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200"></i>
+                        <div class="relative flex-shrink-0" id="btn-import-export-wrap">
+                            <button onclick="toggleImportExport()" class="px-2 py-0.5 text-[11px] font-bold bg-emerald-500 hover:bg-emerald-600 text-white rounded shadow-sm flex items-center gap-1">
+                                <i class="fa-solid fa-box-archive"></i> <span data-i18n="btn-import-export">导入与导出</span>
+                                <i id="import-export-arrow" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 ml-0.5"></i>
                             </button>
-                            <div id="import-export-content" class="hidden absolute left-2 top-[36px] w-48 bg-white dark:bg-slate-800 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col p-1.5 gap-1.5 z-[100]">
+                            <div id="import-export-content" class="hidden absolute left-0 top-full mt-1 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col p-1.5 gap-1.5 z-[100]">
                                 <div class="flex items-center gap-1.5">
                                     <button onclick="triggerImport('md')" class="flex-1 py-1 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded font-black transition-all text-center truncate text-[10px] shadow-sm"><i class="fa-solid fa-file-import"></i> MD</button>
                                     <button onclick="exportFile('md')" class="flex-1 py-1 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-black transition-all text-center truncate text-[10px] shadow-sm"><i class="fa-solid fa-file-export"></i> MD</button>
@@ -195,24 +194,23 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-end flex-nowrap gap-1 ml-auto flex-shrink-0">
-                        <div class="relative flex items-center w-20 sm:w-28 flex-shrink-0">
-                            <i class="fa-solid fa-magnifying-glass absolute left-2.5 text-slate-400 text-[11px]"></i>
-                            <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-full py-0.5 pl-7 pr-2 text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
+                    <div class="flex items-center justify-end flex-wrap gap-2 ml-auto">
+                        <div class="relative flex items-center w-36 flex-shrink-0">
+                            <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-[10px]"></i>
+                            <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索标题或内容..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-full py-0.5 pl-6 pr-2 text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
                         </div>
-                        <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-200 dark:border-blue-800 px-1.5 py-0.5 rounded shadow-sm transition-colors" title="修改归属文件夹">
-                            <i class="fa-solid fa-folder text-blue-500 text-[11px]"></i>
-                            <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="text-[11px] font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer max-w-[65px]"></select>
+                        <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 px-2 py-0.5 rounded shadow-sm">
+                            <span class="text-[11px] font-black text-blue-600 dark:text-blue-400"><i class="fa-solid fa-folder text-blue-500"></i> <span data-i18n="label-category">归属地:</span></span>
+                            <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="text-[11px] font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer"></select>
                         </div>
-                        <button onclick="toggleRightPanel()" class="bg-red-600 hover:bg-red-700 text-white font-black px-1.5 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-red-700 whitespace-nowrap flex-shrink-0" title="历史记录">
-                            <i id="right-panel-toggle-icon" class="fa-solid fa-clock-rotate-left"></i>
+                        <button onclick="toggleRightPanel()" class="bg-red-600 hover:bg-red-700 text-white font-black px-2 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center gap-1 whitespace-nowrap flex-shrink-0">
+                            <i id="right-panel-toggle-icon" class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="nav-history">历史</span>
                         </button>
-                        
-                        <div class="flex-shrink-0">
-                            <button onclick="toggleSettingsMenu(event)" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-1.5 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-slate-700 whitespace-nowrap" title="系统设置">
+                        <div class="relative flex-shrink-0 z-[70]">
+                            <button onclick="toggleSettingsMenu(event)" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-1.5 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center gap-1 border border-slate-700 whitespace-nowrap" title="系统设置">
                                 <i class="fa-solid fa-gear"></i>
                             </button>
-                            <div id="settings-dropdown" class="hidden absolute right-2 top-[36px] w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-[100] flex flex-col py-1">
+                            <div id="settings-dropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 flex flex-col py-1">
                                 <button onclick="toggleLanguage(); closeSettingsMenu();" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span>
                                 </button>
@@ -239,10 +237,10 @@
                     </div>
                 </div>
 
-                <div class="px-2 py-1.5 flex flex-col gap-2 select-none flex-shrink-0 z-[70] overflow-hidden w-full bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 shadow-sm relative">
-                    <div id="editor-format-bar" class="flex items-center gap-1 flex-nowrap w-full overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
-                        
-                        <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="w-[70px] px-1.5 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
+                <div class="px-4 py-1.5 flex flex-col gap-2 select-none flex-shrink-0 z-10">
+                    <div id="editor-format-bar" class="flex items-center gap-1 flex-wrap w-max">
+
+                    <select onchange="if(this.value){execCmd('fontSize', this.value);}" class="w-[100px] px-1.5 py-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="" data-i18n="fmt-size">字号</option>
                         <option value="1" data-i18n="sz-1">1号 (10px)</option>
                         <option value="2" data-i18n="sz-2">2号 (13px)</option>
@@ -253,7 +251,7 @@
                         <option value="7" data-i18n="sz-7">7号 (48px)</option>
                     </select>
                     
-                    <select onchange="if(this.value){execCmd('formatBlock', this.value);}" class="w-[70px] px-1.5 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
+                    <select onchange="if(this.value){execCmd('formatBlock', this.value);}" class="px-1.5 py-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 outline-none cursor-pointer bg-slate-50 dark:bg-slate-700">
                         <option value="" data-i18n="fmt-heading">标题</option>
                         <option value="<H1>" data-i18n="h1">一级标题</option>
                         <option value="<H2>" data-i18n="h2">二级标题</option>
@@ -278,8 +276,8 @@
                     
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
 
-                    <button onmousedown="event.preventDefault();" onclick="wrapHTML('<code>', '</code>')" class="px-2 py-0.5 text-[11px] font-mono text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="插入代码块"><i class="fa-solid fa-code"></i></button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('removeFormat')" class="px-2 py-0.5 text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700" title="清除格式"><i class="fa-solid fa-eraser"></i></button>
+                    <button onmousedown="event.preventDefault();" onclick="wrapHTML('<code>', '</code>')" class="px-2 py-0.5 text-xs font-mono text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600"><i class="fa-solid fa-code"></i></button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('removeFormat')" class="px-2 py-0.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700"><i class="fa-solid fa-eraser"></i></button>
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
     
                     <button onmousedown="event.preventDefault(); document.getElementById('local-img-input').click()" class="px-2 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-700 rounded border border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-slate-700"><i class="fa-regular fa-image"></i> <span data-i18n="fmt-img">图</span></button>
@@ -287,11 +285,9 @@
                 <input type="file" id="local-img-input" accept="image/*" multiple class="hidden" onchange="handleLocalImageUpload(event)">
             </div>
             
-            <div class="flex-1 h-0 overflow-y-auto w-full bg-white dark:bg-slate-950 z-0 relative">
-                <div class="px-3 py-2 sm:px-5 sm:py-4">
-                    <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-xl sm:text-2xl border-0 border-b border-dashed border-slate-300 dark:border-slate-700 outline-none pb-1 mb-1.5 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent flex-shrink-0">
-                    <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full outline-none text-slate-800 dark:text-slate-200 break-words mt-1 pb-32"></div>
-                </div>
+            <div class="flex-1 flex flex-col p-5 overflow-y-auto w-full bg-white dark:bg-slate-950 relative min-h-0">
+                  <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-2xl border-0 border-b-2 border-dashed border-slate-300 dark:border-slate-700 outline-none pb-3 mb-3 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent flex-shrink-0">
+                  <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full flex-1 outline-none text-slate-800 dark:text-slate-200 break-words"></div>
             </div>
         </section>
         
@@ -389,19 +385,16 @@
             document.getElementById('settings-dropdown').classList.add('hidden');
         }
 
-        // 💡 修复：点击空白处关闭悬浮菜单的精准逻辑
         document.addEventListener('click', (e) => {
-            // 设置菜单的检测
-            const settingsDropdown = document.getElementById('settings-dropdown');
-            const settingsBtn = e.target.closest('button[onclick="toggleSettingsMenu(event)"]');
-            if (settingsDropdown && !settingsDropdown.classList.contains('hidden') && !settingsDropdown.contains(e.target) && !settingsBtn) {
-                settingsDropdown.classList.add('hidden');
+            const dropdown = document.getElementById('settings-dropdown');
+            if (dropdown && !dropdown.classList.contains('hidden') && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
             }
             
-            // 导入导出菜单的检测
+            // 💡 新增：点击其他地方时，自动关闭新的导入导出悬浮下拉菜单
             const ieDropdown = document.getElementById('import-export-content');
-            const ieBtn = e.target.closest('button[onclick="toggleImportExport()"]');
-            if (ieDropdown && !ieDropdown.classList.contains('hidden') && !ieDropdown.contains(e.target) && !ieBtn) {
+            const ieWrap = document.getElementById('btn-import-export-wrap');
+            if (ieDropdown && !ieDropdown.classList.contains('hidden') && (!ieWrap || !ieWrap.contains(e.target))) {
                 ieDropdown.classList.add('hidden');
                 const arrow = document.getElementById('import-export-arrow');
                 if(arrow) arrow.classList.remove('rotate-180');
@@ -1037,41 +1030,11 @@
         }
         
         function bindCategoryContextMenu(element, catId) {
-            // 💡 禁用手机端系统默认的长按呼出文字选择或系统菜单
-            element.style.userSelect = 'none';
-            element.style.webkitUserSelect = 'none';
-            element.style.webkitTouchCallout = 'none';
-
-            // 💻 电脑端：依然保留标准的右键点击逻辑
             element.oncontextmenu = (e) => {
                 e.preventDefault(); e.stopPropagation(); rightClickedCategoryId = catId;
                 const menu = document.getElementById('custom-context-menu');
                 menu.classList.remove('hidden'); menu.style.left = e.clientX + 'px'; menu.style.top = e.clientY + 'px';
             };
-
-            // 📱 手机端：新增优雅的长按逻辑
-            let pressTimer;
-            
-            // 1. 手指按住时，开始倒计时
-            element.addEventListener('touchstart', (e) => {
-                pressTimer = setTimeout(() => {
-                    e.preventDefault(); e.stopPropagation();
-                    rightClickedCategoryId = catId;
-                    const menu = document.getElementById('custom-context-menu');
-                    menu.classList.remove('hidden');
-                    
-                    // 手机端获取触摸点的坐标（使用 touches[0]）
-                    const touch = e.touches[0];
-                    menu.style.left = touch.clientX + 'px';
-                    menu.style.top = touch.clientY + 'px';
-                }, 500); // ⏱️ 500毫秒算作长按，可以根据手感自行调整
-            }, { passive: false });
-
-            // 2. 只要手指松开、滑动、或者系统打断，立刻取消倒计时
-            const clearTimer = () => { if (pressTimer) clearTimeout(pressTimer); };
-            element.addEventListener('touchend', clearTimer);
-            element.addEventListener('touchmove', clearTimer);
-            element.addEventListener('touchcancel', clearTimer);
         }
         
         function handleContextMenuRename() {
