@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -29,7 +31,6 @@
         .panel-large-text { font-size: 12px !important; font-weight: 800 !important; }
         .sync-btn-font { font-size: 12px !important; font-weight: 900 !important; }
         
-        /* 💡 去掉了标题下划线 border-bottom */
         /* 💡 强制覆盖内部的 font 标签，确保各级标题尺寸绝对生效 */
         .md-preview h1, .md-preview h1 *, .md-preview h1 font { font-size: 2.6rem !important; font-weight: 800 !important; line-height: 1.3 !important; }
         .md-preview h2, .md-preview h2 *, .md-preview h2 font { font-size: 2.1rem !important; font-weight: 700 !important; line-height: 1.3 !important; }
@@ -54,12 +55,14 @@
         .md-preview code { background-color: #fee2e2; padding: 0.2em 0.5em; border-radius: 6px; font-size: 95%; font-family: monospace; color: #be185d; }
         .md-preview pre { background-color: #1e293b; color: #f8fafc; padding: 1.5rem; border-radius: 10px; overflow-x: auto; margin-bottom: 1.5rem; }
         .md-preview pre code { background-color: transparent; color: inherit; padding: 0; font-size: 17px; }
-        .md-preview a { color: #2563eb; text-decoration: underline; font-weight: bold; cursor: pointer; transition: all 0.2; }
+        .md-preview a { color: #2563eb; text-decoration: underline; font-weight: bold; cursor: pointer; transition: all 0.2s; }
         .md-preview a:hover { color: #1e40af; text-decoration-style: dashed; }
+        
+        /* 原版基础图片样式 */
         .md-preview img {
             max-width: 100%; height: auto; border-radius: 10px; margin: 14px 0;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: inline-block;
-            transition: outline 0.2, box-shadow 0.2, transform 0.1;
+            transition: outline 0.2s, box-shadow 0.2s, transform 0.1s;
             object-fit: contain;
         }
         .md-preview img:hover {
@@ -67,41 +70,73 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.15);
             cursor: nwse-resize;
         }
+        
         [contenteditable]:empty:before { content: attr(placeholder); color: #cbd5e1; pointer-events: none; display: block; }
-        .resizer { width: 6px; cursor: col-resize; background-color: #e2e8f0; transition: background-color 0.2; position: relative; z-index: 10; }
+        .resizer { width: 6px; cursor: col-resize; background-color: #e2e8f0; transition: background-color 0.2s; position: relative; z-index: 10; }
         .resizer:hover, .resizer.resizing { background-color: #2563eb; width: 6px; }
         .no-select { user-select: none; -webkit-user-select: none; }
-        /* 💡 简单粗暴的加粗版滚动条 */
-        ::-webkit-scrollbar { 
-            width: 10px; /* 实打实的 10px 宽 */
-            height: 10px; 
-        }
-        /* 轨道底色：加上淡淡的灰色底色，让你能清晰看出 16px 有多宽 */
+        
+        /* 💡 修复后的滚动条代码 */
+        ::-webkit-scrollbar { width: 16px; height: 16px; }
         ::-webkit-scrollbar-track { background-color: #f1f5f9; border-radius: 8px; }
-        /* 滑块本体：不加任何透明边框，结结实实的胖滑块 */
         ::-webkit-scrollbar-thumb { background-color: #94a3b8; border-radius: 8px; }
         ::-webkit-scrollbar-thumb:hover { background-color: #64748b; }
 
-        /* 🌙 深色模式下的粗滑块 */
         .dark ::-webkit-scrollbar-track { background-color: #0f172a; }
         .dark ::-webkit-scrollbar-thumb { background-color: #475569; }
         .dark ::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
-            background-color: #cbd5e1; 
-            border-radius: 99px; 
-            /* 利用透明边框制造悬浮胶囊的视觉效果，实际触控区域是 16px */
-            border: 4px solid rgba(255,255,255,0); 
-            background-clip: padding-box; 
-        }
-        ::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
         
-        /* 适配深色模式下的滚动条 */
-        .dark ::-webkit-scrollbar-thumb { background-color: #475569; }
-        .dark ::-webkit-scrollbar-thumb:hover { background-color: #64748b; }
         .dragging-node { opacity: 0.4; border: 2px dashed #3b82f6 !important; background-color: #eff6ff !important; }
-        
         .tree-node-wrapper:hover { background-color: #f1f5f9; }
         .active-tree-node { background-color: #3b82f6 !important; color: white !important; }
         #left-notes-container div.active-note-item:hover { background-color: #3b82f6 !important; }
+
+        /* ========================================== */
+        /* 💡 新增：自定义图片包装器与锁按钮 (默认全宽，带锁) */
+        /* ========================================== */
+        .custom-img-wrapper {
+            position: relative; 
+            display: block; 
+            width: 100%; /* 默认全屏撑满宽度 */
+            margin: 16px 0; 
+            box-sizing: border-box;
+        }
+        .custom-img-wrapper img { 
+            width: 100% !important; /* 强制图片撑满容器 */
+            height: auto !important; 
+            border-radius: 10px; 
+            display: block; 
+            margin: 0; 
+        }
+        .custom-img-wrapper.locked img { 
+            pointer-events: none; /* 上锁时，鼠标直接穿透图片，等于摸不到图片 */
+            user-select: none;
+            -webkit-user-drag: none;
+            outline: none !important; /* 去除原本的黄色虚线框 */
+            box-shadow: none !important;
+        }
+        .img-lock-btn {
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            width: 36px; 
+            height: 36px;
+            background-color: rgba(239, 68, 68, 0.9); /* 上锁状态：红色 */
+            color: white; 
+            border-radius: 50%;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 16px;
+            z-index: 50; 
+            cursor: pointer; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
+            pointer-events: auto; /* 保证按钮始终可点 */
+            transition: background-color 0.2s;
+        }
+        .custom-img-wrapper:not(.locked) .img-lock-btn { 
+            background-color: rgba(16, 185, 129, 0.9); /* 解锁状态：绿色 */
+        }
     </style>
 </head>
 <body class="bg-slate-900 font-sans h-screen flex flex-col overflow-hidden text-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300">
@@ -182,14 +217,14 @@
                 <div class="px-2 py-1.5 flex flex-nowrap items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-800 relative z-[60] overflow-x-auto w-full" style="scrollbar-width: none; -ms-overflow-style: none;">
                     
                     <div class="flex items-center gap-1 flex-nowrap flex-shrink-0">
-                        <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-1.5 py-1 rounded shadow-sm font-black text-[12px] mr-1">
+                        <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded shadow-sm font-black text-[11px] mr-1">
                             <i class="fa-solid fa-pen-nib"></i> <span data-i18n="label-editor">编辑区</span>
                         </div>
-                        <button id="btn-new-note" onclick="createNewNote()" class="px-1.5 py-1 text-[12px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-file-lines"></i> <span data-i18n="btn-new-note">新笔记</span></button>
-                        <button onclick="createNewCategory()" class="px-1.5 py-1text-[12px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-folder-plus"></i> <span data-i18n="btn-new-folder">新分类</span></button>
+                        <button id="btn-new-note" onclick="createNewNote()" class="px-2 py-0.5 text-[11px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-file-lines"></i> <span data-i18n="btn-new-note">新笔记</span></button>
+                        <button onclick="createNewCategory()" class="px-2 py-0.5 text-[11px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-folder-plus"></i> <span data-i18n="btn-new-folder">新分类</span></button>
                         
                         <div class="relative flex-shrink-0" id="btn-import-export-wrap">
-                            <button onclick="toggleImportExport()" title="导入导出" class="px-2 py-1 text-[12px] font-bold bg-emerald-500 hover:bg-emerald-600 text-white rounded shadow-sm flex items-center gap-1">
+                            <button onclick="toggleImportExport()" title="导入导出" class="px-2 py-1 text-[11px] font-bold bg-emerald-500 hover:bg-emerald-600 text-white rounded shadow-sm flex items-center gap-1">
                                    <i class="fa-solid fa-right-left text-[11px]"></i>
                                    <i id="import-export-arrow" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200"></i>
                             </button>
@@ -217,10 +252,10 @@
                     <div class="flex items-center justify-end flex-nowrap gap-1 ml-auto flex-shrink-0">
                         <div class="relative flex items-center w-20 sm:w-28 flex-shrink-0">
                             <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-[10px]"></i>
-                            <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索标题或内容..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-full py-1 pl-6 pr-2 text-[12px] font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
+                            <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索标题或内容..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-full py-0.5 pl-6 pr-2 text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
                         </div>
-                        <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 px-1.5 py-1 rounded shadow-sm">
-                            <span class="text-[12px] font-black text-blue-600 dark:text-blue-400"><i class="fa-solid fa-folder text-blue-500"></i> <span data-i18n="label-category">分类:</span></span>
+                        <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 px-1.5 py-0.5 rounded shadow-sm">
+                            <span class="text-[11px] font-black text-blue-600 dark:text-blue-400"><i class="fa-solid fa-folder text-blue-500"></i> <span data-i18n="label-category">分类:</span></span>
                             <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="w-[40px] truncate text-[11px] font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer"></select>
                         </div>
                         <button onclick="toggleRightPanel()" title="历史记录" class="bg-red-600 hover:bg-red-700 text-white font-black px-1.5 py-1 rounded text-[11px] transition-all shadow-sm flex items-center justify-center whitespace-nowrap flex-shrink-0">
@@ -1209,6 +1244,10 @@
 
               const startResize = (e) => {
                      if (e.target.tagName === 'IMG') {
+                         // 💡 增加拦截：如果图片容器带有 locked 类，直接退出，不触发任何移动或放大缩小！
+                         const wrapper = e.target.closest('.custom-img-wrapper');
+                         if (wrapper && wrapper.classList.contains('locked')) return;
+
                          if(e.touches) { e.stopPropagation(); } 
                          else { e.preventDefault(); }
             
@@ -1260,7 +1299,11 @@
                            if (items[i].type.indexOf("image") !== -1) {
                                hasImage = true;
                                const reader = new FileReader();
-                               reader.onload = (event) => execCmd('insertImage', event.target.result);
+                               reader.onload = (event) => {
+                                      // 插入自带红锁的外壳
+                                      const html = `<span class="custom-img-wrapper locked" contenteditable="false"><img src="${event.target.result}" alt="图片"><span class="img-lock-btn" onclick="toggleImgLock(this, event)"><i class="fa-solid fa-lock"></i></span></span><br>`;
+                                      document.execCommand('insertHTML', false, html);
+                               };
                                reader.readAsDataURL(items[i].getAsFile());
                            }
                      }
@@ -1423,8 +1466,10 @@
                    const reader = new FileReader();
                    reader.onload = function(e) {
                         const base64Image = e.target.result;
-                        document.execCommand('insertImage', false, base64Image);
-                        handleEditorInput(); // 触发自动保存
+                        // 插入自带红锁的外壳
+                        const html = `<span class="custom-img-wrapper locked" contenteditable="false"><img src="${base64Image}" alt="图片"><span class="img-lock-btn" onclick="toggleImgLock(this, event)"><i class="fa-solid fa-lock"></i></span></span><br>`;
+                        document.execCommand('insertHTML', false, html);
+                        handleEditorInput(); 
                    };
                    reader.readAsDataURL(file);
                });
@@ -1441,6 +1486,27 @@
                    content.classList.add('hidden'); arrow.classList.remove('rotate-180'); 
               }
         }
+        
+        // ==========================================
+        // 💡 图片安全锁控制中心
+        // ==========================================
+        window.toggleImgLock = function(btn, event) {
+            event.preventDefault(); 
+            event.stopPropagation();
+            const wrapper = btn.closest('.custom-img-wrapper');
+            const icon = btn.querySelector('i');
+            
+            if (wrapper.classList.contains('locked')) {
+                // 解锁：变成绿色开锁状态，可以编辑/缩放
+                wrapper.classList.remove('locked');
+                icon.className = 'fa-solid fa-lock-open';
+            } else {
+                // 上锁：变成红色关锁状态，锁定禁止操作
+                wrapper.classList.add('locked');
+                icon.className = 'fa-solid fa-lock';
+            }
+            handleEditorInput(); // 触发一下保存，记住锁的状态
+        };        
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
