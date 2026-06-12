@@ -120,11 +120,23 @@
             min-width: 40px; /* 防止缩得太小找不到了 */
         }
         .custom-img-wrapper.locked img { 
-            pointer-events: none; /* 上锁时，鼠标直接穿透图片，等于摸不到图片 */
+            /* 删除了 pointer-events: none; 允许鼠标和手指触摸到它 */
             user-select: none;
-            -webkit-user-drag: none;
-            outline: none !important; /* 去除原本的黄色虚线框 */
+            -webkit-user-drag: none; /* 防止浏览器拖动原生图片，强制拖动咱们的外壳 */
+            outline: none !important; 
             box-shadow: none !important;
+        }
+        
+        /* 💡 新增：给上锁的图片盖一层“透明玻璃罩”。既能防误触拉伸，又能提供完美的拖拽受力点！ */
+        .custom-img-wrapper.locked::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; right: 0; bottom: 0;
+            z-index: 10;
+            cursor: grab; /* 电脑端鼠标悬浮会变成小手 */
+        }
+        .custom-img-wrapper.locked:active::after {
+            cursor: grabbing; /* 抓取时变成握紧的小手 */
         }
         .img-lock-btn {
             position: absolute; 
@@ -1582,8 +1594,16 @@
         };
 
         // 绑定拖拽识别事件
-        window.imgDragStart = function(e) { e.target.classList.add('dragging'); };
-        window.imgDragEnd = function(e) { e.target.classList.remove('dragging'); handleEditorInput(); };
+        window.imgDragStart = function(e) { 
+            e.target.classList.add('dragging'); 
+            e.dataTransfer.effectAllowed = 'move';
+            // 💡 必须携带下面这行数据，否则火狐浏览器和大部分手机端补丁会直接拒绝拖拽！
+            e.dataTransfer.setData('text/plain', 'custom-img-wrapper'); 
+        };
+        window.imgDragEnd = function(e) { 
+            e.target.classList.remove('dragging'); 
+            handleEditorInput(); 
+        };
 
         // 自动挂载：不管点的是外壳还是图片，全部识别双击和右键！
         document.addEventListener('DOMContentLoaded', () => {
