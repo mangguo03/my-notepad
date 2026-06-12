@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -277,24 +275,21 @@
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
 
                     <button onmousedown="event.preventDefault();" onclick="wrapHTML('<code>', '</code>')" class="px-2 py-0.5 text-xs font-mono text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600"><i class="fa-solid fa-code"></i></button>
-                    <button onmousedown="event.preventDefault();" onclick="execCmd('removeFormat')" class="px-2 py-0.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700"><i class="fa-solid fa-eraser"></i></button>
-                    <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
-    
                     <button onmousedown="event.preventDefault(); document.getElementById('local-img-input').click()" class="px-2 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-700 rounded border border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-slate-700"><i class="fa-regular fa-image"></i> <span data-i18n="fmt-img">图</span></button>
                 </div>
                 <input type="file" id="local-img-input" accept="image/*" multiple class="hidden" onchange="handleLocalImageUpload(event)">
             </div>
-
-                  <div class="flex-1 relative w-full bg-white dark:bg-slate-950 min-h-0">
-                       <div class="absolute inset-0 overflow-y-auto p-5 pb-32">
-                             <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-2xl border-0 border-b-2 border-dashed border-slate-300 dark:border-slate-700 outline-none pb-3 mb-3 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent block relative z-10">
+        </div> <div class="flex-1 flex flex-col p-5 overflow-y-auto w-full bg-white dark:bg-slate-950 relative min-h-0 cursor-text" onclick="document.getElementById('note-editor-richtext').focus()">
             
-                             <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full outline-none text-slate-800 dark:text-slate-200 break-words block min-h-[80%] relative z-10"></div>
-                       </div>
-                  </div>
-        </section>
-        
-        <div id="resizer-right" class="resizer hidden dark:bg-slate-700"></div>
+            <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-2xl border-0 border-b-2 border-dashed border-slate-300 dark:border-slate-700 outline-none pb-3 mb-3 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent flex-shrink-0 cursor-text" onclick="event.stopPropagation()">
+            
+            <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full flex-1 outline-none text-slate-800 dark:text-slate-200 break-words pb-12 cursor-text" onclick="event.stopPropagation()"></div>
+            
+        </div>
+
+    </section>
+    
+    <div id="resizer-right" class="resizer hidden dark:bg-slate-700"></div>
         
         <aside id="right-panel" class="hidden bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-l border-slate-200 panel-large-text" style="width: 170px; min-width: 130px; max-width: 480px;">
             <div class="p-2 bg-slate-800 dark:bg-slate-900 text-white flex flex-col gap-1.5 flex-shrink-0 shadow-md">
