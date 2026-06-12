@@ -235,7 +235,7 @@
                 <i id="sidebar-float-icon" class="fa-solid fa-caret-left text-[11px] transition-transform duration-300"></i>
             </div>
 
-            <div class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-col select-none flex-shrink-0 z-10 shadow-sm">
+            <div class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-col select-none flex-shrink-0 z-10 shadow-sm w-full">
                 
                 <div class="px-2 py-1.5 flex flex-nowrap items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-800 relative z-[80] overflow-x-auto w-full" style="scrollbar-width: none; -ms-overflow-style: none;">
                     
@@ -360,14 +360,14 @@
                     </div>
                     <input type="file" id="local-img-input" accept="image/*" multiple class="hidden" onchange="handleLocalImageUpload(event)">
                 </div>
-            </div>
-        </div> 
-                <div id="editor-scroll-container" class="flex-1 flex flex-col px-3 py-1.5 sm:px-5 sm:py-4 overflow-y-auto w-full bg-white dark:bg-slate-950 relative" onclick="document.getElementById('note-editor-richtext').focus()">
-                      <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-2xl sm:text-3xl border-0 border-b-2 border-dashed border-slate-300 dark:border-slate-700 outline-none pb-1.5 mb-1.5 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent flex-shrink-0" onclick="event.stopPropagation()">
-                      <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full flex-1 outline-none text-slate-800 dark:text-slate-200 break-words mt-1" onclick="event.stopPropagation()"></div>
                 </div>
+            
+            <div id="editor-scroll-container" class="flex-1 flex flex-col px-3 py-1.5 sm:px-5 sm:py-4 overflow-y-auto w-full bg-white dark:bg-slate-950 relative" onclick="document.getElementById('note-editor-richtext').focus()">
+                  <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-2xl sm:text-3xl border-0 border-b-2 border-dashed border-slate-300 dark:border-slate-700 outline-none pb-1.5 mb-1.5 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent flex-shrink-0" onclick="event.stopPropagation()">
+                  <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full flex-1 outline-none text-slate-800 dark:text-slate-200 break-words mt-1" onclick="event.stopPropagation()"></div>
+            </div>
 
-    </section>
+        </section>
     
     <div id="resizer-right" class="resizer hidden dark:bg-slate-700"></div>
         
