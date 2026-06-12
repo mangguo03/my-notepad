@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -74,8 +73,8 @@
         .no-select { user-select: none; -webkit-user-select: none; }
         /* 💡 简单粗暴的加粗版滚动条 */
         ::-webkit-scrollbar { 
-            width: 16px; /* 实打实的 16px 宽 */
-            height: 16px; 
+            width: 10px; /* 实打实的 10px 宽 */
+            height: 10px; 
         }
         /* 轨道底色：加上淡淡的灰色底色，让你能清晰看出 16px 有多宽 */
         ::-webkit-scrollbar-track { background-color: #f1f5f9; border-radius: 8px; }
@@ -183,14 +182,14 @@
                 <div class="px-2 py-1.5 flex flex-nowrap items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-800 relative z-[60] overflow-x-auto w-full" style="scrollbar-width: none; -ms-overflow-style: none;">
                     
                     <div class="flex items-center gap-1 flex-nowrap flex-shrink-0">
-                        <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded shadow-sm font-black text-[11px] mr-1">
+                        <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-1.5 py-1 rounded shadow-sm font-black text-[12px] mr-1">
                             <i class="fa-solid fa-pen-nib"></i> <span data-i18n="label-editor">编辑区</span>
                         </div>
-                        <button id="btn-new-note" onclick="createNewNote()" class="px-2 py-0.5 text-[11px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-file-lines"></i> <span data-i18n="btn-new-note">新笔记</span></button>
-                        <button onclick="createNewCategory()" class="px-2 py-0.5 text-[11px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-folder-plus"></i> <span data-i18n="btn-new-folder">新分类</span></button>
+                        <button id="btn-new-note" onclick="createNewNote()" class="px-1.5 py-1 text-[12px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-file-lines"></i> <span data-i18n="btn-new-note">新笔记</span></button>
+                        <button onclick="createNewCategory()" class="px-1.5 py-1text-[12px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-folder-plus"></i> <span data-i18n="btn-new-folder">新分类</span></button>
                         
                         <div class="relative flex-shrink-0" id="btn-import-export-wrap">
-                            <button onclick="toggleImportExport()" title="导入导出" class="px-2 py-0.5 text-[11px] font-bold bg-emerald-500 hover:bg-emerald-600 text-white rounded shadow-sm flex items-center gap-1">
+                            <button onclick="toggleImportExport()" title="导入导出" class="px-2 py-1 text-[12px] font-bold bg-emerald-500 hover:bg-emerald-600 text-white rounded shadow-sm flex items-center gap-1">
                                    <i class="fa-solid fa-right-left text-[11px]"></i>
                                    <i id="import-export-arrow" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200"></i>
                             </button>
@@ -218,17 +217,17 @@
                     <div class="flex items-center justify-end flex-nowrap gap-1 ml-auto flex-shrink-0">
                         <div class="relative flex items-center w-20 sm:w-28 flex-shrink-0">
                             <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-400 text-[10px]"></i>
-                            <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索标题或内容..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-full py-0.5 pl-6 pr-2 text-[11px] font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
+                            <input type="text" id="global-search-input" oninput="renderLeftNotesView()" placeholder="搜索标题或内容..." class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-600 rounded-full py-1 pl-6 pr-2 text-[12px] font-bold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500 transition-all shadow-inner placeholder-slate-400">
                         </div>
-                        <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 px-1.5 py-0.5 rounded shadow-sm">
-                            <span class="text-[11px] font-black text-blue-600 dark:text-blue-400"><i class="fa-solid fa-folder text-blue-500"></i> <span data-i18n="label-category">分类:</span></span>
+                        <div class="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 px-1.5 py-1 rounded shadow-sm">
+                            <span class="text-[12px] font-black text-blue-600 dark:text-blue-400"><i class="fa-solid fa-folder text-blue-500"></i> <span data-i18n="label-category">分类:</span></span>
                             <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="w-[40px] truncate text-[11px] font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer"></select>
                         </div>
-                        <button onclick="toggleRightPanel()" title="历史记录" class="bg-red-600 hover:bg-red-700 text-white font-black px-1.5 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center whitespace-nowrap flex-shrink-0">
+                        <button onclick="toggleRightPanel()" title="历史记录" class="bg-red-600 hover:bg-red-700 text-white font-black px-1.5 py-1 rounded text-[11px] transition-all shadow-sm flex items-center justify-center whitespace-nowrap flex-shrink-0">
                                <i id="right-panel-toggle-icon" class="fa-solid fa-clock-rotate-left"></i>
                         </button>
                         <div class="relative flex-shrink-0 z-[70]">
-                            <button onclick="toggleSettingsMenu(event)" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-1.5 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center gap-1 border border-slate-700 whitespace-nowrap" title="系统设置">
+                            <button onclick="toggleSettingsMenu(event)" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-1.5 py-1 rounded text-[11px] transition-all shadow-sm flex items-center justify-center gap-1 border border-slate-700 whitespace-nowrap" title="系统设置">
                                 <i class="fa-solid fa-gear"></i>
                             </button>
                             <div id="settings-dropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50 flex flex-col py-1">
