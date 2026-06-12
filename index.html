@@ -237,7 +237,7 @@
 
             <div class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-col select-none flex-shrink-0 z-10 shadow-sm w-full">
                 
-                <div class="px-2 py-1.5 flex flex-nowrap items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-800 relative z-[80] overflow-x-auto w-full" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <div class="px-2 py-1.5 flex flex-nowrap items-center justify-between gap-1 border-b border-slate-200 dark:border-slate-800 relative z-[80] overflow-x-auto w-full !overflow-y-visible" style="scrollbar-width: none; -ms-overflow-style: none;">
                     
                     <div class="flex items-center gap-1 flex-nowrap flex-shrink-0">
                         <div class="flex items-center gap-1 bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded shadow-sm font-black text-[11px] mr-1">
@@ -251,7 +251,7 @@
                                    <i class="fa-solid fa-right-left text-[11px] pointer-events-none"></i>
                                    <i id="import-export-arrow" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 pointer-events-none"></i>
                             </button>
-                            <div id="import-export-content" class="hidden fixed left-2 top-12 mt-1 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col p-1.5 gap-1.5 z-[100]">
+                            <div id="import-export-content" class="hidden absolute left-0 top-full z-[100] mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col p-1.5 gap-1.5">
                                 <div class="flex items-center gap-1.5">
                                     <button onclick="triggerImport('md')" class="flex-1 py-0.5 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded font-black transition-all text-center truncate text-[10px] shadow-sm"><i class="fa-solid fa-file-import"></i> MD</button>
                                     <button onclick="exportFile('md')" class="flex-1 py-0.5 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-black transition-all text-center truncate text-[10px] shadow-sm"><i class="fa-solid fa-file-export"></i> MD</button>
@@ -289,7 +289,7 @@
                             <button onclick="document.getElementById('settings-dropdown').classList.toggle('hidden'); event.stopPropagation();" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-1.5 py-1 rounded text-[11px] transition-all shadow-sm flex items-center justify-center gap-1 border border-slate-700 whitespace-nowrap" title="系统设置">
                                 <i class="fa-solid fa-gear pointer-events-none"></i>
                             </button>
-                            <div id="settings-dropdown" class="hidden fixed right-2 top-12 mt-1 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 z-[100] flex flex-col py-1">
+                            <div id="settings-dropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 z-[100] flex flex-col py-1">
                                 <button onclick="toggleLanguage(); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span>
                                 </button>
