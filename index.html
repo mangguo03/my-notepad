@@ -1593,15 +1593,20 @@
             } catch (e) {}
         };
 
+        // 💡 全局快递员：记录目前到底在拖动哪张图
+        window.draggingImageNode = null; 
+
         // 绑定拖拽识别事件
         window.imgDragStart = function(e) { 
             e.target.classList.add('dragging'); 
             e.dataTransfer.effectAllowed = 'move';
-            // 💡 必须携带下面这行数据，否则火狐浏览器和大部分手机端补丁会直接拒绝拖拽！
-            e.dataTransfer.setData('text/plain', 'custom-img-wrapper'); 
+            e.dataTransfer.setData('text/plain', 'img-wrapper'); 
+            window.draggingImageNode = e.target; // 把图片交给快递员
         };
+        
         window.imgDragEnd = function(e) { 
             e.target.classList.remove('dragging'); 
+            window.draggingImageNode = null; // 快递送达，清空
             handleEditorInput(); 
         };
 
@@ -1620,11 +1625,43 @@
                 editorRichText.addEventListener('contextmenu', handleImageMenuEvent);
                 editorRichText.addEventListener('dblclick', handleImageMenuEvent);
 
-                // 👇 新增这 4 行：消除无效图标，给编辑器开启“接收拖放”的绿灯 👇
-                editorRichText.addEventListener('dragenter', (e) => { e.preventDefault(); });
-                editorRichText.addEventListener('dragover', (e) => { 
-                    e.preventDefault(); 
-                    e.dataTransfer.dropEffect = 'move'; // 让鼠标变成合法的移动图标
+                // 💡 过程处理：允许鼠标进入并变成合法的拖拽图标
+                editorRichText.addEventListener('dragover', (e) => {
+                    if (window.draggingImageNode) {
+                        e.preventDefault(); 
+                        e.dataTransfer.dropEffect = 'move';
+                    }
+                });
+
+                // 💡 核心签收逻辑：松开鼠标/手指时，强行把图片插到指定位置
+                editorRichText.addEventListener('drop', (e) => {
+                    if (window.draggingImageNode) {
+                        e.preventDefault(); // 拦截浏览器那糟糕的默认处理
+
+                        // 探雷针：利用底层 API 精准找到鼠标松开时的那行文本位置
+                        let range = null;
+                        if (document.caretRangeFromPoint) { // 谷歌/Edge 浏览器内核
+                            range = document.caretRangeFromPoint(e.clientX, e.clientY);
+                        } else if (document.caretPositionFromPoint) { // 火狐浏览器内核
+                            const pos = document.caretPositionFromPoint(e.clientX, e.clientY);
+                            range = document.createRange();
+                            range.setStart(pos.offsetNode, pos.offset);
+                        }
+
+                        // 如果找到了位置，开始外科手术式转移！
+                        if (range) {
+                            window.draggingImageNode.remove(); // 1. 把图片从旧位置拔起
+                            range.insertNode(window.draggingImageNode); // 2. 栽种到你松开手的新位置
+                            
+                            // 3. 贴心小细节：在图片后面自动补一个空格，让你直接就能打字
+                            const space = document.createTextNode('\u00A0');
+                            range.collapse(false);
+                            range.insertNode(space);
+                        }
+                        
+                        window.draggingImageNode = null;
+                        handleEditorInput();
+                    }
                 });
             }
             
