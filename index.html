@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -276,7 +274,7 @@
                     
                     <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
 
-                    <button onmousedown="event.preventDefault();" onclick="wrapHTML('<code>', '</code>')" class="px-2 py-0.5 text-xs font-mono text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600"><i class="fa-solid fa-code"></i></button>
+                    <button onmousedown="event.preventDefault();" onclick="execCmd('removeFormat')" title="清除格式" class="px-2 py-0.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700"><i class="fa-solid fa-eraser"></i></button>
                     <button onmousedown="event.preventDefault(); document.getElementById('local-img-input').click()" class="px-2 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-700 rounded border border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-slate-700"><i class="fa-regular fa-image"></i> <span data-i18n="fmt-img">图</span></button>
                 </div>
                 <input type="file" id="local-img-input" accept="image/*" multiple class="hidden" onchange="handleLocalImageUpload(event)">
@@ -1101,7 +1099,7 @@
                 layerNodes.forEach(cat => {
                     const opt = document.createElement('option');
                     opt.value = opt.value = cat.id;
-                    opt.innerHTML = '—'.repeat(depth) + ' ' + t(cat.name);
+                    opt.innerHTML = '&nbsp;&nbsp;'.repeat(depth) + t(cat.name);
                     select.appendChild(opt);
                     appendOption(cat.id, depth + 1); 
                 });
