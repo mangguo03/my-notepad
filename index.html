@@ -52,7 +52,7 @@
         .custom-img-wrapper.locked img { user-select: none; -webkit-user-drag: none; outline: none !important; box-shadow: none !important; }
         .custom-img-wrapper.locked::after { content: ''; position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 10; cursor: grab; }
         .custom-img-wrapper.locked:active::after { cursor: grabbing; }
-        .img-lock-btn { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 50%; background-color: #22c55e; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-size: 12px; transition: all 0.2s; }
+        .img-lock-btn { position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 50%; background-color: #22c55e; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-size: 10px; transition: all 0.2s; }
         .img-lock-btn.locked { background-color: #ef4444; }
 
         [contenteditable]:empty:before { content: attr(placeholder); color: #cbd5e1; pointer-events: none; display: block; }
@@ -147,10 +147,10 @@
                         <button onclick="createNewCategory()" class="px-2 py-0.5 text-[11px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded shadow-sm flex items-center gap-1"><i class="fa-solid fa-folder-plus"></i> <span data-i18n="btn-new-folder">新分类</span></button>
                         
                         <div class="relative flex-shrink-0">
-                            <button onclick="toggleImportExport(event)" class="flex items-center justify-center gap-1 px-2 py-0.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded shadow-sm transition-colors cursor-pointer">
-                                <i class="fa-solid fa-right-left text-[11px] ml-0.5 pointer-events-none"></i>
-                                <i id="import-export-arrow" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 pointer-events-none"></i>
-                            </button>
+                              <button onclick="toggleImportExport(event)" title="导入导出" class="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-2 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap">
+                                     <i class="fa-solid fa-right-left pointer-events-none"></i>
+                                     <i id="import-export-arrow" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 pointer-events-none"></i>
+                              </button>
                             <div id="import-export-content" class="hidden fixed mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col p-1.5 gap-1.5 z-[9999]">
                                 <div class="flex items-center gap-1.5">
                                     <button onclick="triggerImport('md')" class="flex-1 py-1 px-1 bg-amber-500 hover:bg-amber-600 text-white rounded font-black transition-all text-center truncate text-[10px] shadow-sm"><i class="fa-solid fa-file-import"></i> MD</button>
@@ -181,14 +181,15 @@
                             <i class="fa-solid fa-folder text-blue-500 text-[11px]"></i>
                             <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="text-[11px] font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer max-w-[90px]"></select>
                         </div>
-                        <button onclick="toggleRightPanel()" class="bg-red-600 hover:bg-red-700 text-white font-black px-1.5 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-red-700 whitespace-nowrap flex-shrink-0">
-                            <i class="fa-solid fa-clock-rotate-left pointer-events-none"></i>
+                        <button onclick="toggleRightPanel()" title="历史记录" class="bg-red-600 hover:bg-red-700 text-white font-black px-2 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-red-700 whitespace-nowrap flex-shrink-0">
+                               <i class="fa-solid fa-clock-rotate-left pointer-events-none"></i>
                         </button>
                         
                         <div class="relative flex-shrink-0">
-                            <button onclick="toggleSettingsMenu(event)" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-1.5 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-slate-700 whitespace-nowrap">
-                                <i class="fa-solid fa-gear pointer-events-none"></i>
-                            </button>
+                              <button onclick="toggleSettingsMenu(event)" title="系统设置" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-2 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-slate-700 whitespace-nowrap">
+                                     <i class="fa-solid fa-gear pointer-events-none"></i>
+                              </button>
+                        </div>
                             <div id="settings-dropdown" class="hidden fixed mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-[9999] flex flex-col py-1">
                                 <button onclick="toggleLanguage(); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span>
