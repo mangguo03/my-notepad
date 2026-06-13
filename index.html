@@ -46,7 +46,7 @@
         .md-preview a:hover { color: #1e40af; text-decoration-style: dashed; }
 
         /* ==================== 核心恢复：图片外壳及红绿锁逻辑 ==================== */
-        .custom-img-wrapper { position: relative; display: inline-block; margin: 14px 0; vertical-align: middle; max-width: 100%; }
+        .custom-img-wrapper { position: relative; display: inline-block; margin: 14px 0; vertical-align: bottom; max-width: 100%; }
         .custom-img-wrapper img { max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: block; transition: outline 0.2s, box-shadow 0.2s; }
         .custom-img-wrapper:not(.locked) img { outline: 3px dashed #eab308; outline-offset: 2px; cursor: nwse-resize; }
         .custom-img-wrapper.locked img { user-select: none; -webkit-user-drag: none; outline: none !important; box-shadow: none !important; }
@@ -283,11 +283,11 @@
         <button id="ctx-delete-btn" onclick="handleContextMenuDelete()" class="w-full text-left px-4 py-2 hover:bg-red-50 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 border-t border-slate-100 dark:border-slate-700 flex items-center gap-2 font-black"><i class="fa-regular fa-trash-can text-red-500"></i> <span data-i18n="ctx-delete">安全删除分类</span></button>
     </div>
 
-    <div id="img-context-menu" class="hidden">
-        <button onclick="window.imgMenuAction('download')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"><i class="fa-solid fa-download text-blue-500"></i> 提取保存图片</button>
-        <button onclick="window.imgMenuAction('copy')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"><i class="fa-regular fa-copy text-emerald-500"></i> 复制到剪贴板</button>
-        <button onclick="window.imgMenuAction('cut')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 border-b border-slate-100 dark:border-slate-700"><i class="fa-solid fa-scissors text-amber-500"></i> 剪切移动图片</button>
-        <button onclick="window.imgMenuAction('share')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"><i class="fa-solid fa-share-nodes text-purple-500"></i> 跨应用分享</button>
+    <div id="img-context-menu" class="hidden fixed bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl py-1 w-28 z-[9999] text-xs font-bold text-slate-700 dark:text-slate-200 select-none">
+        <button onclick="window.imgMenuAction('download')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"><i class="fa-solid fa-download text-blue-500"></i> 下载</button>
+        <button onclick="window.imgMenuAction('copy')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"><i class="fa-regular fa-copy text-emerald-500"></i> 复制</button>
+        <button onclick="window.imgMenuAction('cut')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 border-b border-slate-100 dark:border-slate-700"><i class="fa-solid fa-scissors text-amber-500"></i> 剪切</button>
+        <button onclick="window.imgMenuAction('share')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"><i class="fa-solid fa-share-nodes text-purple-500"></i> 分享</button>
     </div>
 
     <script>
