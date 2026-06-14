@@ -1020,15 +1020,57 @@
             if (!currentImageWrapper) return;
             const img = currentImageWrapper.querySelector('img');
 
+            // 💡 核心修复：创建一个“格式转换引擎”，把图片实时转成剪贴板和分享系统最兼容的 PNG 格式
+            const getPngBlob = () => {
+                return new Promise((resolve) => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.naturalWidth || img.width;
+                    canvas.height = img.naturalHeight || img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    canvas.toBlob(resolve, 'image/png');
+                });
+            };
+
             if (action === 'download') {
-                const a = document.createElement('a'); a.href = img.src; a.download = 'image_' + Date.now() + '.png'; a.click();
+                // 下载可以直接保留原来的格式，节约体积
+                const a = document.createElement('a'); a.href = img.src; a.download = 'image_' + Date.now() + '.jpg'; a.click();
             } else if (action === 'copy') {
-                try { const res = await fetch(img.src); const blob = await res.blob(); await navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})]); alert('图片已复制！'); } catch(err) {}
+                try {
+                    const blob = await getPngBlob();
+                    // 强制以 image/png 格式写入剪贴板，彻底解决变成乱码文字的问题
+                    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+                    alert('✅ 图片已成功复制！');
+                } catch(err) {
+                    alert('❌ 复制失败：请确保网页处于 HTTPS 安全环境下，并允许浏览器访问剪贴板。');
+                }
             } else if (action === 'cut') {
-                try { const res = await fetch(img.src); const blob = await res.blob(); await navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})]); currentImageWrapper.remove(); handleEditorInput(); } catch(err) {}
+                try {
+                    const blob = await getPngBlob();
+                    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+                    currentImageWrapper.remove();
+                    handleEditorInput();
+                    alert('✂️ 图片已剪切！');
+                } catch(err) {
+                    alert('❌ 剪切失败：请确保网页处于 HTTPS 安全环境下，并允许浏览器访问剪贴板。');
+                }
             } else if (action === 'share') {
-                if (navigator.share) { try { const res = await fetch(img.src); const blob = await res.blob(); const file = new File([blob], 'image.png', {type: blob.type}); await navigator.share({ files: [file], title: '分享图片' }); } catch(e) {} } 
-                else { alert('当前浏览器不支持分享'); }
+                if (navigator.share) {
+                    try {
+                        const blob = await getPngBlob();
+                        // 包装成标准的 File 对象，防止系统分享面板崩溃
+                        const file = new File([blob], 'share_' + Date.now() + '.png', { type: 'image/png' });
+                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                            await navigator.share({ files: [file], title: '分享图片' });
+                        } else {
+                            alert('❌ 当前系统不支持分享此格式的图片。');
+                        }
+                    } catch(e) {
+                        console.log('分享面板已关闭');
+                    }
+                } else {
+                    alert('❌ 当前浏览器不支持原生分享功能。');
+                }
             }
             currentImageWrapper = null;
         };
