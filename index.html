@@ -217,16 +217,20 @@
                                 <button onclick="setTheme('system'); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-desktop text-slate-400 w-4 text-center"></i> <span data-i18n="theme-sys">系统</span>
                                 </button>
+                                
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
-                                <button onclick="showAboutModal(); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
-                                    <i class="fa-solid fa-circle-info text-blue-400 w-4 text-center"></i> <span data-i18n="about-soft">关于软件</span>
-                                </button>
-                                <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
+                                
                                 <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-right-from-bracket text-slate-400 w-4 text-center"></i> <span data-i18n="nav-logout">退出登录</span>
                                 </button>
                                 <button onclick="deleteAccount()" class="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-user-xmark w-4 text-center"></i> <span data-i18n="nav-delete">注销账号</span>
+                                </button>
+
+                                <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
+
+                                <button onclick="showAboutModal(); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
+                                    <i class="fa-solid fa-circle-info text-blue-400 w-4 text-center"></i> <span data-i18n="about-soft">关于软件</span>
                                 </button>
                             </div>
                         </div>
@@ -1060,13 +1064,20 @@
                    }
                });
 
-               let activeImage = null; let startY = 0; let startHeight = 0;
+               let activeImage = null; let startY = 0; let startX = 0; let startWidth = 0; let startRatio = 1;
                const getClientY = (e) => { return e.touches ? e.touches[0].clientY : e.clientY; };
+               const getClientX = (e) => { return e.touches ? e.touches[0].clientX : e.clientX; };
 
                const startResize = (e) => {
                       if (e.target.tagName === 'IMG' && !e.target.closest('.locked')) {
                           if(e.touches) { e.stopPropagation(); } else { e.preventDefault(); }
-                          activeImage = e.target; startY = getClientY(e); startHeight = activeImage.clientHeight || activeImage.offsetHeight;
+                          activeImage = e.target; 
+                          startY = getClientY(e); 
+                          startX = getClientX(e); 
+                          startWidth = activeImage.clientWidth || activeImage.offsetWidth;
+                          const startHeight = activeImage.clientHeight || activeImage.offsetHeight;
+                          startRatio = startWidth / startHeight; // 💡 动态记忆原生比例
+
                           if (!e.touches) document.body.style.cursor = 'nwse-resize';
                           if (e.touches) { document.addEventListener('touchmove', resizeImg, { passive: false }); document.addEventListener('touchend', stopResizeImg); } 
                           else { document.addEventListener('mousemove', resizeImg); document.addEventListener('mouseup', stopResizeImg); }
@@ -1078,7 +1089,14 @@
                       if (activeImage) {
                           if (e.touches) { if (e.cancelable) e.preventDefault(); }
                           const dy = getClientY(e) - startY;
-                          activeImage.style.height = (startHeight + dy) + 'px'; activeImage.style.width = 'auto';
+                          const dx = getClientX(e) - startX;
+                          
+                          // 💡 智能判断手指滑动的方向，换算成宽度的变化量
+                          const deltaWidth = Math.abs(dx) > Math.abs(dy) ? dx : (dy * startRatio);
+                          
+                          // 💡 核心修复：只改宽度，高度强行设为 auto，完美配合防超出边框的属性
+                          activeImage.style.width = Math.max(30, startWidth + deltaWidth) + 'px'; 
+                          activeImage.style.height = 'auto'; 
                       }
                 }
 
