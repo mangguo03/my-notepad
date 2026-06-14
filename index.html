@@ -5,22 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>云笔记</title>
     
+    <link rel="manifest" href="manifest.json">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' };
     </script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/default.css">
+    <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
     
     <style>
         body { font-size: 16px; }
         .md-preview { font-size: 16px; }
         .panel-large-text { font-size: 12px !important; font-weight: 800 !important; }
         .sync-btn-font { font-size: 12px !important; font-weight: 900 !important; }
+
+        [draggable="true"] {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-user-drag: element; 
+            touch-action: pan-y; 
+        }
         
         .md-preview h1, .md-preview h1 *, .md-preview h1 font { font-size: 2.6rem !important; font-weight: 800 !important; line-height: 1.3 !important; }
         .md-preview h2, .md-preview h2 *, .md-preview h2 font { font-size: 2.1rem !important; font-weight: 700 !important; line-height: 1.3 !important; }
@@ -45,14 +57,12 @@
         .md-preview a { color: #2563eb; text-decoration: underline; font-weight: bold; cursor: pointer; transition: all 0.2; }
         .md-preview a:hover { color: #1e40af; text-decoration-style: dashed; }
 
-        /* ==================== 核心恢复：图片外壳及红绿锁逻辑 ==================== */
         .custom-img-wrapper { position: relative; display: inline-block; margin: 14px 0; vertical-align: bottom; max-width: 100%; }
         .custom-img-wrapper img { max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: block; transition: outline 0.2s, box-shadow 0.2s; }
         .custom-img-wrapper:not(.locked) img { outline: 3px dashed #eab308; outline-offset: 2px; cursor: nwse-resize; }
         .custom-img-wrapper.locked img { user-select: none; -webkit-user-drag: none; outline: none !important; box-shadow: none !important; }
         .custom-img-wrapper.locked::after { content: ''; position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 10; cursor: grab; }
         .custom-img-wrapper.locked:active::after { cursor: grabbing; }
-        /* 💡 调整后：变得更小巧精致的迷你锁 */
         .img-lock-btn { position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 50%; background-color: #22c55e; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-size: 10px; transition: all 0.2s; }
         .img-lock-btn.locked { background-color: #ef4444; }
 
@@ -86,7 +96,7 @@
 
     <header id="app-header" class="bg-slate-800 text-slate-200 py-0.5 px-3 flex items-center select-none border-b border-slate-700 relative z-[70]" style="-webkit-app-region: drag;">
         <div class="flex items-center gap-1.5 pointer-events-none" style="-webkit-app-region: no-drag;">
-            <i class="fa-solid fa-pen-to-square text-yellow-400 text-sm"></i>
+            <i class="fa-solid fa-pen-to-square text-blue-400 text-sm"></i>
             <span class="font-black tracking-wide text-sm bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300" data-i18n="app-title">云笔记</span>
         </div>
     </header>
@@ -97,34 +107,35 @@
 
     <div id="workspace-container" class="flex flex-1 overflow-hidden w-full bg-slate-200 dark:bg-slate-900 transition-colors duration-300">
         
-        <aside id="left-panel" class="bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-r border-slate-200 panel-large-text transition-all relative z-50 h-full" style="width: 170px; min-width: 130px; max-width: 480px;">
-            <div id="all-docs-container" class="py-1.5 px-[9px] border-b border-slate-200 dark:border-slate-700 bg-slate-100/40 dark:bg-slate-800 flex-shrink-0"></div>
-            <div class="px-3.5 py-2 bg-slate-200/60 dark:bg-slate-900/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-300/60 dark:hover:bg-slate-800 transition-colors" onclick="toggleFolderSection()">
-                <span class="sync-btn-font text-yellow-600 dark:text-yellow-400 font-black flex items-center gap-1.5">
+        <aside id="left-panel" class="bg-slate-50 dark:bg-slate-800 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden border-r border-slate-200 panel-large-text transition-all relative z-50 h-full" style="width: 150px; min-width: 120px; max-width: 480px;">
+            <div id="all-docs-container" class="py-0.5 px-1.5 border-b border-slate-200 dark:border-slate-700 bg-slate-100/40 dark:bg-slate-800 flex-shrink-0"></div>
+            
+            <div class="px-2.5 py-1.5 bg-slate-200/60 dark:bg-slate-900/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-300/60 dark:hover:bg-slate-800 transition-colors" onclick="toggleFolderSection()">
+                <span class="sync-btn-font text-blue-600 dark:text-blue-400 font-black flex items-center gap-1.5">
                     <i id="folder-section-icon" class="fa-solid fa-chevron-down text-[11px] transition-transform duration-200"></i>
-                    <span data-i18n="label-folder">文件夹</span>
+                    <span data-i18n="label-folder">文件</span>
                 </span>
                 <div class="flex items-center gap-0.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded p-0.5 shadow-inner scale-95 origin-right" onclick="event.stopPropagation()">
-                    <button id="view-tree-list" onclick="toggleTreeLayout('list')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200" data-i18n="btn-list">列表</button>
-                    <button id="view-tree-grid" onclick="toggleTreeLayout('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200" data-i18n="btn-grid">图表</button>
+                    <button id="view-tree-list" onclick="toggleTreeLayout('list')" class="px-2 py-1 text-[11px] rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200 transition-colors" title="列表视图"><i class="fa-solid fa-list-ul"></i></button>
+                    <button id="view-tree-grid" onclick="toggleTreeLayout('grid')" class="px-2 py-1 text-[11px] rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200 transition-colors" title="九宫格视图"><i class="fa-solid fa-table-cells-large"></i></button>
                 </div>
             </div>
             
-            <div id="category-tree-container" class="p-2 border-b border-slate-200 dark:border-slate-700 bg-slate-100/40 dark:bg-slate-800/40 flex-shrink-0 max-h-[30vh] overflow-y-auto space-y-1"></div>
+            <div id="category-tree-container" class="p-1.5 border-b border-slate-200 dark:border-slate-700 bg-slate-100/40 dark:bg-slate-800/40 flex-shrink-0 max-h-[30vh] overflow-y-auto space-y-1"></div>
             
-            <div class="px-3.5 py-2 bg-slate-200/60 dark:bg-slate-900/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-300/60 dark:hover:bg-slate-800 transition-colors" onclick="toggleContentSection()">
-                <span class="sync-btn-font text-yellow-600 dark:text-yellow-400 font-black flex items-center gap-1.5">
+            <div class="px-2.5 py-1.5 bg-slate-200/60 dark:bg-slate-900/60 flex items-center justify-between flex-shrink-0 select-none border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-300/60 dark:hover:bg-slate-800 transition-colors" onclick="toggleContentSection()">
+                <span class="sync-btn-font text-blue-600 dark:text-blue-400 font-black flex items-center gap-1.5">
                     <i id="content-section-icon" class="fa-solid fa-chevron-down text-[11px] transition-transform duration-200"></i>
-                    <span data-i18n="label-content">笔记集</span>
+                    <span data-i18n="label-content">笔记</span>
                 </span>
                 <div class="flex items-center gap-0.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded p-0.5 shadow-inner scale-95 origin-right" onclick="event.stopPropagation()">
-                    <button id="view-left-list" onclick="toggleLeftView('list')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200" style="background-color: #3b82f6;" data-i18n="btn-list">列表</button>
-                    <button id="view-left-grid" onclick="toggleLeftView('grid')" class="px-2 py-0.5 text-xs font-black rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200" style="background-color: transparent;" data-i18n="btn-grid">图表</button>
+                    <button id="view-left-list" onclick="toggleLeftView('list')" class="px-2 py-1 text-[11px] rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200 transition-colors" style="background-color: #3b82f6; color: #ffffff;" title="列表视图"><i class="fa-solid fa-list-ul"></i></button>
+                    <button id="view-left-grid" onclick="toggleLeftView('grid')" class="px-2 py-1 text-[11px] rounded hover:bg-slate-100 dark:hover:bg-slate-700 dark:text-slate-200 transition-colors" style="background-color: transparent;" title="九宫格视图"><i class="fa-solid fa-table-cells-large"></i></button>
                 </div>
             </div>
             
             <div id="content-section-container" class="flex-1 relative min-h-0 bg-slate-50/50 dark:bg-slate-800/50 transition-all duration-200">
-                <div id="left-notes-container" class="absolute inset-0 overflow-y-scroll p-2 pb-18"></div>
+                <div id="left-notes-container" class="absolute inset-0 overflow-y-scroll p-1.5 pb-18"></div>
             </div>
         </aside>
         
@@ -132,7 +143,7 @@
         
         <section id="middle-panel" class="bg-white dark:bg-slate-950 flex flex-col flex-1 overflow-hidden min-w-0 transition-colors duration-300 relative">
             
-            <div id="float-toggle-handle" onclick="toggleLeftPanel()" class="absolute left-0 top-1/2 -translate-y-1/2 w-3.5 h-20 bg-gradient-to-b from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white cursor-pointer flex items-center justify-center rounded-r-xl shadow-lg z-[60] transition-all border border-l-0 border-orange-400 opacity-90 hover:opacity-100" title="展开/收起侧栏">
+            <div id="float-toggle-handle" onclick="toggleLeftPanel()" class="absolute left-0 top-1/2 -translate-y-1/2 w-3.5 h-20 bg-gradient-to-b from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white cursor-pointer flex items-center justify-center rounded-r-xl shadow-lg z-[60] transition-all border border-l-0 border-blue-400 opacity-90 hover:opacity-100" title="展开/收起侧栏">
                 <i id="sidebar-float-icon" class="fa-solid fa-caret-left text-[11px] transition-transform duration-300"></i>
             </div>
 
@@ -182,15 +193,16 @@
                             <i class="fa-solid fa-folder text-blue-500 text-[11px]"></i>
                             <select id="note-category-select" onchange="changeNoteCategory(this.value)" class="text-[11px] font-black text-blue-700 dark:text-blue-300 bg-transparent outline-none cursor-pointer w-[60px] truncate"></select>
                         </div>
-                        <button onclick="toggleRightPanel()" title="历史记录" class="bg-red-600 hover:bg-red-700 text-white font-black px-1.5 py-0.5 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-red-700 whitespace-nowrap flex-shrink-0">
+                        
+                        <button onclick="toggleRightPanel()" title="历史记录" class="bg-red-600 hover:bg-red-700 text-white font-black px-2 py-1 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-red-700 whitespace-nowrap flex-shrink-0">
                             <i class="fa-solid fa-clock-rotate-left pointer-events-none"></i>
                         </button>
                         
                         <div class="relative flex-shrink-0">
-                            <button onclick="toggleSettingsMenu(event)" title="系统设置" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-1.5 py-1 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-slate-700 whitespace-nowrap">
+                            <button onclick="toggleSettingsMenu(event)" title="系统设置" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-2 py-1 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-slate-700 whitespace-nowrap">
                                 <i class="fa-solid fa-gear pointer-events-none"></i>
                             </button>
-                            <div id="settings-dropdown" class="hidden fixed mt-2 w-36 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-[9999] flex flex-col py-1">
+                            <div id="settings-dropdown" class="hidden fixed mt-2 w-44 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-[9999] flex flex-col py-1">
                                 <button onclick="toggleLanguage(); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span>
                                 </button>
@@ -204,6 +216,10 @@
                                 </button>
                                 <button onclick="setTheme('system'); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-desktop text-slate-400 w-4 text-center"></i> <span data-i18n="theme-sys">系统</span>
+                                </button>
+                                <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
+                                <button onclick="showAboutModal(); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
+                                    <i class="fa-solid fa-circle-info text-blue-400 w-4 text-center"></i> <span data-i18n="about-soft">关于软件</span>
                                 </button>
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
                                 <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
@@ -291,47 +307,76 @@
         <button onclick="window.imgMenuAction('share')" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"><i class="fa-solid fa-share-nodes text-purple-500"></i> 分享</button>
     </div>
 
+    <div id="about-modal" class="hidden fixed inset-0 bg-black/50 z-[99999] flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col border border-slate-200 dark:border-slate-700">
+            <div class="px-5 py-3 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900/50">
+                <h3 class="font-black text-lg text-slate-800 dark:text-slate-200 flex items-center gap-2"><i class="fa-solid fa-circle-info text-blue-500"></i> <span data-i18n="about-soft">关于软件</span></h3>
+                <button onclick="closeAboutModal()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            
+            <div class="p-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed overflow-y-auto max-h-[60vh]">
+                <p class="mb-3 font-black text-slate-800 dark:text-slate-200 text-xl">云笔记 v1.0</p>
+                <p class="mb-2">这是一款极速、安全的 PWA 笔记本软件。支持云端同步、无缝跨设备使用。</p>
+                <ul class="list-disc pl-5 space-y-1 mb-3">
+                    <li>支持离线使用，无网也能秒开</li>
+                    <li>支持 Markdown 和富文本排版</li>
+                    <li>支持多级文件夹拖拽排序</li>
+                    <li>自动压缩本地图片，节省空间</li>
+                </ul>
+                <p class="text-xs text-slate-400 mt-4 leading-relaxed">
+                    开发者：乐乐 <br>
+                    项目地址：<a href="https://github.com/mangguo02/my-cloud-notepad" target="_blank" class="text-blue-500 hover:underline">点击访问 GitHub 仓库</a> <br>
+                    发布日期：2026年6月
+                </p>
+            </div>
+            
+            <div class="px-5 py-3 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-700 flex justify-end">
+                <button onclick="closeAboutModal()" class="px-4 py-1.5 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow-sm transition-colors text-sm">我知道了</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // 💡 彻底修复后的完整双语字典
         const dict = {
             zh: {
-                'nav-logout': '退出登录', 'nav-delete': '注销账号', 'nav-history': '历史',
+                'nav-logout': '退出登录', 'nav-delete': '注销账号',
                 'theme-title': '主题模式', 'theme-light': '浅色模式', 'theme-dark': '深色模式', 'theme-sys': '跟随系统',
-                'lang-toggle': '切换语言 / EN',
-                'nav-sidebar': '侧栏', 'app-title': '云笔记',
+                'lang-toggle': '切换语言 / EN', 'app-title': '云笔记',
                 'btn-new-note': '新笔记', 'btn-new-folder': '新分类',
-                'btn-import-export': '导入与导出', 'label-folder': '文件夹',
-                'label-content': '笔记集', 'label-editor': '编辑栏',
-                'label-category': '归属地:', 'trash-title': '回收站',
-                'btn-list': '列表', 'btn-grid': '图表',
+                'label-folder': '文件', 'label-content': '笔记', 'label-editor': '编辑栏',
+                'trash-title': '回收站', 'btn-list': '列表', 'btn-grid': '图表',
                 'all-docs': '全笔记展示', 'no-data': '无数据', 'trash-empty': '回收站空空如也',
                 'untitled': '无标题', 'original-folder': '原位置:',
-                'fmt-size': '字号', 'sz-1': '1号 (10px)', 'sz-2': '2号 (13px)', 'sz-3': '3号 (16px 正常)', 'sz-4': '4号 (18px)', 'sz-5': '5号 (24px)', 'sz-6': '6号 (32px)', 'sz-7': '7号 (48px)',
+                'fmt-size': '字号', 'sz-1': '1号 (10px)', 'sz-2': '2号 (13px)', 'sz-3': '3号 (16px)', 'sz-4': '4号 (18px)', 'sz-5': '5号 (24px)', 'sz-6': '6号 (32px)', 'sz-7': '7号 (48px)',
                 'fmt-heading': '标题', 'h1': '一级标题', 'h2': '二级标题', 'h3': '三级标题', 'p': '正文',
                 'color-white': '白', 'color-red': '红', 'color-yellow': '黄', 'color-blue': '蓝', 'color-green': '绿', 'color-black': '黑',
                 'fmt-img': '图', 'btn-recover': '恢复', 'btn-empty': '清空', 'ctx-rename': '重命名分类', 'ctx-delete': '安全删除分类',
                 '未分类': '未分类', '工作': '工作', '生活': '生活',
-                'btn-import-folder': '导入文件夹', 'btn-export-folder': '导出文件夹'
+                'btn-import-folder': '导入文件夹', 'btn-export-folder': '导出文件夹',
+                'about-soft': '关于软件'
             },
             en: {
-                'nav-logout': 'Logout', 'nav-delete': 'Delete Account', 'nav-history': 'History',
+                'nav-logout': 'Logout', 'nav-delete': 'Delete Account',
                 'theme-title': 'Theme Mode', 'theme-light': 'Light Mode', 'theme-dark': 'Dark Mode', 'theme-sys': 'System Default',
-                'lang-toggle': 'Switch Lang / 中文',
-                'nav-sidebar': 'Sidebar', 'app-title': 'Cloud Note',
+                'lang-toggle': 'Switch Lang / 中文', 'app-title': 'Cloud Note',
                 'btn-new-note': 'New Note', 'btn-new-folder': 'New Folder',
-                'btn-import-export': 'Import/Export', 'label-folder': 'Folders',
-                'label-content': 'Content', 'label-editor': 'Editor',
-                'label-category': 'Category:', 'trash-title': 'Trash',
-                'btn-list': 'List', 'btn-grid': 'Grid',
+                'label-folder': 'Folders', 'label-content': 'Content', 'label-editor': 'Editor',
+                'trash-title': 'Trash', 'btn-list': 'List', 'btn-grid': 'Grid',
                 'all-docs': 'All Documents', 'no-data': 'No Data', 'trash-empty': 'Trash is empty',
                 'untitled': 'Untitled', 'original-folder': 'From:',
-                'fmt-size': 'Size', 'sz-1': 'Sz 1 (10px)', 'sz-2': 'Sz 2 (13px)', 'sz-3': 'Sz 3 (16px Normal)', 'sz-4': 'Sz 4 (18px)', 'sz-5': 'Sz 5 (24px)', 'sz-6': 'Sz 6 (32px)', 'sz-7': 'Sz 7 (48px)',
+                'fmt-size': 'Size', 'sz-1': 'Sz 1 (10px)', 'sz-2': 'Sz 2 (13px)', 'sz-3': 'Sz 3 (16px)', 'sz-4': 'Sz 4 (18px)', 'sz-5': 'Sz 5 (24px)', 'sz-6': 'Sz 6 (32px)', 'sz-7': 'Sz 7 (48px)',
                 'fmt-heading': 'Heading', 'h1': 'Heading 1', 'h2': 'Heading 2', 'h3': 'Heading 3', 'p': 'Normal Text',
                 'color-white': 'W', 'color-red': 'R', 'color-yellow': 'Y', 'color-blue': 'B', 'color-green': 'G', 'color-black': 'Bk',
                 'fmt-img': 'Img', 'btn-recover': 'Restore', 'btn-empty': 'Empty', 'ctx-rename': 'Rename', 'ctx-delete': 'Delete safely',
                 '未分类': 'Uncategorized', '工作': 'Work', '生活': 'Life',
-                'btn-import-folder': 'Import Folder', 'btn-export-folder': 'Export Folder'
+                'btn-import-folder': 'Import Folder', 'btn-export-folder': 'Export Folder',
+                'about-soft': 'About App'
             }
         };
+
+        function showAboutModal() { document.getElementById('about-modal').classList.remove('hidden'); }
+        function closeAboutModal() { document.getElementById('about-modal').classList.add('hidden'); }
 
         let currentLang = localStorage.getItem('app-lang') || 'zh';
         function t(key) { return dict[currentLang][key] || key; }
@@ -339,8 +384,7 @@
         function toggleLanguage() {
             currentLang = currentLang === 'zh' ? 'en' : 'zh';
             localStorage.setItem('app-lang', currentLang);
-            updateLanguageUI();
-            refreshAllViews(); 
+            updateLanguageUI(); refreshAllViews(); 
         }
 
         function updateLanguageUI() {
@@ -351,12 +395,9 @@
             });
         }
 
-        // ==========================================
-        // 雷达追踪引擎：保证下拉菜单紧贴图标且不被裁切
-        // ==========================================
         function toggleSettingsMenu(e) {
             e.stopPropagation(); 
-            document.getElementById('import-export-content').classList.add('hidden'); // 互斥
+            document.getElementById('import-export-content').classList.add('hidden'); 
             const arrow = document.getElementById('import-export-arrow');
             if(arrow) arrow.classList.remove('rotate-180');
 
@@ -364,18 +405,16 @@
             if (dropdown.classList.contains('hidden')) {
                 const rect = e.currentTarget.getBoundingClientRect();
                 dropdown.style.top = (rect.bottom + 4) + 'px';
-                let leftPos = rect.right - 192; // w-48 is 192px
+                let leftPos = rect.right - 176; 
                 if(leftPos < 0) leftPos = 4;
                 dropdown.style.left = leftPos + 'px';
                 dropdown.classList.remove('hidden');
-            } else {
-                dropdown.classList.add('hidden');
-            }
+            } else { dropdown.classList.add('hidden'); }
         }
 
         function toggleImportExport(e) {
             e.stopPropagation();
-            document.getElementById('settings-dropdown').classList.add('hidden'); // 互斥
+            document.getElementById('settings-dropdown').classList.add('hidden');
             const content = document.getElementById('import-export-content');
             const arrow = document.getElementById('import-export-arrow');
             if (content.classList.contains('hidden')) {
@@ -393,7 +432,6 @@
         document.addEventListener('click', (e) => {
             const settingsDropdown = document.getElementById('settings-dropdown');
             if (settingsDropdown && !settingsDropdown.contains(e.target)) settingsDropdown.classList.add('hidden');
-            
             const ieDropdown = document.getElementById('import-export-content');
             const ieWrap = document.getElementById('btn-import-export-wrap');
             if (ieDropdown && (!ieWrap || !ieWrap.contains(e.target))) {
@@ -401,29 +439,23 @@
                 const arrow = document.getElementById('import-export-arrow');
                 if(arrow) arrow.classList.remove('rotate-180');
             }
-            
             document.getElementById('custom-context-menu').classList.add('hidden');
-            
-            // 点击空白处自动隐藏图片专属菜单
             const imgMenu = document.getElementById('img-context-menu');
             if (imgMenu && !imgMenu.contains(e.target)) imgMenu.classList.add('hidden');
         }, true);
 
-        function setTheme(theme) {
-            localStorage.setItem('app-theme', theme); 
-            applyTheme(theme);
-        }
-
+        function setTheme(theme) { localStorage.setItem('app-theme', theme); applyTheme(theme); }
         function applyTheme(theme) {
             const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            if (isDark) { document.documentElement.classList.add('dark'); } 
-            else { document.documentElement.classList.remove('dark'); }
+            if (isDark) { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); }
         }
-
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
             if (localStorage.getItem('app-theme') === 'system' || !localStorage.getItem('app-theme')) applyTheme('system');
         });
 
+        // ==========================================
+        // 💡 云端核心逻辑引擎
+        // ==========================================
         let notes = [];
         let trashBin = [];
         let isCloudDataLoaded = false;
@@ -464,6 +496,7 @@
         let leftLayoutView = "list";
         let rightClickedCategoryId = null; 
         
+        // 💡 登录状态管理
         let isLoginMode = true;
         let cfUser = localStorage.getItem('cfUser');
         let cfPass = localStorage.getItem('cfPass');
@@ -534,22 +567,32 @@
             if (window.innerWidth < 768) { toggleLeftPanel(); }
             initResizers();
             initRichTextInteractiveEvents();
-
             document.getElementById('note-title-input').addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') { e.preventDefault(); document.getElementById('note-editor-richtext').focus(); }
             });  
+            applyTheme(localStorage.getItem('app-theme') || 'system');
+            updateLanguageUI();
+            
+            MobileDragDrop.polyfill({
+                holdToDrag: 300, 
+                forceApply: true 
+            });
+            window.addEventListener('touchmove', function(e) {
+                if (document.body.classList.contains('dnd-poly-active') && e.cancelable) {
+                    e.preventDefault(); 
+                }
+            }, {passive: false});
 
+            // 💡 检测是否已登录
             if (cfUser && cfPass) {
                 document.getElementById('auth-overlay').classList.add('hidden');
                 loadCloudData();
             } else {
                 document.getElementById('auth-overlay').classList.remove('hidden');
             }
-
-            applyTheme(localStorage.getItem('app-theme') || 'system');
-            updateLanguageUI();
         });
         
+        // 💡 加载云端数据
         async function loadCloudData() {
             if (typeof marked !== 'undefined') marked.use({ breaks: true, gfm: true });
             try {
@@ -592,6 +635,7 @@
             }
         }
         
+        // 💡 保存云端数据
         async function saveCloudData() {
             if(!cfUser || !isCloudDataLoaded) return; 
             const allData = { notes, categories, categoryColors, trashBin, folderTreeRelations, leftExpandedFolders };
@@ -604,6 +648,8 @@
             document.getElementById('view-left-list').style.backgroundColor = leftLayoutView === 'list' ? '#3b82f6' : 'transparent';
             document.getElementById('view-left-grid').style.backgroundColor = leftLayoutView === 'grid' ? '#3b82f6' : 'transparent';
             
+            document.getElementById('view-tree-list').style.color = treeLayoutView === 'list' ? '#ffffff' : '';
+            document.getElementById('view-tree-grid').style.color = treeLayoutView === 'grid' ? '#ffffff' : '';
             document.getElementById('view-left-list').style.color = leftLayoutView === 'list' ? '#ffffff' : '';
             document.getElementById('view-left-grid').style.color = leftLayoutView === 'grid' ? '#ffffff' : '';
 
@@ -627,7 +673,7 @@
             const defaultStyle = 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 shadow-sm';
 
             const allBtn = document.createElement('div');
-            allBtn.className = `px-2.5 py-0.5 rounded-lg border flex items-center gap-1 cursor-pointer transition-all text-xs font-black ${currentFilterCategory === '全部' ? activeStyle : defaultStyle}`;
+            allBtn.className = `w-full px-1.5 py-0 rounded-none border flex items-center justify-center gap-1 cursor-pointer transition-all text-xs font-black ${currentFilterCategory === '全部' ? activeStyle : defaultStyle}`;
             allBtn.innerHTML = `<i class="fa-solid fa-list-check text-[12px]"></i> ${t('all-docs')}`;
             allBtn.onclick = () => { currentFilterCategory = "全部"; refreshAllViews(); };
             if(allDocsContainer) allDocsContainer.appendChild(allBtn);
@@ -644,8 +690,8 @@
                     const noteCount = notes.filter(n => getAllCategoryIds(cat.id).includes(n.category)).length;
                     
                     const cell = document.createElement('div');
-                    cell.className = `py-1 px-2.5 rounded-lg border cursor-pointer transition-all flex items-center justify-between relative h-6 folder-drop-target ${isSelected ? activeStyle : defaultStyle}`;
-                    cell.style.paddingLeft = `${level * 12 + 6}px`;
+                    cell.className = `w-full py-1 pr-1.5 rounded-lg border cursor-pointer transition-all flex items-center justify-between relative folder-drop-target ${isSelected ? activeStyle : defaultStyle}`;
+                    cell.style.paddingLeft = `${level * 10 + 6}px`;
                     
                     let folderIconColor = 'text-amber-500';
                     if (level === 1) folderIconColor = 'text-blue-500'; else if (level === 2) folderIconColor = 'text-emerald-500'; else if (level >= 3) folderIconColor = 'text-purple-500';
@@ -657,23 +703,30 @@
                             ${iconHtml}
                             <span class="font-extrabold text-[12px] truncate">${t(cat.name)}</span>
                         </div>
-                        <span class="text-[10px] font-bold ${isSelected ? 'opacity-100 text-blue-100' : 'opacity-60'} shrink-0">(${noteCount})</span>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="text-[10px] font-bold ${isSelected ? 'opacity-100 text-blue-100' : 'opacity-60'}">(${noteCount})</span>
+                            <i class="fa-solid fa-ellipsis-vertical text-[14px] text-slate-400 hover:text-blue-500 px-1 z-10 folder-more-btn" title="操作"></i>
+                        </div>
                     `;
 
                     cell.setAttribute('draggable', 'true');
-                    cell.ondragstart = (e) => {
+                    
+                    cell.addEventListener('dragstart', (e) => {
                         e.dataTransfer.effectAllowed = 'move';
                         e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'folder', id: cat.id }));
                         e.dataTransfer.setData('text/folder-id', cat.id);
                         setTimeout(() => cell.classList.add('opacity-40'), 0);
-                    };
-                    cell.ondragend = () => {
+                    });
+                    
+                    cell.addEventListener('dragend', () => {
                         cell.classList.remove('opacity-40');
                         document.querySelectorAll('.folder-drop-target').forEach(el => el.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed'));
-                    };
-                    cell.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; cell.classList.add('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed'); };
-                    cell.ondragleave = () => { cell.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed'); };
-                    cell.ondrop = (e) => {
+                    });
+                    
+                    cell.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; cell.classList.add('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed'); });
+                    cell.addEventListener('dragleave', () => { cell.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed'); });
+                    
+                    cell.addEventListener('drop', (e) => {
                         e.preventDefault(); cell.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed');
                         let dropData = { type: null, id: null };
                         try { const plainText = e.dataTransfer.getData('text/plain'); if (plainText) dropData = JSON.parse(plainText); } catch (err) {}
@@ -698,8 +751,16 @@
                                 if (sourceCat) { sourceCat.parentId = cat.id; saveCloudData(); refreshAllViews(); }
                             } else { alert("🚨 不能将父级目录移动到自身子目录下！"); }
                         }
-                    };
+                    });
+
                     cell.onclick = (e) => {
+                        if (e.target.closest('.folder-more-btn')) {
+                            e.stopPropagation(); rightClickedCategoryId = cat.id;
+                            const menu = document.getElementById('custom-context-menu'); menu.classList.remove('hidden');
+                            const clientX = e.clientX || (e.touches && e.touches[0].clientX) || 50;
+                            const clientY = e.clientY || (e.touches && e.touches[0].clientY) || 50;
+                            menu.style.left = clientX + 'px'; menu.style.top = clientY + 'px'; return;
+                        }
                         if (e.target.closest('.fa-caret-down') || e.target.closest('.fa-caret-right')) {
                             leftExpandedFolders[cat.id] = !isExpanded; saveCloudData(); refreshAllViews();
                         } else {
@@ -743,7 +804,7 @@
                 const activeBoxStyle = 'bg-blue-500 border-blue-600 text-white shadow active-note-item';
 
                 box.className = leftLayoutView === 'list' ? 
-                    `w-full py-1 px-2 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? activeBoxStyle : defaultBoxStyle}` :
+                    `w-full py-1 px-1.5 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? activeBoxStyle : defaultBoxStyle}` :
                     `w-full h-[72px] p-1.5 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? activeBoxStyle : defaultBoxStyle}`;
                     
                 box.innerHTML = `
@@ -755,15 +816,18 @@
                 `;
 
                 box.setAttribute('draggable', 'true');
-                box.ondragstart = (e) => {
+                
+                box.addEventListener('dragstart', (e) => {
                     draggedNoteId = note.id; e.dataTransfer.effectAllowed = 'move';
                     e.dataTransfer.setData('text/plain', JSON.stringify({ type: 'note', id: note.id }));
                     setTimeout(() => box.classList.add('opacity-40', 'scale-95'), 0);
-                };
-                box.ondragend = () => { draggedNoteId = null; box.classList.remove('opacity-40', 'scale-95'); document.querySelectorAll('.folder-drop-target').forEach(el => el.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed')); };
-                box.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; if (draggedNoteId && draggedNoteId !== note.id) box.classList.add('border-t-2', 'border-blue-500'); };
-                box.ondragleave = () => { box.classList.remove('border-t-2', 'border-blue-500'); };
-                box.ondrop = (e) => {
+                });
+                
+                box.addEventListener('dragend', () => { draggedNoteId = null; box.classList.remove('opacity-40', 'scale-95'); document.querySelectorAll('.folder-drop-target').forEach(el => el.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'border-blue-400', 'border-dashed')); });
+                box.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; if (draggedNoteId && draggedNoteId !== note.id) box.classList.add('border-t-2', 'border-blue-500'); });
+                box.addEventListener('dragleave', () => { box.classList.remove('border-t-2', 'border-blue-500'); });
+                
+                box.addEventListener('drop', (e) => {
                     e.preventDefault(); box.classList.remove('border-t-2', 'border-blue-500');
                     let dropNoteId = draggedNoteId;
                     try { const plainText = e.dataTransfer.getData('text/plain'); if (plainText) { const data = JSON.parse(plainText); if (data.type === 'note') dropNoteId = data.id; } } catch(err) {}
@@ -775,7 +839,7 @@
                             notes.splice(newToIdx, 0, movedItem); saveCloudData(); renderLeftNotesView();
                         }
                     }
-                };
+                });
                 gridWrapper.appendChild(box);
             });
             container.appendChild(gridWrapper);
@@ -903,8 +967,7 @@
             function appendOption(parentId, depth) {
                 categories.filter(c => c.parentId === parentId).forEach(cat => {
                     const opt = document.createElement('option');
-                    opt.value = cat.id; 
-                    opt.innerHTML = t(cat.name); // 💡 彻底去掉了 '—'.repeat(depth)，文字将全部靠左对齐
+                    opt.value = cat.id; opt.innerHTML = t(cat.name);
                     select.appendChild(opt); appendOption(cat.id, depth + 1); 
                 });
             }
@@ -930,7 +993,7 @@
             const leftPanel = document.getElementById('left-panel'); const resizerLeft = document.getElementById('resizer-left');
             const rightPanel = document.getElementById('right-panel'); const resizerRight = document.getElementById('resizer-right');
             resizerLeft.addEventListener('mousedown', function(e) { e.preventDefault(); resizerLeft.classList.add('resizing'); document.body.classList.add('no-select'); document.addEventListener('mousemove', resizeLeft); document.addEventListener('mouseup', stopResizeLeft); });
-            function resizeLeft(e) { let newWidth = e.clientX - container.getBoundingClientRect().left; if (newWidth >= 130 && newWidth <= 480) leftPanel.style.width = newWidth + 'px'; }
+            function resizeLeft(e) { let newWidth = e.clientX - container.getBoundingClientRect().left; if (newWidth >= 120 && newWidth <= 480) leftPanel.style.width = newWidth + 'px'; }
             function stopResizeLeft() { resizerLeft.classList.remove('resizing'); document.body.classList.remove('no-select'); document.removeEventListener('mousemove', resizeLeft); document.removeEventListener('mouseup', stopResizeLeft); }
             
             resizerRight.addEventListener('mousedown', function(e) { e.preventDefault(); resizerRight.classList.add('resizing'); document.body.classList.add('no-select'); document.addEventListener('mousemove', resizeRight); document.addEventListener('mouseup', stopResizeRight); });
@@ -938,63 +1001,38 @@
             function stopResizeRight() { resizerRight.classList.remove('resizing'); document.body.classList.remove('no-select'); document.removeEventListener('mousemove', resizeRight); document.removeEventListener('mouseup', stopResizeRight); }
         }
 
-        // ==========================================
-        // 核心恢复：图片红绿锁与相关交互逻辑
-        // ==========================================
         window.toggleImgLock = function(btn, e) {
             if(e) e.stopPropagation();
             const wrapper = btn.closest('.custom-img-wrapper');
             const icon = btn.querySelector('i');
             if (wrapper.classList.contains('locked')) {
-                wrapper.classList.remove('locked');
-                btn.classList.remove('locked');
-                icon.className = 'fa-solid fa-lock-open';
+                wrapper.classList.remove('locked'); btn.classList.remove('locked'); icon.className = 'fa-solid fa-lock-open';
             } else {
-                wrapper.classList.add('locked');
-                btn.classList.add('locked');
-                icon.className = 'fa-solid fa-lock';
+                wrapper.classList.add('locked'); btn.classList.add('locked'); icon.className = 'fa-solid fa-lock';
             }
             handleEditorInput();
         };
 
-        window.imgDragStart = function(e) {
-            e.target.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/plain', 'custom-img-wrapper');
-            window.draggingImageNode = e.target;
-        };
-        
-        window.imgDragEnd = function(e) {
-            e.target.classList.remove('dragging');
-            window.draggingImageNode = null;
-            handleEditorInput();
-        };
+        window.imgDragStart = function(e) { e.target.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', 'custom-img-wrapper'); window.draggingImageNode = e.target; };
+        window.imgDragEnd = function(e) { e.target.classList.remove('dragging'); window.draggingImageNode = null; handleEditorInput(); };
 
         let currentImageWrapper = null;
-        window.showImgContextMenu = function(e, wrapper) {
-            currentImageWrapper = wrapper;
-            const menu = document.getElementById('img-context-menu');
-            menu.classList.remove('hidden');
-            menu.style.left = e.clientX + 'px';
-            menu.style.top = e.clientY + 'px';
-        };
+        window.showImgContextMenu = function(e, wrapper) { currentImageWrapper = wrapper; const menu = document.getElementById('img-context-menu'); menu.classList.remove('hidden'); menu.style.left = e.clientX + 'px'; menu.style.top = e.clientY + 'px'; };
 
         window.imgMenuAction = async function(action) {
-            const menu = document.getElementById('img-context-menu');
-            menu.classList.add('hidden');
+            const menu = document.getElementById('img-context-menu'); menu.classList.add('hidden');
             if (!currentImageWrapper) return;
             const img = currentImageWrapper.querySelector('img');
 
             if (action === 'download') {
                 const a = document.createElement('a'); a.href = img.src; a.download = 'image_' + Date.now() + '.png'; a.click();
             } else if (action === 'copy') {
-                try { const res = await fetch(img.src); const blob = await res.blob(); await navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})]); alert('图片已复制到剪贴板！'); } catch(err) { alert('复制失败'); }
+                try { const res = await fetch(img.src); const blob = await res.blob(); await navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})]); alert('图片已复制！'); } catch(err) {}
             } else if (action === 'cut') {
-                try { const res = await fetch(img.src); const blob = await res.blob(); await navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})]); currentImageWrapper.remove(); handleEditorInput(); } catch(err) { alert('剪切失败'); }
+                try { const res = await fetch(img.src); const blob = await res.blob(); await navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})]); currentImageWrapper.remove(); handleEditorInput(); } catch(err) {}
             } else if (action === 'share') {
-                if (navigator.share) {
-                    try { const res = await fetch(img.src); const blob = await res.blob(); const file = new File([blob], 'image.png', {type: blob.type}); await navigator.share({ files: [file], title: '分享图片' }); } catch(e) {}
-                } else { alert('当前浏览器不支持原生分享'); }
+                if (navigator.share) { try { const res = await fetch(img.src); const blob = await res.blob(); const file = new File([blob], 'image.png', {type: blob.type}); await navigator.share({ files: [file], title: '分享图片' }); } catch(e) {} } 
+                else { alert('当前浏览器不支持分享'); }
             }
             currentImageWrapper = null;
         };
@@ -1008,30 +1046,16 @@
                    if (lockBtn) { e.preventDefault(); e.stopPropagation(); window.toggleImgLock(lockBtn, e); }
                });
     
-               editor.addEventListener('contextmenu', (e) => {
-                   const wrapper = e.target.closest('.custom-img-wrapper');
-                   if (wrapper) { e.preventDefault(); showImgContextMenu(e, wrapper); }
-               });
-               editor.addEventListener('dblclick', (e) => {
-                   const wrapper = e.target.closest('.custom-img-wrapper');
-                   if (wrapper) { e.preventDefault(); showImgContextMenu(e, wrapper); }
-               });
-
-               editor.addEventListener('dragover', (e) => {
-                   if (window.draggingImageNode) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
-               });
+               editor.addEventListener('contextmenu', (e) => { const wrapper = e.target.closest('.custom-img-wrapper'); if (wrapper) { e.preventDefault(); showImgContextMenu(e, wrapper); } });
+               editor.addEventListener('dblclick', (e) => { const wrapper = e.target.closest('.custom-img-wrapper'); if (wrapper) { e.preventDefault(); showImgContextMenu(e, wrapper); } });
+               editor.addEventListener('dragover', (e) => { if (window.draggingImageNode) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; } });
 
                editor.addEventListener('drop', (e) => {
                    if (window.draggingImageNode) {
-                       e.preventDefault();
-                       let range = null;
+                       e.preventDefault(); let range = null;
                        if (document.caretRangeFromPoint) { range = document.caretRangeFromPoint(e.clientX, e.clientY); } 
                        else if (document.caretPositionFromPoint) { const pos = document.caretPositionFromPoint(e.clientX, e.clientY); range = document.createRange(); range.setStart(pos.offsetNode, pos.offset); }
-                       if (range) {
-                           window.draggingImageNode.remove();
-                           range.insertNode(window.draggingImageNode);
-                           const space = document.createTextNode('\u00A0'); range.collapse(false); range.insertNode(space);
-                       }
+                       if (range) { window.draggingImageNode.remove(); range.insertNode(window.draggingImageNode); const space = document.createTextNode('\u00A0'); range.collapse(false); range.insertNode(space); }
                        window.draggingImageNode = null; handleEditorInput();
                    }
                });
@@ -1067,12 +1091,10 @@
 
                editor.addEventListener('paste', (e) => {
                      e.preventDefault(); 
-                     let hasImage = false;
-                     const items = (e.clipboardData || window.clipboardData).items;
+                     let hasImage = false; const items = (e.clipboardData || window.clipboardData).items;
                      for (let i = 0; i < items.length; i++) {
                            if (items[i].type.indexOf("image") !== -1) {
-                               hasImage = true;
-                               const reader = new FileReader();
+                               hasImage = true; const reader = new FileReader();
                                reader.onload = (event) => {
                                    const base64Image = event.target.result;
                                    const imgHTML = `<span class="custom-img-wrapper locked" contenteditable="false" draggable="true" ondragstart="window.imgDragStart(event)" ondragend="window.imgDragEnd(event)"><img src="${base64Image}" alt="图片" /><span class="img-lock-btn locked" title="点击解锁以调整大小" contenteditable="false"><i class="fa-solid fa-lock"></i></span></span>&nbsp;`;
@@ -1081,10 +1103,7 @@
                                reader.readAsDataURL(items[i].getAsFile());
                            }
                      }
-                     if (!hasImage) {
-                         const text = (e.originalEvent || e).clipboardData.getData('text/plain');
-                         document.execCommand('insertText', false, text); handleEditorInput();
-                     }
+                     if (!hasImage) { const text = (e.originalEvent || e).clipboardData.getData('text/plain'); document.execCommand('insertText', false, text); handleEditorInput(); }
                 });
          }
      
@@ -1095,7 +1114,7 @@
         function triggerFolderImport() { document.getElementById('import-folder-input').click(); }
         
         async function exportCurrentFolder() {
-            if (currentFilterCategory === "全部") { alert("请先在左侧选择一个特定的分类文件夹后再导出！"); return; }
+            if (currentFilterCategory === "全部") { alert("请先在左侧选择分类！"); return; }
             const currentCatObj = categories.find(c => c.id === currentFilterCategory); if (!currentCatObj) return;
             const originalBtnText = document.querySelector('button[onclick="exportCurrentFolder()"]').innerHTML;
             document.querySelector('button[onclick="exportCurrentFolder()"]').innerHTML = `<i class="fa-solid fa-spinner fa-spin text-blue-200"></i> 打包中...`;
@@ -1103,19 +1122,16 @@
                 const zip = new JSZip();
                 function addFilesToZip(folderId, currentZipFolder) {
                     notes.filter(n => n.category === folderId).forEach(note => {
-                        let mdContent = note.content;
-                        if (typeof TurndownService !== 'undefined' && note.content.includes('<')) mdContent = new TurndownService().turndown(note.content);
+                        let mdContent = note.content; if (typeof TurndownService !== 'undefined' && note.content.includes('<')) mdContent = new TurndownService().turndown(note.content);
                         currentZipFolder.file(`${(note.title || t('untitled')).replace(/[\\/:*?"<>|]/g, "_")}.md`, mdContent);
                     });
-                    categories.filter(c => c.parentId === folderId).forEach(sub => {
-                        addFilesToZip(sub.id, currentZipFolder.folder(sub.name.replace(/[\\/:*?"<>|]/g, "_")));
-                    });
+                    categories.filter(c => c.parentId === folderId).forEach(sub => { addFilesToZip(sub.id, currentZipFolder.folder(sub.name.replace(/[\\/:*?"<>|]/g, "_"))); });
                 }
                 const rootFolderName = currentCatObj.name.replace(/[\\/:*?"<>|]/g, "_");
                 addFilesToZip(currentFilterCategory, zip.folder(rootFolderName));
                 const content = await zip.generateAsync({ type: "blob" });
                 const url = window.URL.createObjectURL(content); const a = document.createElement("a"); a.href = url; a.download = `${rootFolderName}_备份.zip`; a.click(); window.URL.revokeObjectURL(url);
-            } catch (error) { alert("导出失败，请检查控制台报错。"); } finally { document.querySelector('button[onclick="exportCurrentFolder()"]').innerHTML = originalBtnText; }
+            } catch (error) { alert("导出失败"); } finally { document.querySelector('button[onclick="exportCurrentFolder()"]').innerHTML = originalBtnText; }
         }
 
         function handleImportFile(event, type) {
@@ -1142,8 +1158,7 @@
                     if (file.webkitRelativePath) {
                         const parts = file.webkitRelativePath.split('/');
                         for (let i = 0; i < parts.length - 1; i++) {
-                            const dirName = parts[i];
-                            let found = categories.find(c => c.name === dirName && c.parentId === currentParentId);
+                            const dirName = parts[i]; let found = categories.find(c => c.name === dirName && c.parentId === currentParentId);
                             if (!found) { found = { id: 'cat_' + Date.now() + '_' + Math.floor(Math.random() * 10000), name: dirName, parentId: currentParentId }; categories.push(found); }
                             currentParentId = found.id; 
                         }
@@ -1167,26 +1182,45 @@
             const a = document.createElement('a'); a.download = `${title}.${formatType}`; a.href = url; a.click(); window.URL.revokeObjectURL(url);
         }
          
-        // ==========================================
-        // 核心恢复：图片上传自带玻璃罩外壳
-        // ==========================================
         function handleLocalImageUpload(event) {
-               const files = event.target.files;
-               if (!files || files.length === 0) return;
-               const editor = document.getElementById('note-editor-richtext');
-               if (editor) editor.focus(); 
+            const files = event.target.files; if (!files || files.length === 0) return;
+            const editor = document.getElementById('note-editor-richtext'); if (editor) editor.focus(); 
+            
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) { return; }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const MAX_WIDTH = 1200; 
+                        let width = img.width;
+                        let height = img.height;
 
-               Array.from(files).forEach(file => {
-                   if (!file.type.startsWith('image/')) { alert(`文件 [${file.name}] 不是图片类型，已跳过！`); return; }
-                   const reader = new FileReader();
-                   reader.onload = function(e) {
-                        const base64Image = e.target.result;
-                        const imgHTML = `<span class="custom-img-wrapper locked" contenteditable="false" draggable="true" ondragstart="window.imgDragStart(event)" ondragend="window.imgDragEnd(event)"><img src="${base64Image}" alt="图片" /><span class="img-lock-btn locked" title="点击解锁以调整大小" contenteditable="false"><i class="fa-solid fa-lock"></i></span></span>&nbsp;`;
+                        if (width > MAX_WIDTH) {
+                            height = Math.round((height * MAX_WIDTH) / width);
+                            width = MAX_WIDTH;
+                        }
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        
+                        ctx.fillStyle = "#ffffff";
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.9);
+
+                        const imgHTML = `<span class="custom-img-wrapper locked" contenteditable="false" draggable="true" ondragstart="window.imgDragStart(event)" ondragend="window.imgDragEnd(event)"><img src="${compressedBase64}" alt="图片" /><span class="img-lock-btn locked" title="点击解锁以调整大小" contenteditable="false"><i class="fa-solid fa-lock"></i></span></span>&nbsp;`;
                         execCmd('insertHTML', imgHTML);
-                   };
-                   reader.readAsDataURL(file);
-               });
-               event.target.value = '';
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+            event.target.value = '';
         }
 
         if ('serviceWorker' in navigator) {
