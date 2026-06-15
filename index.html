@@ -57,7 +57,7 @@
         .md-preview a { color: #2563eb; text-decoration: underline; font-weight: bold; cursor: pointer; transition: all 0.2; }
         .md-preview a:hover { color: #1e40af; text-decoration-style: dashed; }
 
-        .custom-img-wrapper { position: relative; display: inline-block; margin: 14px 0; vertical-align: bottom; max-width: 100%; }
+        .custom-img-wrapper { position: relative; display: inline-block; margin: 14px 0; vertical-align: bottom; max-width: 100%; z-index: 1; }
         .custom-img-wrapper img { max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: block; transition: outline 0.2s, box-shadow 0.2s; }
         .custom-img-wrapper:not(.locked) img { outline: 3px dashed #eab308; outline-offset: 2px; cursor: nwse-resize; }
         .custom-img-wrapper.locked img { user-select: none; -webkit-user-drag: none; outline: none !important; box-shadow: none !important; }
@@ -236,21 +236,21 @@
 
                                  <div id="shortcut-panel" class="hidden flex-col gap-1 px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border-y border-slate-100 dark:border-slate-700" onclick="event.stopPropagation()">
     
-                                      <div class="flex items-center justify-between gap-1 text-xs">
+                                      <div class="flex items-center justify-start gap-1 text-xs">
                                             <span class="text-slate-600 dark:text-slate-300 font-bold">新建笔记</span>
                                             <input type="text" id="shortcut-new-note" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'newNote')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
                                       </div>
     
-                                      <div class="flex items-center justify-between gap-1 text-xs">
+                                      <div class="flex items-center justify-start gap-1 text-xs">
                                             <span class="text-slate-600 dark:text-slate-300 font-bold">新建分类</span>
                                             <input type="text" id="shortcut-new-folder" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'newFolder')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
                                       </div>
     
-                                      <div class="flex items-center justify-between text-xs">
+                                      <div class="flex items-center justify-start gap-1 text-xs">
                                             <span class="text-slate-600 dark:text-slate-300 font-bold" title="以独立无边框窗口打开">弹至桌面</span>
                                             <input type="text" id="shortcut-pop-out" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'popOut')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
                                       </div>
-                                      <div class="text-[10px] text-slate-400 mt-1 text-center font-normal">点击输入框，创建快捷方式：单键双击或组合键</div>
+                                      <div class="text-[10px] text-slate-400 mt-1 text-center font-normal">快捷方式支持：单键双击或组合键</div>
                                 </div>
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>                                
 
