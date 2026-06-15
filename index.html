@@ -872,28 +872,28 @@
                 });
                 gridWrapper.appendChild(box);
             });
-            // ... 前面是你原本的代码
+            // ... 前面是你原本的代码 (生成每个笔记的小盒子)
             container.appendChild(gridWrapper);
 
-            // ================= 新增：处理拖拽到空白区域的逻辑 =================
+            // ================= 新增：处理拖拽到空白区域的逻辑 (☁️ CF 云端适配版) =================
             container.ondragover = (e) => {
                 e.preventDefault(); 
-                // 💡 修复点 1：必须发“通行证”，明确告诉浏览器这块空白区域允许放置！
+                // 💡 发放通行证：明确告诉浏览器这块空白区域允许放置
                 e.dataTransfer.dropEffect = 'move'; 
             };
 
             container.ondrop = (e) => {
                 e.preventDefault();
                 
-                // 🛑 核心防冲突：如果落在具体的笔记上，由笔记自己的代码处理
+                // 🛑 核心防冲突：如果落在具体的笔记上，让笔记自己的 drop 事件去处理
                 if (e.target.closest('.group')) return; 
 
-                // 如果确实落在了空白处，把它移到列表末尾
+                // 如果确实落在了底部的空白处，把它移到列表末尾
                 if (draggedNoteId) {
                     const fromIdx = notes.findIndex(n => n.id === draggedNoteId);
                     if (fromIdx !== -1) {
                         
-                        // 💡 修复点 2：在拔出自己之前，先从显示的列表里“排除自己”，去寻找真正的最后一名
+                        // 在拔出自己之前，先从当前显示的列表里“排除自己”，去寻找真正的最后一名
                         const otherNotes = displayNotes.filter(n => n.id !== draggedNoteId);
                         const lastNoteId = otherNotes.length > 0 ? otherNotes[otherNotes.length - 1].id : null;
                         
@@ -905,19 +905,22 @@
                             const targetIdx = notes.findIndex(n => n.id === lastNoteId);
                             notes.splice(targetIdx + 1, 0, movedItem);
                         } else {
-                            // 兜底：如果列表原本就空了（这是唯一的笔记），直接放进去
+                            // 兜底：如果列表原本就空了，直接放进去
                             notes.push(movedItem);
                         }
                         
-                        // 3. 保存并刷新画面
-                        saveLocalData(); 
+                        // 3. ☁️ 执行云端保存并刷新画面
+                        if (typeof saveCloudData === 'function') {
+                            saveCloudData(); 
+                        } else {
+                            console.warn("未检测到 saveCloudData 函数，请确认云端保存逻辑是否正确挂载！");
+                        }
                         renderLeftNotesView();
                     }
                 }
             };
             // =============================================================
-            // =============================================================
-        } // 这是 renderLeftNotesView 函数原本的结束括号
+        } // <--- 这是 renderLeftNotesView 函数的结束大括号
         
         function renderTrashBin() {
             const container = document.getElementById('right-trash-flow'); container.innerHTML = '';
