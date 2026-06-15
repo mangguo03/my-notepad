@@ -209,7 +209,7 @@
                             <button onclick="toggleSettingsMenu(event)" title="系统设置" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-black px-2 py-1 rounded text-[11px] transition-all shadow-sm flex items-center justify-center border border-slate-700 whitespace-nowrap">
                                 <i class="fa-solid fa-gear pointer-events-none"></i>
                             </button>
-                            <div id="settings-dropdown" class="hidden fixed mt-2 w-44 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-[9999] flex flex-col py-1">
+                            <div id="settings-dropdown" class="hidden fixed mt-1 w-45 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col py-1 z-[10000]">
                                 <button onclick="toggleLanguage(); document.getElementById('settings-dropdown').classList.add('hidden');" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-language text-lg text-blue-500 w-4 text-center"></i> <span data-i18n="lang-toggle">切换语言 / EN</span>
                                 </button>
@@ -227,6 +227,33 @@
                                 
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
                                 
+                                <button onclick="toggleShortcutPanel(event)" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-between font-bold transition-colors">
+                                      <div class="flex items-center gap-3">
+                                            <i class="fa-solid fa-keyboard text-purple-500 w-4 text-center"></i> <span>快捷键设置</span>
+                                      </div>
+                                      <i id="shortcut-arrow" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
+                                 </button>
+
+                                 <div id="shortcut-panel" class="hidden flex-col gap-1 px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border-y border-slate-100 dark:border-slate-700" onclick="event.stopPropagation()">
+    
+                                      <div class="flex items-center justify-between gap-1 text-xs">
+                                            <span class="text-slate-600 dark:text-slate-300 font-bold">新建笔记</span>
+                                            <input type="text" id="shortcut-new-note" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'newNote')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
+                                      </div>
+    
+                                      <div class="flex items-center justify-between gap-1 text-xs">
+                                            <span class="text-slate-600 dark:text-slate-300 font-bold">新建分类</span>
+                                            <input type="text" id="shortcut-new-folder" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'newFolder')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
+                                      </div>
+    
+                                      <div class="flex items-center justify-between text-xs">
+                                            <span class="text-slate-600 dark:text-slate-300 font-bold" title="以独立无边框窗口打开">弹至桌面</span>
+                                            <input type="text" id="shortcut-pop-out" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'popOut')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
+                                      </div>
+                                      <div class="text-[10px] text-slate-400 mt-1 text-center font-normal">点击输入框，创建快捷方式：单键双击或组合键</div>
+                                </div>
+                                <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>                                
+
                                 <button onclick="logout()" class="w-full text-left px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-3 font-bold transition-colors">
                                     <i class="fa-solid fa-right-from-bracket text-slate-400 w-4 text-center"></i> <span data-i18n="nav-logout">退出登录</span>
                                 </button>
@@ -1273,6 +1300,140 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
         }
+                               
+        // 1. 控制设置菜单里的折叠面板展开/收起
+        function toggleShortcutPanel(event) {
+               event.stopPropagation(); // 阻止点击事件冒泡，防止整个设置菜单被关掉
+               const panel = document.getElementById('shortcut-panel');
+               const arrow = document.getElementById('shortcut-arrow');
+    
+               if (panel.classList.contains('hidden')) {
+                   panel.classList.remove('hidden');
+                   panel.classList.add('flex');
+                   arrow.classList.add('rotate-180');
+               } else {
+                    panel.classList.add('hidden');
+                    panel.classList.remove('flex');
+                    arrow.classList.remove('rotate-180');
+               }
+         }
+
+         // 2. 存储用户配置的快捷键字典
+        const userShortcuts = {
+              newNote: '',
+              newFolder: '',
+              popOut: ''
+         };
+
+         // 3. 捕获输入框的按键（支持 Ctrl/Alt/Shift + 字母，或者单独的 F1-F12）
+        function captureShortcut(event, action) {
+               event.preventDefault();  // 拦截默认快捷键
+               event.stopPropagation();
+
+               const key = event.key;
+               // 如果只按下了修饰键，不要急着记录，等用户按下字母
+               if (['Control', 'Shift', 'Alt', 'Meta'].includes(key)) return;
+
+               let shortcutStr = '';
+    
+               // 判断组合键
+               if (event.ctrlKey) shortcutStr += 'Ctrl + ';
+               if (event.altKey) shortcutStr += 'Alt + ';
+               if (event.shiftKey) shortcutStr += 'Shift + ';
+
+               // 把字母转大写，如果是单键比如 F2，就直接是 F2
+               shortcutStr += key.length === 1 ? key.toUpperCase() : key;
+
+               // 显示在输入框并存入字典
+               event.target.value = shortcutStr;
+               userShortcuts[action] = shortcutStr;
+    
+               // 录制完后自动取消输入框的焦点
+               event.target.blur();
+         }
+
+         // 记录上一次按键的内容和时间（用于实现双击判断）
+         let lastKeyPress = '';
+         let lastKeyPressTime = 0;
+
+         // 4. 监听全局键盘事件（终极智能版：双击单键 + 单击组合键）
+         document.addEventListener('keydown', function(event) {
+             
+             // 🛑 保护机制：如果你的光标正在“设置快捷键”的输入框里，不要触发功能，让它安静录制
+             if (event.target.id && event.target.id.includes('shortcut-')) {
+                 return; 
+             }
+
+             // 拼装当前按下的按键字符串
+             let currentPress = '';
+             const hasModifier = event.ctrlKey || event.altKey || event.shiftKey || event.metaKey;
+
+             if (event.ctrlKey) currentPress += 'Ctrl + ';
+             if (event.altKey) currentPress += 'Alt + ';
+             if (event.shiftKey) currentPress += 'Shift + ';
+             currentPress += event.key.length === 1 ? event.key.toUpperCase() : event.key;
+
+             // 匹配当前按键是否是你设置的某个快捷键
+             let matchedAction = null;
+             if (currentPress === userShortcuts.newNote && userShortcuts.newNote !== '') matchedAction = 'newNote';
+             else if (currentPress === userShortcuts.newFolder && userShortcuts.newFolder !== '') matchedAction = 'newFolder';
+             else if (currentPress === userShortcuts.popOut && userShortcuts.popOut !== '') matchedAction = 'popOut';
+
+             // 如果没按中任何快捷键，只把按键记录下来备用，然后结束
+             if (!matchedAction) {
+                 lastKeyPress = currentPress;
+                 lastKeyPressTime = new Date().getTime();
+                 return;
+             }
+
+             // ================= 核心触发逻辑 =================
+
+             if (hasModifier) {
+                 // 【模式一：组合键】 (例如 Alt + N)
+                 // 只要带有修饰键，按一次立刻触发！并且强行拦截默认行为。
+                 event.preventDefault();
+                 executeShortcut(matchedAction);
+             } else {
+                 // 【模式二：单键双击】 (例如 单独按下 N)
+                 const currentTime = new Date().getTime();
+                 
+                 // 如果两次按的是同一个键，而且间隔小于 400 毫秒（0.4秒内连按） -> 判定为双击成功！
+                 if (lastKeyPress === currentPress && (currentTime - lastKeyPressTime) < 400) {
+                     event.preventDefault(); // 阻止这第二次按键把字母打到屏幕上
+                     executeShortcut(matchedAction);
+                     
+                     // 触发后清空记录，防止你按三下它触发两次
+                     lastKeyPress = '';
+                     lastKeyPressTime = 0;
+                 } else {
+                     // 如果这是你第一次按，啥也不做（允许它像正常打字一样输出字母），只把时间记下来
+                     lastKeyPress = currentPress;
+                     lastKeyPressTime = currentTime;
+                 }
+             }
+         });
+
+         // 专门用来执行具体功能的集线器（代码更清爽）
+         function executeShortcut(action) {
+             if (action === 'newNote') {
+                 if(typeof createNewNote === 'function') createNewNote();
+             } else if (action === 'newFolder') {
+                 if(typeof createNewCategory === 'function') createNewCategory();
+             } else if (action === 'popOut') {
+                 popOutToDesktop();
+             }
+         }
+
+        // 5. 弹出独立桌面窗口的函数
+        function popOutToDesktop() {
+               // 这行代码会剥离浏览器的标签栏和书签栏，弹出一个干净的“类原生应用”窗口
+               window.open(window.location.href, '_blank', 'width=1024,height=768,menubar=no,toolbar=no,location=no,status=no');
+        }
+
+    </script>
+</body>
+</html>                  
+                                  
     </script>
 </body>
 </html>
