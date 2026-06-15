@@ -877,32 +877,35 @@
 
             // ================= 新增：处理拖拽到空白区域的逻辑 =================
             container.ondragover = (e) => {
-                e.preventDefault(); // 解除浏览器的默认拦截，允许内容掉落在这里
+                e.preventDefault(); 
+                // 💡 修复点 1：必须发“通行证”，明确告诉浏览器这块空白区域允许放置！
+                e.dataTransfer.dropEffect = 'move'; 
             };
 
             container.ondrop = (e) => {
                 e.preventDefault();
                 
-                // 🛑 核心防冲突：如果你的鼠标其实已经悬停在某个笔记上方了，就退出，让笔记盒子自己的代码去处理
-                // (.group 是每个笔记盒子自带的类名)
+                // 🛑 核心防冲突：如果落在具体的笔记上，由笔记自己的代码处理
                 if (e.target.closest('.group')) return; 
 
                 // 如果确实落在了空白处，把它移到列表末尾
                 if (draggedNoteId) {
                     const fromIdx = notes.findIndex(n => n.id === draggedNoteId);
                     if (fromIdx !== -1) {
+                        
+                        // 💡 修复点 2：在拔出自己之前，先从显示的列表里“排除自己”，去寻找真正的最后一名
+                        const otherNotes = displayNotes.filter(n => n.id !== draggedNoteId);
+                        const lastNoteId = otherNotes.length > 0 ? otherNotes[otherNotes.length - 1].id : null;
+                        
                         // 1. 把被拖拽的笔记从原位置“拔”出来
                         const [movedItem] = notes.splice(fromIdx, 1);
                         
-                        // 2. 找到当前屏幕上显示的列表里的最后一个笔记
-                        const lastNoteId = displayNotes[displayNotes.length - 1]?.id;
-                        
                         if (lastNoteId) {
-                            // 找到最后一名在总数据库里的位置，插到它后面
+                            // 2. 找到这“真正的最后一名”在总数据库里的位置，插到它后面
                             const targetIdx = notes.findIndex(n => n.id === lastNoteId);
                             notes.splice(targetIdx + 1, 0, movedItem);
                         } else {
-                            // 兜底方案：如果列表是空的，直接放进去
+                            // 兜底：如果列表原本就空了（这是唯一的笔记），直接放进去
                             notes.push(movedItem);
                         }
                         
@@ -912,6 +915,7 @@
                     }
                 }
             };
+            // =============================================================
             // =============================================================
         } // 这是 renderLeftNotesView 函数原本的结束括号
         
