@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -228,7 +225,7 @@
 
                                 <button onclick="toggleShortcutPanel(event)" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-start gap-0.5 font-bold transition-colors">
                                       <div class="flex items-center gap-3">
-                                            <i class="fa-solid fa-keyboard text-purple-500 w-4 text-center"></i> <span>快捷键设置</span>
+                                            <i class="fa-solid fa-keyboard text-purple-500 w-4 text-center"></i> <span data-i18n="shortcut-title">快捷键设置</span>
                                       </div>
                                       <i id="shortcut-arrow" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
                                  </button>
@@ -236,20 +233,20 @@
                                  <div id="shortcut-panel" class="hidden flex-col gap-1 px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border-y border-slate-100 dark:border-slate-700" onclick="event.stopPropagation()">
     
                                       <div class="flex items-center justify-start gap-1 text-xs">
-                                            <span class="text-slate-600 dark:text-slate-300 font-bold w-14">新建笔记</span>
-                                            <input type="text" id="shortcut-new-note" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'newNote')" class="w-20 text-center text-[10px] py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
+                                            <span class="text-slate-600 dark:text-slate-300 font-bold w-14" data-i18n="shortcut-new-note">新建笔记</span>
+                                            <input type="text" id="shortcut-new-note" readonly placeholder="点击录制" data-i18n-placeholder="shortcut-record" onkeydown="captureShortcut(event, 'newNote')" class="w-20 text-center text-[10px] py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
                                       </div>
 
                                       <div class="flex items-center justify-start gap-1 text-xs">
-                                            <span class="text-slate-600 dark:text-slate-300 font-bold w-14">新建分类</span>
-                                            <input type="text" id="shortcut-new-folder" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'newFolder')" class="w-20 text-center text-[10px] py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
+                                            <span class="text-slate-600 dark:text-slate-300 font-bold w-14" data-i18n="shortcut-new-folder">新建分类</span>
+                                            <input type="text" id="shortcut-new-folder" readonly placeholder="点击录制" data-i18n-placeholder="shortcut-record" onkeydown="captureShortcut(event, 'newFolder')" class="w-20 text-center text-[10px] py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
                                       </div>
 
                                       <div class="flex items-center justify-start gap-1 text-xs">
-                                            <span class="text-slate-600 dark:text-slate-300 font-bold w-14" title="以独立无边框窗口打开">弹至桌面</span>
-                                            <input type="text" id="shortcut-pop-out" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'popOut')" class="w-20 text-center text-[10px] py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
+                                            <span class="text-slate-600 dark:text-slate-300 font-bold w-14" title="以独立无边框窗口打开" data-i18n="shortcut-pop-out">弹至桌面</span>
+                                            <input type="text" id="shortcut-pop-out" readonly placeholder="点击录制" data-i18n-placeholder="shortcut-record" onkeydown="captureShortcut(event, 'popOut')" class="w-20 text-center text-[10px] py-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
                                       </div>
-                                      <div class="text-[10px] text-slate-400 mt-1 text-center font-normal whitespace-normal leading-relaxed break-words">快捷方式：单键双击或组合键</div>
+                                      <div class="text-[10px] text-slate-400 mt-1 text-center font-normal whitespace-normal leading-relaxed break-words" data-i18n="shortcut-hint">快捷方式：单键双击或组合键</div>
                                 </div>
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
                                 
@@ -385,7 +382,15 @@
                 'fmt-img': '图', 'btn-recover': '恢复', 'btn-empty': '清空', 'ctx-rename': '重命名分类', 'ctx-delete': '安全删除分类',
                 '未分类': '未分类', '工作': '工作', '生活': '生活',
                 'btn-import-folder': '导入文件夹', 'btn-export-folder': '导出文件夹',
-                'about-soft': '关于软件'
+                'about-soft': '关于软件',
+                // 👇 下面是这次新加的快捷键和恢复设置的词条
+                'shortcut-title': '快捷键设置',
+                'shortcut-new-note': '新建笔记',
+                'shortcut-new-folder': '新建分类',
+                'shortcut-pop-out': '弹至桌面',
+                'shortcut-record': '点击录制',
+                'shortcut-hint': '快捷方式：单键双击或组合键',
+                'factory-reset': '恢复初始设置'
             },
             en: {
                 'theme-title': 'Theme Mode', 'theme-light': 'Light Mode', 'theme-dark': 'Dark Mode', 'theme-sys': 'System Default',
@@ -401,7 +406,15 @@
                 'fmt-img': 'Img', 'btn-recover': 'Restore', 'btn-empty': 'Empty', 'ctx-rename': 'Rename', 'ctx-delete': 'Delete safely',
                 '未分类': 'Uncategorized', '工作': 'Work', '生活': 'Life',
                 'btn-import-folder': 'Import Folder', 'btn-export-folder': 'Export Folder',
-                'about-soft': 'About App'
+                'about-soft': 'About App',
+                // 👇 下面是对应的英文翻译
+                'shortcut-title': 'Shortcuts',
+                'shortcut-new-note': 'New Note',
+                'shortcut-new-folder': 'New Folder',
+                'shortcut-pop-out': 'Pop Out',
+                'shortcut-record': 'Record',
+                'shortcut-hint': 'Shortcut: Double-click a key or use a combo',
+                'factory-reset': 'Factory Reset'
             }
         };
 
@@ -418,10 +431,18 @@
         }
 
         function updateLanguageUI() {
-            const currentDict = dict[currentLang];
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (currentDict[key]) el.innerText = currentDict[key];
+               const currentDict = dict[currentLang];
+    
+               // 1. 原本翻译普通文字的代码（保持不变）
+               document.querySelectorAll('[data-i18n]').forEach(el => {
+                       const key = el.getAttribute('data-i18n');
+                       if (currentDict[key]) el.innerText = currentDict[key];
+               });
+
+               // 2. 👇 新增：专门翻译 input 框 placeholder 提示文字的代码
+              document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                      const key = el.getAttribute('data-i18n-placeholder');
+                      if (currentDict[key]) el.placeholder = currentDict[key];
             });
         }
 
