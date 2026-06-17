@@ -249,6 +249,10 @@
                                             <span class="text-slate-600 dark:text-slate-300 font-bold">新建分类</span>
                                             <input type="text" id="shortcut-new-folder" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'newFolder')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
                                       </div>
+                                          <div class="flex items-center justify-start gap-1 text-xs">
+                                            <span class="text-slate-600 dark:text-slate-300 font-bold" title="以独立无边框窗口打开">弹至桌面</span>
+                                            <input type="text" id="shortcut-pop-out" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'popOut')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
+                                      </div>
                                       <div class="text-[10px] text-slate-400 mt-1 text-center font-normal">快捷方式支持：单键双击或组合键</div>
                                 </div>
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
@@ -302,11 +306,8 @@
                         <button onmousedown="event.preventDefault();" onclick="execCmd('foreColor', '#22c55e')" class="px-1.5 py-0.5 text-[11px] font-bold text-white hover:opacity-80 rounded shadow-sm" style="background-color: #22c55e;" data-i18n="color-green">绿</button>
                         <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
                         <button onmousedown="event.preventDefault();" onclick="wrapHTML('<code>', '</code>')" class="px-2 py-0.5 text-[11px] font-mono text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="代码块"><i class="fa-solid fa-code"></i></button>
-                        
                         <button onmousedown="event.preventDefault();" onclick="clearAllFormat()" class="px-2 py-0.5 text-[11px] font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 rounded border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700" title="清除格式"><i class="fa-solid fa-eraser"></i></button>
-                        
-                        <button onmousedown="event.preventDefault(); document.getElementById('local-img-input').click()" class="px-2 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-700 rounded border border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-slate-700" title="插入图片" data-i18n-title="title-img"><span data-i18n="fmt-img">图</span></button>
-                        
+                        <button onmousedown="event.preventDefault(); document.getElementById('local-img-input').click()" class="px-2 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-700 rounded border border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-slate-700"><span data-i18n="fmt-img">图</span></button>
                         <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
                         
                         <div class="relative flex-shrink-0">
@@ -315,17 +316,17 @@
                                 <i class="fa-solid fa-chevron-down text-[8px] opacity-70 pointer-events-none"></i>
                             </button>
                             <div id="align-dropdown-menu" class="hidden fixed mt-1 w-28 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 flex flex-col py-1 z-[11000] text-xs font-bold">
-                                <button onmousedown="event.preventDefault();" onclick="execCmd('justifyLeft'); document.getElementById('align-dropdown-menu').classList.add('hidden');" title="左对齐" data-i18n-title="title-align-left" class="w-full text-left px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors"><i class="fa-solid fa-align-left w-4 text-center text-blue-500"></i> <span data-i18n="title-align-left">左对齐</span></button>
-                                <button onmousedown="event.preventDefault();" onclick="execCmd('justifyCenter'); document.getElementById('align-dropdown-menu').classList.add('hidden');" title="居中对齐" data-i18n-title="title-align-center" class="w-full text-left px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors"><i class="fa-solid fa-align-center w-4 text-center text-blue-500"></i> <span data-i18n="title-align-center">居中对齐</span></button>
-                                <button onmousedown="event.preventDefault();" onclick="execCmd('justifyRight'); document.getElementById('align-dropdown-menu').classList.add('hidden');" title="右对齐" data-i18n-title="title-align-right" class="w-full text-left px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors"><i class="fa-solid fa-align-right w-4 text-center text-blue-500"></i> <span data-i18n="title-align-right">右对齐</span></button>
-                                <button onmousedown="event.preventDefault();" onclick="execCmd('justifyFull'); document.getElementById('align-dropdown-menu').classList.add('hidden');" title="两端对齐" data-i18n-title="title-align-full" class="w-full text-left px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors"><i class="fa-solid fa-align-justify w-4 text-center text-blue-500"></i> <span data-i18n="title-align-full">两端对齐</span></button>
+                                <button onmousedown="event.preventDefault();" onclick="execCmd('justifyLeft'); document.getElementById('align-dropdown-menu').classList.add('hidden');" class="w-full text-left px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors"><i class="fa-solid fa-align-left w-4 text-center text-blue-500"></i> 左对齐</button>
+                                <button onmousedown="event.preventDefault();" onclick="execCmd('justifyCenter'); document.getElementById('align-dropdown-menu').classList.add('hidden');" class="w-full text-left px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors"><i class="fa-solid fa-align-center w-4 text-center text-blue-500"></i> 居中对齐</button>
+                                <button onmousedown="event.preventDefault();" onclick="execCmd('justifyRight'); document.getElementById('align-dropdown-menu').classList.add('hidden');" class="w-full text-left px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors"><i class="fa-solid fa-align-right w-4 text-center text-blue-500"></i> 右对齐</button>
+                                <button onmousedown="event.preventDefault();" onclick="execCmd('justifyFull'); document.getElementById('align-dropdown-menu').classList.add('hidden');" class="w-full text-left px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors"><i class="fa-solid fa-align-justify w-4 text-center text-blue-500"></i> 两端对齐</button>
                             </div>
                         </div>
                         
                         <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600 mx-0.5"></div>
                         
-                        <button onmousedown="event.preventDefault();" onclick="execCmd('outdent')" class="px-2 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="减少缩进" data-i18n-title="title-outdent"><i class="fa-solid fa-outdent"></i></button>
-                        <button onmousedown="event.preventDefault();" onclick="execCmd('indent')" class="px-2 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="增加缩进" data-i18n-title="title-indent"><i class="fa-solid fa-indent"></i></button>
+                        <button onmousedown="event.preventDefault();" onclick="execCmd('outdent')" class="px-2 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="减少缩进"><i class="fa-solid fa-outdent"></i></button>
+                        <button onmousedown="event.preventDefault();" onclick="execCmd('indent')" class="px-2 py-0.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-600" title="增加缩进"><i class="fa-solid fa-indent"></i></button>
                         
                     </div>
                     <input type="file" id="local-img-input" accept="image/*" multiple class="hidden" onchange="handleLocalImageUpload(event)">
@@ -334,7 +335,7 @@
             
             <div id="editor-scroll-container" class="flex-1 flex flex-col p-5 overflow-y-auto w-full bg-white dark:bg-slate-950 relative">
                 <input id="note-title-input" oninput="handleEditorInput()" type="text" placeholder="此处输入新随笔标题..." class="w-full font-black text-2xl border-0 border-b-2 border-dashed border-slate-300 dark:border-slate-700 outline-none pb-3 mb-3 text-slate-900 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent flex-shrink-0">
-                <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写..." class="md-preview w-full flex-1 outline-none text-slate-800 dark:text-slate-200 break-words"></div>
+                <div id="note-editor-richtext" contenteditable="true" oninput="handleEditorInput()" placeholder="在这里直接排版书写，试试输入 # 加空格..." class="md-preview w-full flex-1 outline-none text-slate-800 dark:text-slate-200 break-words"></div>
             </div>
         </section>
         
@@ -412,14 +413,7 @@
                 'fmt-img': '图', 'btn-recover': '恢复', 'btn-empty': '清空', 'ctx-rename': '重命名分类', 'ctx-delete': '安全删除分类',
                 '未分类': '未分类', '工作': '工作', '生活': '生活',
                 'btn-import-folder': '导入文件夹', 'btn-export-folder': '导出文件夹',
-                'about-soft': '关于软件',
-                'title-img': '插入图片',
-                'title-align-left': '左对齐',
-                'title-align-center': '居中对齐',
-                'title-align-right': '右对齐',
-                'title-align-full': '两端对齐',
-                'title-indent': '增加缩进',
-                'title-outdent': '减少缩进'
+                'about-soft': '关于软件'
             },
             en: {
                 'nav-logout': 'Logout', 'nav-delete': 'Delete Account',
@@ -436,14 +430,7 @@
                 'fmt-img': 'Img', 'btn-recover': 'Restore', 'btn-empty': 'Empty', 'ctx-rename': 'Rename', 'ctx-delete': 'Delete safely',
                 '未分类': 'Uncategorized', '工作': 'Work', '生活': 'Life',
                 'btn-import-folder': 'Import Folder', 'btn-export-folder': 'Export Folder',
-                'about-soft': 'About App',
-                'title-img': 'Insert Image',
-                'title-align-left': 'Align Left',
-                'title-align-center': 'Align Center',
-                'title-align-right': 'Align Right',
-                'title-align-full': 'Justify',
-                'title-indent': 'Indent',
-                'title-outdent': 'Outdent'
+                'about-soft': 'About App'
             }
         };
 
@@ -461,20 +448,9 @@
 
         function updateLanguageUI() {
             const currentDict = dict[currentLang];
-            
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (currentDict[key]) el.innerText = currentDict[key];
-            });
-
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                if (currentDict[key]) el.placeholder = currentDict[key];
-            });
-
-            document.querySelectorAll('[data-i18n-title]').forEach(el => {
-                const key = el.getAttribute('data-i18n-title');
-                if (currentDict[key]) el.title = currentDict[key];
             });
         }
 
@@ -719,45 +695,6 @@
                 if (data.leftExpandedFolders) leftExpandedFolders = data.leftExpandedFolders;
                 
                 isCloudDataLoaded = true; 
-                
-                // 👇 🌟 新增：检测并强行注入无法删除的系统默认笔记
-                const hasDefaultNote = notes.some(n => n.id === 'system_default_instruction');
-                if (!hasDefaultNote) {
-                    notes.push({
-                        id: 'system_default_instruction',
-                        title: '🛠️ 云笔记功能指南与使用说明',
-                        content: `欢迎使用云笔记！这是一份内置的系统说明文档：<br><br>
-
-<b>1. 隐私承诺</b><br>
-轻笔记是一款轻量级、可完全自托管的个人笔记系统。您的所有数据仅存储在您自己的设备上，完全由您自行管理和控制，系统不依赖任何第三方云服务。<br><br>
-
-<b>2. 数据收集</b><br>
-由于是轻量级自托管系统，所有数据都在您的完全控制范围内，不会被任何第三方访问。<br><br>
-
-<b>3. 数据备份</b><br>
-不管你是用 Cloudflare Pages 部署的云笔记项目、还是使用本地的轻笔记项目，请不定时使用导出功能导出你的数据，保存在本地，或上传第三方笔记保存。<br><br>
-
-<b>4. 快速上手指南</b><br>
-• <b>创建笔记 </b>：点击置顶栏的"新笔记"按钮即可创建新笔记。支持 Markdown 语法，输入语法即能马上展示语法效果。<br>
-• <b>整理笔记 </b>：使用分类和标签来组织您的笔记。分类提供层级结构，构建清晰的知识体系；标签提供多维度关联，快速定位相关内容。可随意拖动文件夹、笔记归档。<br>
-• <b>导入导出 </b>：支持导入导出多层级文件夹与笔记，导出文件夹是压缩包，导入文件夹为文件夹形式导入。<br>
-• <b>撤销重做 </b>：在当前编辑页一键实现无数层撤销重做。<br>
-• <b>搜索笔记 </b>：支持关键词搜索、快速查找。<br>
-• <b>历史记录 </b>：支持历史记录预览、删除、恢复。<br>
-• <b>橡皮擦 </b>：【清除格式】（橡皮擦）按钮不仅能清除颜色，还能把一级标题、无序列表全部打回普通文本。<br>
-• <b>插入图片 </b>：插入图片默认是上锁状态，无法缩放图片，可长按拖放图标，右键点击弹出折叠功能：下载、复制、剪切、删除。点击解锁后可缩放图片。<br>
-• <b>恢复初始设置 </b>：将消除所有笔记缓存，请提前导出备份好笔记。<br><br>
-
-<b>5. 版权说明</b><br>
-• <b>软件许可 </b>：这是一款轻量级、可完全自托管的个人笔记系统。您可以自由使用、修改和分发本软件，但需要遵守相关的开源许可协议。系统专为注重隐私、安全与可控性的用户设计。<br>
-• <b>知识产权 </b>：本软件的源代码、文档和相关资源受版权法保护。在遵守许可协议的前提下，您可以使用和修改这些内容。所有数据仅存储在您自己的服务器中，确保完全的数据所有权。<br>
-• <b>免责声明 </b>：本软件按"现状"提供，不提供任何明示或暗示的保证。使用本软件的风险由用户自行承担。作为自托管系统，您拥有完全的控制权和责任。`,
-                        category: '未分类',
-                        updatedAt: Date.now()
-                    });
-                }
-                // 👆 🌟 新增结束
-
                 refreshAllViews();
                 
                 if (notes.length > 0) {
@@ -943,11 +880,9 @@
                 box.className = leftLayoutView === 'list' ? 
                     `w-full py-1 px-1.5 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? activeBoxStyle : defaultBoxStyle}` :
                     `w-full h-[72px] p-1.5 rounded-lg border cursor-pointer flex flex-col justify-between transition-all text-xs break-all relative group ${isSelected ? activeBoxStyle : defaultBoxStyle}`;
-                
-                // 👇 🌟 修改：如果是系统默认笔记，直接不渲染垃圾桶删除按钮
-                const isSystemDefault = note.id === 'system_default_instruction';    
+                    
                 box.innerHTML = `
-                    ${isSystemDefault ? '' : `<button class="del-btn absolute right-1 top-1 p-0.5 ${isSelected ? 'block text-white hover:text-red-200' : 'hidden'} transition-all z-10" onclick="confirmDelete(event, '${note.id}')"><i class="fa-solid fa-trash-can text-[9px]"></i></button>`}
+                    <button class="del-btn absolute right-1 top-1 p-0.5 ${isSelected ? 'block text-white hover:text-red-200' : 'hidden'} transition-all z-10" onclick="confirmDelete(event, '${note.id}')"><i class="fa-solid fa-trash-can text-[9px]"></i></button>
                     <div class="w-full overflow-hidden flex flex-col flex-1 ${leftLayoutView==='list'?'pr-4':''} justify-center">
                         <div class="font-black ${leftLayoutView==='list'?'text-[12px]':'text-[10px]'} ${isSelected ? 'text-yellow-200' : 'text-yellow-600 dark:text-yellow-400'} line-clamp-1 leading-snug mb-0">${displayTitle}</div>
                         <p class="${leftLayoutView==='list'?'text-[12px]':'text-[10px]'} ${isSelected ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400'} line-clamp-${leftLayoutView==='list'?'1':'2'} leading-none">${plainText}</p>
@@ -1066,12 +1001,6 @@
         
         function confirmDelete(event, id) { event.stopPropagation(); if (confirm("🚨 确定要将这条笔记移入回收站吗？")) deleteNote(id); }
         function deleteNote(id) {
-            // 👇 🌟 新增：拦截系统默认笔记的删除行为
-            if (id === 'system_default_instruction') {
-                alert("💡 提示：这是系统内置的使用功能说明书，不能删除哦！");
-                return;
-            }
-            // 👆 🌟 新增结束
             const idx = notes.findIndex(n => n.id === id); 
             if (idx !== -1) {
                 trashBin.push(notes.splice(idx, 1)[0]); saveCloudData();
@@ -1513,6 +1442,135 @@
             window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
         }
         
+        // 1. 控制设置菜单里的折叠面板展开/收起
+        function toggleShortcutPanel(event) {
+               event.stopPropagation(); // 阻止点击事件冒泡，防止整个设置菜单被关掉
+               const panel = document.getElementById('shortcut-panel');
+               const arrow = document.getElementById('shortcut-arrow');
+    
+               if (panel.classList.contains('hidden')) {
+                   panel.classList.remove('hidden');
+                   panel.classList.add('flex');
+                   arrow.classList.add('rotate-180');
+               } else {
+                    panel.classList.add('hidden');
+                    panel.classList.remove('flex');
+                    arrow.classList.remove('rotate-180');
+               }
+         }
+
+         // 2. 存储用户配置的快捷键字典
+        const userShortcuts = {
+              newNote: '',
+              newFolder: '',
+              popOut: ''
+         };
+
+         // 3. 捕获输入框的按键（支持 Ctrl/Alt/Shift + 字母，或者单独的 F1-F12）
+        function captureShortcut(event, action) {
+               event.preventDefault();  // 拦截默认快捷键
+               event.stopPropagation();
+
+               const key = event.key;
+               // 如果只按下了修饰键，不要急着记录，等用户按下字母
+               if (['Control', 'Shift', 'Alt', 'Meta'].includes(key)) return;
+
+               let shortcutStr = '';
+    
+               // 判断组合键
+               if (event.ctrlKey) shortcutStr += 'Ctrl + ';
+               if (event.altKey) shortcutStr += 'Alt + ';
+               if (event.shiftKey) shortcutStr += 'Shift + ';
+
+               // 把字母转大写，如果是单键比如 F2，就直接是 F2
+               shortcutStr += key.length === 1 ? key.toUpperCase() : key;
+
+               // 显示在输入框并存入字典
+               event.target.value = shortcutStr;
+               userShortcuts[action] = shortcutStr;
+    
+               // 录制完后自动取消输入框的焦点
+               event.target.blur();
+         }
+
+         // 记录上一次按键的内容和时间（用于实现双击判断）
+         let lastKeyPress = '';
+         let lastKeyPressTime = 0;
+
+         // 4. 监听全局键盘事件（终极智能版：双击单键 + 单击组合键）
+         document.addEventListener('keydown', function(event) {
+             
+             // 🛑 保护机制：如果你的光标正在“设置快捷键”的输入框里，不要触发功能，让它安静录制
+             if (event.target.id && event.target.id.includes('shortcut-')) {
+                 return; 
+             }
+
+             // 拼装当前按下的按键字符串
+             let currentPress = '';
+             const hasModifier = event.ctrlKey || event.altKey || event.shiftKey || event.metaKey;
+
+             if (event.ctrlKey) currentPress += 'Ctrl + ';
+             if (event.altKey) currentPress += 'Alt + ';
+             if (event.shiftKey) currentPress += 'Shift + ';
+             currentPress += event.key.length === 1 ? event.key.toUpperCase() : event.key;
+
+             // 匹配当前按键是否是你设置的某个快捷键
+             let matchedAction = null;
+             if (currentPress === userShortcuts.newNote && userShortcuts.newNote !== '') matchedAction = 'newNote';
+             else if (currentPress === userShortcuts.newFolder && userShortcuts.newFolder !== '') matchedAction = 'newFolder';
+             else if (currentPress === userShortcuts.popOut && userShortcuts.popOut !== '') matchedAction = 'popOut';
+
+             // 如果没按中任何快捷键，只把按键记录下来备用，然后结束
+             if (!matchedAction) {
+                 lastKeyPress = currentPress;
+                 lastKeyPressTime = new Date().getTime();
+                 return;
+             }
+
+             // ================= 核心触发逻辑 =================
+
+             if (hasModifier) {
+                 // 【模式一：组合键】 (例如 Alt + N)
+                 // 只要带有修饰键，按一次立刻触发！并且强行拦截默认行为。
+                 event.preventDefault();
+                 executeShortcut(matchedAction);
+             } else {
+                 // 【模式二：单键双击】 (例如 单独按下 N)
+                 const currentTime = new Date().getTime();
+                 
+                 // 如果两次按的是同一个键，而且间隔小于 400 毫秒（0.4秒内连按） -> 判定为双击成功！
+                 if (lastKeyPress === currentPress && (currentTime - lastKeyPressTime) < 400) {
+                     event.preventDefault(); // 阻止这第二次按键把字母打到屏幕上
+                     executeShortcut(matchedAction);
+                     
+                     // 触发后清空记录，防止你按三下它触发两次
+                     lastKeyPress = '';
+                     lastKeyPressTime = 0;
+                 } else {
+                     // 如果这是你第一次按，啥也不做（允许它像正常打字一样输出字母），只把时间记下来
+                     lastKeyPress = currentPress;
+                     lastKeyPressTime = currentTime;
+                 }
+             }
+         });
+
+         // 专门用来执行具体功能的集线器（代码更清爽）
+         function executeShortcut(action) {
+             if (action === 'newNote') {
+                 if(typeof createNewNote === 'function') createNewNote();
+             } else if (action === 'newFolder') {
+                 if(typeof createNewCategory === 'function') createNewCategory();
+             } else if (action === 'popOut') {
+                 popOutToDesktop();
+             }
+         }
+
+        // 5. 弹出独立桌面窗口的函数
+        function popOutToDesktop() {
+               // 这行代码会剥离浏览器的标签栏和书签栏，弹出一个干净的“类原生应用”窗口
+               window.open(window.location.href, '_blank', 'width=1024,height=768,menubar=no,toolbar=no,location=no,status=no');
+        }
+
     </script>
 </body>
 </html>
