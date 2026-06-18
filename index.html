@@ -398,6 +398,12 @@
     <script>
         const dict = {
             zh: {
+                'nav-logout': '退出登录/换号',
+                'nav-delete': '注销删除数据',
+                'login-user-placeholder': '请输入账号',
+                'login-pass-placeholder': '请输入密码',
+                'confirm-trash-note': '🚨 确定要将这条笔记移入回收站吗？',
+                'confirm-del-folder': '确定删除分类目录【{name}】？其内部子目录及所属笔记都将全部进入回收站。',
                 'nav-logout': '退出登录', 'nav-delete': '注销账号',
                 'theme-title': '主题模式', 'theme-light': '浅色模式', 'theme-dark': '深色模式', 'theme-sys': '跟随系统',
                 'lang-toggle': '切换语言 / EN', 'app-title': '轻云记',
@@ -422,6 +428,12 @@
                 'title-outdent': '减少缩进'
             },
             en: {
+                'nav-logout': 'Logout / Switch',
+                'nav-delete': 'Delete Data & Account',
+                'login-user-placeholder': 'Username',
+                'login-pass-placeholder': 'Password',
+                'confirm-trash-note': '🚨 Are you sure you want to move this note to the trash?',
+                'confirm-del-folder': 'Delete category [{name}]? All subfolders and notes inside will be moved to the trash.',
                 'nav-logout': 'Logout', 'nav-delete': 'Delete Account',
                 'theme-title': 'Theme Mode', 'theme-light': 'Light Mode', 'theme-dark': 'Dark Mode', 'theme-sys': 'System Default',
                 'lang-toggle': 'Switch Lang / 中文', 'app-title': 'Cloud Note',
@@ -1231,24 +1243,23 @@
             } else if (action === 'copy') {
                 try {
                     await writeToClipboard();
-                    alert('✅ 图片已成功复制，可直接去微信/QQ粘贴！');
+                    // 弹窗已移除，静默复制
                 } catch(err) {
-                    alert('❌ 复制失败：可能当前浏览器不支持或未授予剪贴板权限。');
+                    console.error('复制失败', err);
                 }
             } else if (action === 'cut') {
                 try {
                     await writeToClipboard();
                     currentImageWrapper.remove();
                     handleEditorInput();
-                    alert('✂️ 图片已成功剪切！');
+                    // 弹窗已移除，静默剪切
                 } catch(err) {
-                    alert('❌ 剪切失败：可能当前浏览器不支持或未授予剪贴板权限。');
+                    console.error('剪切失败', err);
                 }
             } else if (action === 'delete') {
-                if (confirm('⚠️ 确定要删除这张图片吗？')) {
-                    currentImageWrapper.remove();
-                    handleEditorInput(); 
-                }
+                // 确认弹窗已移除，点击直接静默删除
+                currentImageWrapper.remove();
+                handleEditorInput(); 
             }
             
             currentImageWrapper = null;
@@ -1317,20 +1328,49 @@
                }
 
                editor.addEventListener('paste', (e) => {
-                     e.preventDefault(); 
-                     let hasImage = false; const items = (e.clipboardData || window.clipboardData).items;
+                     const items = (e.clipboardData || window.clipboardData).items;
+                     let imageFile = null;
+
+                     // 1. 查找剪贴板里有没有图片文件（比如截图、复制的本地图片）
                      for (let i = 0; i < items.length; i++) {
                            if (items[i].type.indexOf("image") !== -1) {
-                               hasImage = true; const reader = new FileReader();
-                               reader.onload = (event) => {
-                                   const base64Image = event.target.result;
-                                   const imgHTML = `&#8203;<span class="custom-img-wrapper locked" contenteditable="false" draggable="true" ondragstart="window.imgDragStart(event)" ondragend="window.imgDragEnd(event)"><img src="${base64Image}" alt="图片" /><span class="img-lock-btn locked" title="点击解锁以调整大小" contenteditable="false"><i class="fa-solid fa-lock"></i></span></span>&nbsp;`;
-                                   execCmd('insertHTML', imgHTML);
-                               };
-                               reader.readAsDataURL(items[i].getAsFile());
+                               imageFile = items[i].getAsFile();
+                               if (imageFile) break; // 找到了就跳出循环
                            }
                      }
-                     if (!hasImage) { const text = (e.originalEvent || e).clipboardData.getData('text/plain'); document.execCommand('insertText', false, text); handleEditorInput(); }
+
+                     if (imageFile) {
+                         e.preventDefault(); // 拦截默认粘贴
+                         
+                         // 🚨 核心修复 1：提前记住当前光标的确切位置！
+                         const selection = window.getSelection();
+                         if (!selection.rangeCount) return;
+                         const savedRange = selection.getRangeAt(0).cloneRange();
+
+                         const reader = new FileReader();
+                         reader.onload = (event) => {
+                             // 🚨 核心修复 2：图片转码完毕后，先把光标恢复到刚才记住的位置
+                             selection.removeAllRanges();
+                             selection.addRange(savedRange);
+
+                             const base64Image = event.target.result;
+                             
+                             // 🚨 核心修复 3：使用 <div> 强制换行包裹，防止多张图片变成连体婴！
+                             // 注意：这是修改后的超级换行隔断版，请替换掉原来的 const imgHTML = ... 那行代码
+                             const imgHTML = `<div style="text-align: left;">&#8203;<span class="custom-img-wrapper locked" contenteditable="false" draggable="true" ondragstart="window.imgDragStart(event)" ondragend="window.imgDragEnd(event)"><img src="${compressedBase64}" alt="图片" /><span class="img-lock-btn locked" title="${t('title-unlock')}" data-i18n-title="title-unlock" contenteditable="false"><i class="fa-solid fa-lock"></i></span></span></div><div><br></div>`;
+                             
+                             execCmd('insertHTML', imgHTML);
+                         };
+                         reader.readAsDataURL(imageFile);
+                     } else {
+                         // 🚨 如果是粘贴普通文字，为了防止带入乱七八糟的网页格式，强制转换为纯文本粘贴
+                         const text = (e.originalEvent || e).clipboardData.getData('text/plain');
+                         if (text) {
+                             e.preventDefault();
+                             document.execCommand('insertText', false, text);
+                         }
+                         setTimeout(() => { handleEditorInput(); }, 100);
+                     }
                 });
 
                 // ======================================================================
@@ -1501,7 +1541,9 @@
 
                         const compressedBase64 = canvas.toDataURL('image/jpeg', 0.9);
                         
-                        const imgHTML = `&#8203;<span class="custom-img-wrapper locked" contenteditable="false" draggable="true" ondragstart="window.imgDragStart(event)" ondragend="window.imgDragEnd(event)"><img src="${compressedBase64}" alt="图片" /><span class="img-lock-btn locked" title="点击解锁以调整大小" contenteditable="false"><i class="fa-solid fa-lock"></i></span></span>&nbsp;`;
+                        // 🚨 核心修复：1. 删除了重复的行；2. 使用 <div> 完美包裹，彻底解决连体婴、光标乱跳、缩进不了的问题！
+                        const imgHTML = `<div style="text-align: left;">&#8203;<span class="custom-img-wrapper locked" contenteditable="false" draggable="true" ondragstart="window.imgDragStart(event)" ondragend="window.imgDragEnd(event)"><img src="${compressedBase64}" alt="图片" /><span class="img-lock-btn locked" title="${t('title-unlock')}" data-i18n-title="title-unlock" contenteditable="false"><i class="fa-solid fa-lock"></i></span></span></div><div><br></div>`;
+                        
                         execCmd('insertHTML', imgHTML);
                     };
                     img.src = e.target.result;
