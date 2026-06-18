@@ -234,22 +234,22 @@
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
                                 
                                 <button onclick="toggleShortcutPanel(event)" class="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-between font-bold transition-colors">
-                                      <div class="flex items-center gap-3">
-                                            <i class="fa-solid fa-keyboard text-purple-500 w-4 text-center"></i> <span>快捷键设置</span>
-                                      </div>
-                                      <i id="shortcut-arrow" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
-                                 </button>
+                                           <div class="flex items-center gap-3">
+                                                    <i class="fa-solid fa-keyboard text-purple-500 w-4 text-center"></i> <span data-i18n="shortcut-title">快捷键设置</span>
+                                             </div>
+                                             <i id="shortcut-arrow" class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200"></i>
+                                </button>
 
-                                 <div id="shortcut-panel" class="hidden flex-col gap-1 px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border-y border-slate-100 dark:border-slate-700" onclick="event.stopPropagation()">
-                                          <div class="flex items-center justify-start gap-1 text-xs">
-                                            <span class="text-slate-600 dark:text-slate-300 font-bold">新建笔记</span>
-                                            <input type="text" id="shortcut-new-note" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'newNote')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
+                                <div id="shortcut-panel" class="hidden flex-col gap-1 px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border-y border-slate-100 dark:border-slate-700" onclick="event.stopPropagation()">
+                                       <div class="flex items-center justify-start gap-1 text-xs">
+                                                <span class="text-slate-600 dark:text-slate-300 font-bold w-14" data-i18n="shortcut-new-note">新建笔记</span>
+                                                <input type="text" id="shortcut-new-note" readonly placeholder="点击录制" data-i18n-placeholder="shortcut-record" onkeydown="captureShortcut(event, 'newNote')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
+                                       </div>
+                                       <div class="flex items-center justify-start gap-1 text-xs">
+                                                <span class="text-slate-600 dark:text-slate-300 font-bold w-14" data-i18n="shortcut-new-folder">新建分类</span>
+                                                <input type="text" id="shortcut-new-folder" readonly placeholder="点击录制" data-i18n-placeholder="shortcut-record" onkeydown="captureShortcut(event, 'newFolder')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
                                       </div>
-                                          <div class="flex items-center justify-start gap-1 text-xs">
-                                            <span class="text-slate-600 dark:text-slate-300 font-bold">新建分类</span>
-                                            <input type="text" id="shortcut-new-folder" readonly placeholder="点击录制" onkeydown="captureShortcut(event, 'newFolder')" class="w-20 text-center text-[10px] py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded cursor-pointer outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 text-slate-600 dark:text-slate-300 shadow-inner transition-all placeholder-slate-400">
-                                      </div>
-                                      <div class="text-[10px] text-slate-400 mt-1 text-center font-normal">快捷方式支持：单键双击或组合键</div>
+                                      <div class="text-[10px] text-slate-400 mt-1 text-center font-normal" data-i18n="shortcut-hint">快捷方式：单键双击或组合键</div>
                                 </div>
                                 <div class="h-px bg-slate-100 dark:bg-slate-700 w-full my-1"></div>
                                 
@@ -398,6 +398,11 @@
     <script>
         const dict = {
             zh: {
+                'shortcut-title': '快捷键设置',
+                'shortcut-new-note': '新建笔记',
+                'shortcut-new-folder': '新建分类',
+                'shortcut-record': '点击录制',
+                'shortcut-hint': '快捷方式：单键双击或组合键',
                 'nav-logout': '退出登录/换号',
                 'nav-delete': '注销删除数据',
                 'login-user-placeholder': '请输入账号',
@@ -428,6 +433,11 @@
                 'title-outdent': '减少缩进'
             },
             en: {
+                'shortcut-title': 'Shortcuts',
+                'shortcut-new-note': 'New Note',
+                'shortcut-new-folder': 'New Folder',
+                'shortcut-record': 'Record',
+                'shortcut-hint': 'Shortcuts: Double-click or Combo',
                 'nav-logout': 'Logout / Switch',
                 'nav-delete': 'Delete Data & Account',
                 'login-user-placeholder': 'Username',
