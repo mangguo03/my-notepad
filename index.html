@@ -1556,6 +1556,25 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
         }
+
+        // 🪄 强力补入：控制快捷键面板折叠展开的函数
+        function toggleShortcutPanel(event) {
+               event.stopPropagation(); // 阻止点击事件冒泡，防止外层菜单被误关
+               const panel = document.getElementById('shortcut-panel');
+               const arrow = document.getElementById('shortcut-arrow');
+    
+               if (panel && arrow) {
+                   if (panel.classList.contains('hidden')) {
+                       panel.classList.remove('hidden');
+                       panel.classList.add('flex');
+                       arrow.classList.add('rotate-180');
+                   } else {
+                        panel.classList.add('hidden');
+                        panel.classList.remove('flex');
+                        arrow.classList.remove('rotate-180');
+                   }
+               }
+         }
         
     </script>
 </body>
