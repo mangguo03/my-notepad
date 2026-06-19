@@ -1586,17 +1586,24 @@
                }
          }
 
-        // 监听全局点击事件（修复版）
+        // 🌟 终极修复版：点击空白处自动关闭历史栏
         document.addEventListener('click', function(event) {
             const rightPanel = document.getElementById('right-panel');
-            const historyBtn = document.querySelector('[data-i18n-title="title-history"]');
             
-            // 关键修复：判断历史栏是否处于显示状态（即没有 'hidden' 类名）
-            if (rightPanel && !rightPanel.classList.contains('hidden') && 
-                !rightPanel.contains(event.target) && 
-                (!historyBtn || !historyBtn.contains(event.target))) {
+            // 1. 判断历史栏是否存在并且处于“打开”状态
+            if (rightPanel && !rightPanel.classList.contains('hidden')) {
                 
-                toggleRightPanel(); // 触发关闭
+                // 2. 检查点击的位置是否在历史栏“内部”
+                const isInsidePanel = rightPanel.contains(event.target);
+                
+                // 3. 检查点击的位置是否是那个红色的“历史按钮”（通过找图标特征来认，绝对不会丢）
+                const isHistoryBtn = event.target.closest('.fa-clock-rotate-left') || event.target.closest('button[title="历史记录"]');
+                
+                // 4. 如果点的既不是历史栏里面，也不是历史按钮，那就果断关闭它！
+                if (!isInsidePanel && !isHistoryBtn) {
+                    rightPanelClosed = true; // 同步系统状态
+                    rightPanel.classList.add('hidden'); // 隐藏界面
+                }
             }
         });
         
