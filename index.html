@@ -1585,6 +1585,20 @@
                    }
                }
          }
+
+        // 监听全局点击事件（修复版）
+        document.addEventListener('click', function(event) {
+            const rightPanel = document.getElementById('right-panel');
+            const historyBtn = document.querySelector('[data-i18n-title="title-history"]');
+            
+            // 关键修复：判断历史栏是否处于显示状态（即没有 'hidden' 类名）
+            if (rightPanel && !rightPanel.classList.contains('hidden') && 
+                !rightPanel.contains(event.target) && 
+                (!historyBtn || !historyBtn.contains(event.target))) {
+                
+                toggleRightPanel(); // 触发关闭
+            }
+        });
         
     </script>
 </body>
